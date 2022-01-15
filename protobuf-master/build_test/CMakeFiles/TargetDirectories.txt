@@ -1,0 +1,10 @@
+E:/third_part/protobuf-master/build_test/CMakeFiles/libprotobuf-lite.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/libprotobuf.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/libprotoc.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/protoc.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/edit_cache.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/rebuild_cache.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/list_install_components.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/install.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/install/local.dir
+E:/third_part/protobuf-master/build_test/CMakeFiles/install/strip.dir
