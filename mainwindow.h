@@ -27,6 +27,8 @@ public slots:
 
     void OnServerMsgRecv();
 
+    void OnSndServerMsg(qint16 nSystem, qint16 nCmd, std::string data);
+
     void OnShowProgramServerLists(const QString & str = "");
 private:
     Ui::MainWindow *ui;

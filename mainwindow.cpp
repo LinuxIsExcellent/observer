@@ -8,6 +8,7 @@
 
 #include "msg.pb.h"
 #include "log.h"
+#include "Packet.h"
 #include <google/protobuf/text_format.h>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    m_ServerSockect->close();
     delete ui;
 }
 
@@ -76,7 +78,7 @@ void MainWindow::OnShowProgramServerLists(const QString &)
 //请求连接到特定服务器
 void MainWindow::OnClickConnectServerBtn()
 {
-    QString ip = "192.168.184.130";
+    QString ip = "192.168.184.250";
     uint16_t port = 23543;
 
     m_ServerSockect->connectToHost(QHostAddress(ip),port);
@@ -97,6 +99,7 @@ void MainWindow::OnSocketError(QAbstractSocket::SocketError error)
     else if (error == QAbstractSocket::RemoteHostClosedError)
     {
         str = "服务器断开连接！！！";
+        m_ServerSockect->close();
     }
 
     QMessageBox information(QMessageBox::Critical, tr("警告"), str, QMessageBox::Ok);
@@ -110,9 +113,50 @@ void MainWindow::OnServerConnect()
     qDebug () << "服务器连接成功";
 }
 
+/*发送数据包
+ * in nSystem：系统号 nCmd：命令号 data：二进制数据
+*/
+void MainWindow::OnSndServerMsg(qint16 nSystem, qint16 nCmd, std::string data)
+{
+    // 先计算出包体的总长度
+    // 因为packet类增加字符串的时候会增加2字节的长度和1字节的结束字符
+    // 所以除了nSystem和nCmd之外需要多增加3字节的数据长度
+    int nDataLength = sizeof(nSystem) + sizeof(nCmd) + 3 + data.length();
+    Packet packet;
+    packet << nDataLength << nSystem << nCmd << data.c_str();
+
+    m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+}
+
 void MainWindow::OnServerMsgRecv()
 {
-    QByteArray data = m_ServerSockect->readAll();
-    QString s = QString(data);
-    qDebug() << "recv:" << s;
+    //先解析数据头，整个数据包包含多少个字节
+    char headStr[4];
+    if(m_ServerSockect->read(headStr, 4) == 0)
+    {
+        qDebug() << "服务器请求断开连接";
+        return;
+    }
+    int packetLength = *(int*)headStr;
+    if (packetLength <= 0 && packetLength >= 65536)
+    {
+        qDebug() << "数据包头读取出错：" << packetLength;
+        m_ServerSockect->readAll();
+        return;
+    }
+    //解析数据部分
+    char dataStr[packetLength];
+    qint16 readCount = m_ServerSockect->read(dataStr, packetLength);
+    if (readCount != packetLength)
+    {
+        qDebug() << "数据包解析错误，丢弃当前数据包";
+        m_ServerSockect->readAll();
+        return;
+    }
+    Packet packet(dataStr, packetLength);
+    qint16 nSystem, nCmd;
+    packet >> nSystem >> nCmd;
+
+    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
+
 }

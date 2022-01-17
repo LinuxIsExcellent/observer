@@ -25,6 +25,7 @@ SOURCES += \
     parseconfig.cpp
 
 HEADERS += \
+    Packet.h \
     globalconfig.h \
     log.h \
     mainwindow.h \
@@ -39,12 +40,12 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix|win32: LIBS += -LE:/third_part/protobuf-master/build_test/ -lprotobuf
+unix|win32: LIBS += -LH:/observer/protobuf-master/build_test/ -lprotobuf
 
-INCLUDEPATH += E:/third_part/protobuf-master/src
-DEPENDPATH += E:/third_part/protobuf-master/src
+INCLUDEPATH += H:/observer/protobuf-master/src
+DEPENDPATH += H:/observer/protobuf-master/src
 
-unix|win32: LIBS += -LE:/third_part/compileLua/ -lcompileLua
+unix|win32: LIBS += -LH:/observer/compileLua/ -lcompileLua
 
-INCLUDEPATH += E:/third_part/compileLua/src
-DEPENDPATH += E:/third_part/compileLua/src
+INCLUDEPATH += H:/observer/compileLua/src
+DEPENDPATH += H:/observer/compileLua/src

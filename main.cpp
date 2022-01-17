@@ -33,6 +33,9 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    QString path = QCoreApplication::applicationDirPath ();
+
+    qDebug() << path;
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QTextCodec::setCodecForLocale(codec);
 

@@ -22,7 +22,7 @@ struct sServerInfo
     QString     ip;
     int         port;
 
-    friend QDebug& operator<<(QDebug out, const sServerInfo& info)
+    friend QDebug& operator<<(QDebug& out, const sServerInfo& info)
     {
         out << info.name << info.ip << info.port;
         return out;
@@ -35,7 +35,7 @@ struct sProgram
     QString      sProgramName;
     QVector<sServerInfo>    serverList;
 
-    friend QDebug& operator<<(QDebug out, const sProgram& info)
+    friend QDebug& operator<<(QDebug& out, const sProgram& info)
     {
         out << info.sProgramName << info.serverList;
         return out;
