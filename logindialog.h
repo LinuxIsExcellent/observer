@@ -2,6 +2,9 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
+#include <QDebug>
+#include "mainwindow.h"
+#include "globalconfig.h"
 
 namespace Ui {
 class LoginDialog;
@@ -11,12 +14,35 @@ class LoginDialog : public QDialog
 {
     Q_OBJECT
 
+private slots:
+    void OnShowProgramServerLists(const QString & str = "");
+
 public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
 
+    void InitDialog();
+protected:
+    void mousePressEvent(QMouseEvent*);
+    void mouseMoveEvent(QMouseEvent*);
+    void mouseReleaseEvent(QMouseEvent*);
+
+public slots:
+    //请求连接服务器
+    void OnConnectBtnClicked();
+
+    //请求退出
+    void OnclickCloseBtn();
+
+    //点击ListView
+    void OnListViewDoubleClicked(const QModelIndex &);
 private:
     Ui::LoginDialog *ui;
+
+    sProgram m_sProgram;
+
+    bool m_bPressed;
+    QPoint m_ptPress;
 };
 
 #endif // LOGINDIALOG_H

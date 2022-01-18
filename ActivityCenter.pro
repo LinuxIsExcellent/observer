@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     globalconfig.cpp \
     log.cpp \
+    logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
     msg.pb.cc \
@@ -28,11 +29,13 @@ HEADERS += \
     Packet.h \
     globalconfig.h \
     log.h \
+    logindialog.h \
     mainwindow.h \
     msg.pb.h \
     parseconfig.h
 
 FORMS += \
+    logindialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.
@@ -40,12 +43,12 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix|win32: LIBS += -LH:/observer/protobuf-master/build_test/ -lprotobuf
+unix|win32: LIBS += -LE:/workspace/protobuf-master/build_test/ -lprotobuf
 
-INCLUDEPATH += H:/observer/protobuf-master/src
-DEPENDPATH += H:/observer/protobuf-master/src
+INCLUDEPATH += E:/workspace/protobuf-master/src
+DEPENDPATH += E:/workspace/protobuf-master/src
 
-unix|win32: LIBS += -LH:/observer/compileLua/ -lcompileLua
+unix|win32: LIBS += -LE:/workspace/compileLua/ -lcompileLua
 
-INCLUDEPATH += H:/observer/compileLua/src
-DEPENDPATH += H:/observer/compileLua/src
+INCLUDEPATH += E:/workspace/compileLua/src
+DEPENDPATH += E:/workspace/compileLua/src

@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    m_ServerSockect = new QTcpSocket(this);
 
+    m_ServerSockect = new QTcpSocket(this);
     //连接事件
     connect(m_ServerSockect,&QTcpSocket::connected, this, &MainWindow::OnServerConnect);
     //有可读事件
@@ -25,10 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     //socket错误事件
     connect(m_ServerSockect, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(OnSocketError(QAbstractSocket::SocketError)));
 
-    //点击连接服务器
-    connect(ui->connect_server, SIGNAL(clicked()), this, SLOT(OnClickConnectServerBtn()));
-
-    connect(ui->comboBox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(OnShowProgramServerLists(const QString &)));
+    init_windows();
 }
 
 MainWindow::~MainWindow()
@@ -37,50 +34,66 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::init_windows()
+void MainWindow::SetLoginDialog(LoginDialog* dialog)
 {
-    ui->comboBox->clear();
-
-    const qMapPrograms* mapProgram = GlobalConfig::getInstance()->GetProgramData();
-    if(mapProgram)
-    {
-        for (qMapPrograms::const_iterator it = mapProgram->begin();it != mapProgram->end() ; ++it) {
-            ui->comboBox->addItem(it.value().sProgramName, it.key());
-        }
-    }
-
-
-    OnShowProgramServerLists();
+    m_loginDailog = dialog;
 }
 
-void MainWindow::OnShowProgramServerLists(const QString &)
+void MainWindow::init_windows()
 {
-    QString programName = ui->comboBox->currentData().toString();
-    qDebug() << programName;
+    m_mainWindowWidget = new QWidget(this);
+    m_leftWidget = new QWidget(this);
+    m_rightWidget = new QWidget(this);
 
-    const qMapPrograms* mapProgram = GlobalConfig::getInstance()->GetProgramData();
-    if (mapProgram)
-    {
-        if(mapProgram->contains(programName))
-        {
-            sProgram program = mapProgram->value(programName);
-            for (QVector<sServerInfo>::const_iterator it = program.serverList.begin();it != program.serverList.end() ; ++it)
-            {
-                it->name;
-                it->ip;
-                it->port;
-            }
-        }
-    }
-//    ui->listWidget->addItems(list);
+    vlayout_left = new QVBoxLayout;
+    vlayout_right = new QVBoxLayout;
+    hlayout_all = new QHBoxLayout;
+
+    //左边
+    m_treeWidget = new QTreeWidget(this);
+    vlayout_left->addWidget(m_treeWidget);
+
+    //右边
+    m_tabWidget = new QTabWidget(this);
+    m_lineEdit = new QLineEdit(this);
+
+    vlayout_right->addWidget(m_lineEdit);
+    vlayout_right->addWidget(m_tabWidget);
+
+    vlayout_right->setStretchFactor(m_lineEdit, 2);
+    vlayout_right->setStretchFactor(m_tabWidget, 10);
+
+    m_leftWidget->setLayout(vlayout_left);
+    m_rightWidget->setLayout(vlayout_right);
+
+    hlayout_all->addWidget(m_leftWidget);
+    hlayout_all->addWidget(m_rightWidget);
+    hlayout_all->setStretchFactor(m_leftWidget, 1);
+    hlayout_all->setStretchFactor(m_rightWidget, 5);
+
+    m_mainWindowWidget->setLayout(hlayout_all);
+
+    setCentralWidget(m_mainWindowWidget);
+
+    QWidget* widget = new QWidget(this);
+    QWidget* widget1 = new QWidget(this);
+    QWidget* widget2 = new QWidget(this);
+    m_tabWidget->addTab(widget, "111");
+    m_tabWidget->addTab(widget1, "222");
+    m_tabWidget->addTab(widget2, "333");
+}
+
+//窗口关闭事件
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    //如果不加这行的处理，会因为有一个隐藏的loginDialog而卡住
+    QApplication::setQuitOnLastWindowClosed(true);
 }
 
 //请求连接到特定服务器
-void MainWindow::OnClickConnectServerBtn()
+void MainWindow::OnClickConnectServerBtn(QString ip, qint32 port)
 {
-    QString ip = "192.168.184.250";
-    uint16_t port = 23543;
-
+    qDebug() << "请求连接服务器: " << ip << ", " << port;
     m_ServerSockect->connectToHost(QHostAddress(ip),port);
 }
 
@@ -104,13 +117,13 @@ void MainWindow::OnSocketError(QAbstractSocket::SocketError error)
 
     QMessageBox information(QMessageBox::Critical, tr("警告"), str, QMessageBox::Ok);
     information.exec();
-    return;
 }
 
 //服务器连接成功
 void MainWindow::OnServerConnect()
 {
-    qDebug () << "服务器连接成功";
+    this->show();
+    m_loginDailog->hide();
 }
 
 /*发送数据包

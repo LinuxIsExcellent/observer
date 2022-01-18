@@ -1,10 +1,13 @@
 #include "mainwindow.h"
+#include "logindialog.h"
 #include "parseconfig.h"
 #include "globalconfig.h"
 #include <QApplication>
 #include <QHash>
 #include <QDataStream>
 #include <iostream>
+#include <QObject>
+
 using namespace std;
 
 
@@ -25,6 +28,8 @@ static lua_State *L = NULL;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QApplication::setQuitOnLastWindowClosed(false);
+
     MainWindow w;
 
     L = luaL_newstate();
@@ -47,17 +52,12 @@ int main(int argc, char *argv[])
 
     GlobalConfig::getInstance()->LoadConfig(L, qLConfigPath);
 
-//    QMap<QString, QString> program_map;
-//    program_map.insert("ph", "菲律宾");
-//    program_map.insert("th", "泰国");
+    LoginDialog loginDialog(&w);
 
-//    ParseConfig::getInstance()->updateValue("program", program_map);
+    loginDialog.show();
 
-//    program_map.clear();
-//    program_map.insert("server1", "192.168.1.62");
-//    program_map.insert("server2", "192.168.1.65");
-//    ParseConfig::getInstance()->updateValue("朱迪胜", program_map);
-    w.init_windows();
-    w.show();
+    w.SetLoginDialog(&loginDialog);
+
+//    w.show();
     return a.exec();
 }
