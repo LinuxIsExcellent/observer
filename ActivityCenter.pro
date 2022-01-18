@@ -43,12 +43,12 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix|win32: LIBS += -LE:/workspace/protobuf-master/build_test/ -lprotobuf
+unix|win32: LIBS += -LE:/workspace/observer/protobuf-master/build_test/ -lprotobuf
 
-INCLUDEPATH += E:/workspace/protobuf-master/src
-DEPENDPATH += E:/workspace/protobuf-master/src
+INCLUDEPATH += E:/workspace/observer/protobuf-master/src
+DEPENDPATH += E:/workspace/observer/protobuf-master/src
 
-unix|win32: LIBS += -LE:/workspace/compileLua/ -lcompileLua
+unix|win32: LIBS += -LE:/workspace/observer/compileLua/ -lcompileLua
 
-INCLUDEPATH += E:/workspace/compileLua/src
-DEPENDPATH += E:/workspace/compileLua/src
+INCLUDEPATH += E:/workspace/observer/compileLua/src
+DEPENDPATH += E:/workspace/observer/compileLua/src

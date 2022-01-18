@@ -10,7 +10,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog/* | Qt::WindowStaysOnTopHint*/);
 
     QDesktopWidget* desktopWidget = QApplication::desktop();
     if(desktopWidget)

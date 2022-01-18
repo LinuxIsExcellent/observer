@@ -124,6 +124,12 @@ void MainWindow::OnServerConnect()
 {
     this->show();
     m_loginDailog->hide();
+
+    test_2::client_login_request quest;
+    std::string output;
+    quest.SerializeToString(&output);
+
+    OnSndServerMsg(0, test_2::client_msg::REQUEST_LOGIN, output);
 }
 
 /*发送数据包
@@ -170,6 +176,6 @@ void MainWindow::OnServerMsgRecv()
     qint16 nSystem, nCmd;
     packet >> nSystem >> nCmd;
 
-    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
+    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd << ", packetLength = " << packetLength;
 
 }
