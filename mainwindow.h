@@ -9,6 +9,7 @@
 #include<QTabWidget>
 #include<QVBoxLayout>
 #include "logindialog.h"
+#include "Packet.h"
 
 class LoginDialog;
 QT_BEGIN_NAMESPACE
@@ -28,6 +29,8 @@ public:
     void OnClickConnectServerBtn(QString ip, qint32 port);
 
     void SetLoginDialog(LoginDialog* dialog);
+
+    void OnNetMsgProcess(Packet& packet);
 protected:
     void closeEvent(QCloseEvent *event);
 public slots:
@@ -38,7 +41,7 @@ public slots:
 
     void OnServerMsgRecv();
 
-    void OnSndServerMsg(qint16 nSystem, qint16 nCmd, std::string data);
+    void OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data);
 private:
     Ui::MainWindow *ui;
 

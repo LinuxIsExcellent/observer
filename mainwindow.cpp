@@ -8,7 +8,6 @@
 
 #include "msg.pb.h"
 #include "log.h"
-#include "Packet.h"
 #include <google/protobuf/text_format.h>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -135,7 +134,7 @@ void MainWindow::OnServerConnect()
 /*发送数据包
  * in nSystem：系统号 nCmd：命令号 data：二进制数据
 */
-void MainWindow::OnSndServerMsg(qint16 nSystem, qint16 nCmd, std::string data)
+void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
 {
     // 先计算出包体的总长度
     // 因为packet类增加字符串的时候会增加2字节的长度和1字节的结束字符
@@ -165,7 +164,7 @@ void MainWindow::OnServerMsgRecv()
     }
     //解析数据部分
     char dataStr[packetLength];
-    qint16 readCount = m_ServerSockect->read(dataStr, packetLength);
+    quint16 readCount = m_ServerSockect->read(dataStr, packetLength);
     if (readCount != packetLength)
     {
         qDebug() << "数据包解析错误，丢弃当前数据包";
@@ -173,9 +172,35 @@ void MainWindow::OnServerMsgRecv()
         return;
     }
     Packet packet(dataStr, packetLength);
-    qint16 nSystem, nCmd;
-    packet >> nSystem >> nCmd;
+    OnNetMsgProcess(packet);
+}
 
-    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd << ", packetLength = " << packetLength;
+void MainWindow::OnNetMsgProcess(Packet& packet)
+{
+    quint16 nSystem, nCmd;
+    const char* strData;
 
+    packet >> nSystem >> nCmd >> strData;
+    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
+
+    if (nSystem == 0)
+    {
+        if (nCmd == test_2::server_msg::SEND_FILE_TREE_INFO)
+        {
+            test_2::server_send_file_tree_notify notify;
+            notify.ParseFromString(strData);
+
+            for (int i = 0; i < notify.lua_file_names_size();++i)
+            {
+                std::string file_name = notify.lua_file_names(i);
+                qDebug() << QString::fromStdString(file_name);
+            }
+
+        }
+        else if (nCmd == test_2::client_msg::REQUSET_LUA_TABLE_INFO)
+        {
+
+
+        }
+    }
 }
