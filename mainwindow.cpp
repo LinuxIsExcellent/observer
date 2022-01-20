@@ -5,10 +5,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QMessageBox>
-
-#include "msg.pb.h"
 #include "log.h"
-#include <google/protobuf/text_format.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_ServerSockect, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(OnSocketError(QAbstractSocket::SocketError)));
 
     init_windows();
+
+    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
 }
 
 MainWindow::~MainWindow()
@@ -68,7 +67,7 @@ void MainWindow::init_windows()
     hlayout_all->addWidget(m_leftWidget);
     hlayout_all->addWidget(m_rightWidget);
     hlayout_all->setStretchFactor(m_leftWidget, 1);
-    hlayout_all->setStretchFactor(m_rightWidget, 5);
+    hlayout_all->setStretchFactor(m_rightWidget, 4);
 
     m_mainWindowWidget->setLayout(hlayout_all);
 
@@ -118,6 +117,27 @@ void MainWindow::OnSocketError(QAbstractSocket::SocketError error)
     information.exec();
 }
 
+//双击文件树的item
+void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int column)
+{
+    if(item && item->parent())
+    {
+        if (item->parent()->text(0) == tr("二维表"))
+        {
+            qDebug() << item->text(0);
+            //请求二维表的数据
+
+            test_2::client_lua_table_data_quest quest;
+            quest.set_file_name(item->text(0).toStdString());
+
+            std::string output;
+            quest.SerializeToString(&output);
+
+            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_INFO, output);
+        }
+    }
+}
+
 //服务器连接成功
 void MainWindow::OnServerConnect()
 {
@@ -139,7 +159,7 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     // 先计算出包体的总长度
     // 因为packet类增加字符串的时候会增加2字节的长度和1字节的结束字符
     // 所以除了nSystem和nCmd之外需要多增加3字节的数据长度
-    int nDataLength = sizeof(nSystem) + sizeof(nCmd) + 3 + data.length();
+    quint32 nDataLength = sizeof(nSystem) + sizeof(nCmd) + 3 + data.length();
     Packet packet;
     packet << nDataLength << nSystem << nCmd << data.c_str();
 
@@ -148,31 +168,85 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
 
 void MainWindow::OnServerMsgRecv()
 {
-    //先解析数据头，整个数据包包含多少个字节
-    char headStr[4];
-    if(m_ServerSockect->read(headStr, 4) == 0)
+    //把内核缓冲区中所有的字节流读取出来
+    QByteArray data = m_ServerSockect->readAll();
+
+    quint32 nBufferSize = m_RecvBuffer.size();
+    if (nBufferSize <= RECV_BUFFER_SIZE)
     {
-        qDebug() << "服务器请求断开连接";
-        return;
+        m_RecvBuffer.append(data);
     }
-    int packetLength = *(int*)headStr;
-    if (packetLength <= 0 && packetLength >= 65536)
+    else
     {
-        qDebug() << "数据包头读取出错：" << packetLength;
-        m_ServerSockect->readAll();
-        return;
+        qDebug() << "tcp数据解析错误，数据缓存区已满 :" << nBufferSize;
+        m_RecvBuffer.clear();
     }
-    //解析数据部分
-    char dataStr[packetLength];
-    quint16 readCount = m_ServerSockect->read(dataStr, packetLength);
-    if (readCount != packetLength)
+
+    nBufferSize = m_RecvBuffer.size();
+
+    QByteArray header = m_RecvBuffer.left(4);
+    quint32 nLength = *(quint32*)header.data();
+
+    qDebug() << "数据包的大小为: " << nLength;
+    qDebug() << "接收到的流的大小为: " << data.size();
+    qDebug() << "数据缓冲区的大小: " << nBufferSize;
+
+    if (nBufferSize - 4 >= nLength)
     {
-        qDebug() << "数据包解析错误，丢弃当前数据包";
-        m_ServerSockect->readAll();
-        return;
+        char* packetStr = m_RecvBuffer.data();
+        Packet packet(packetStr + 4, nLength);
+        OnNetMsgProcess(packet);
+
+        //重新设置接收缓冲区的数据
+        if (nBufferSize - 4 > nLength)
+        {
+            QByteArray rightData = m_RecvBuffer.right(nBufferSize - nLength - 4);
+            m_RecvBuffer.clear();
+            m_RecvBuffer = rightData;
+
+            qDebug() << "重置缓冲区";
+        }
+        else
+        {
+            m_RecvBuffer.clear();
+
+            qDebug() << "重置缓冲区";
+        }
     }
-    Packet packet(dataStr, packetLength);
-    OnNetMsgProcess(packet);
+//    qDebug() << "head = " << data/*.size()*/;
+
+//    //先解析数据头，整个数据包包含多少个字节
+//    char headStr[4];
+//    if(m_ServerSockect->read(headStr, 4) == 0)
+//    {
+//        qDebug() << "服务器请求断开连接";
+//        return;
+//    }
+
+//    int nMax = 0x3FFFFFF;
+//    qDebug() << "nMax = " << nMax;
+
+//    int packetLength = *(int*)headStr;
+//    if (packetLength <= 0 || packetLength >= 65536)
+//    {
+//        qDebug() << "数据包头读取出错：" << packetLength;
+//        m_ServerSockect->readAll();
+//        return;
+//    }
+//    //解析数据部分
+//    char dataStr[packetLength];
+//    quint16 readCount = m_ServerSockect->read(dataStr, packetLength);
+//    qDebug() << "readCount = " << readCount;
+//    qDebug() << "packetLength = " << packetLength;
+//    if (readCount != packetLength)
+//    {
+//        qDebug() << "数据包解析错误，丢弃当前数据包";
+//        QByteArray data = m_ServerSockect->readAll();
+//        qDebug() << "size = " << data.size();
+//        return;
+//    }
+//    Packet packet(dataStr, packetLength);
+//    OnNetMsgProcess(packet);
 }
 
 void MainWindow::OnNetMsgProcess(Packet& packet)
@@ -190,17 +264,44 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             test_2::server_send_file_tree_notify notify;
             notify.ParseFromString(strData);
 
-            for (int i = 0; i < notify.lua_file_names_size();++i)
-            {
-                std::string file_name = notify.lua_file_names(i);
-                qDebug() << QString::fromStdString(file_name);
-            }
-
+            OnLeftTreeViewData(notify);
         }
-        else if (nCmd == test_2::client_msg::REQUSET_LUA_TABLE_INFO)
+        else if (nCmd == test_2::server_msg::SEND_LUA_TABLE_DATA)
         {
-
-
+//            qDebug() << strData;
         }
+    }
+}
+
+//https://blog.csdn.net/weixin_39485901/article/details/88413789
+void MainWindow::OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto)
+{
+    m_treeWidget->clear();
+    m_treeWidget->setHeaderHidden(true);
+
+    QList<QTreeWidgetItem *> items;
+
+    QTreeWidgetItem* first = new QTreeWidgetItem;
+    first->setText(0, tr("二维表"));
+    items.append(first);
+
+    QTreeWidgetItem* second = new QTreeWidgetItem;
+    second->setText(0, tr("全局一维表"));
+    items.append(second);
+
+    QTreeWidgetItem* third = new QTreeWidgetItem;
+    third->setText(0, tr("组合"));
+    items.append(third);
+
+    m_treeWidget->insertTopLevelItems(0, items);
+
+
+    for (int i = 0; i < proto.lua_table_file_names_size();++i)
+    {
+        std::string file_name = proto.lua_table_file_names(i);
+
+        QTreeWidgetItem *itemFileName = new QTreeWidgetItem;
+        itemFileName->setText(0, QString::fromStdString(file_name));
+        first->addChild(itemFileName);
     }
 }

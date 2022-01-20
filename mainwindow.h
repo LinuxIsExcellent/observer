@@ -10,6 +10,10 @@
 #include<QVBoxLayout>
 #include "logindialog.h"
 #include "Packet.h"
+#include "msg.pb.h"
+#include <google/protobuf/text_format.h>
+
+#define RECV_BUFFER_SIZE 10 * 1024 * 1024
 
 class LoginDialog;
 QT_BEGIN_NAMESPACE
@@ -31,6 +35,10 @@ public:
     void SetLoginDialog(LoginDialog* dialog);
 
     void OnNetMsgProcess(Packet& packet);
+
+public:
+    //刷新左边的列表数据
+    void OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 public slots:
@@ -42,8 +50,12 @@ public slots:
     void OnServerMsgRecv();
 
     void OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data);
+
+    void OnClickTreeWidgetItem(QTreeWidgetItem *item, int column);
 private:
     Ui::MainWindow *ui;
+
+    QByteArray m_RecvBuffer;      //tcp数据缓冲区
 
     QTcpSocket* m_ServerSockect;
     LoginDialog* m_loginDailog;
