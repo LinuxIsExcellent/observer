@@ -4,10 +4,12 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QHostAddress>
-#include<QLineEdit>
-#include<QTreeWidget>
-#include<QTabWidget>
-#include<QVBoxLayout>
+#include <QLineEdit>
+#include <QTreeWidget>
+#include <QTabWidget>
+#include <QVBoxLayout>
+#include <QTableView>
+#include <QStandardItemModel>
 #include "logindialog.h"
 #include "Packet.h"
 #include "msg.pb.h"
@@ -39,6 +41,9 @@ public:
 public:
     //刷新左边的列表数据
     void OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto);
+
+    //收到服务器发送过来的二维表数据，刷新tableWidget
+    void OnRecvServerLuaTableData(test_2::table_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 public slots:
@@ -70,7 +75,9 @@ private:
     QVBoxLayout* vlayout_right;
 
     QTreeWidget* m_treeWidget;   //文件目录
-    QTabWidget* m_tabWidget;    //数据信息展示页
+    QTabWidget* m_tabWidget;    //数据信息tab控件
+    QMap<QString, QWidget*> m_mTabwidgetMap;  //数据信息展示widget
+
     QLineEdit*  m_lineEdit;     //搜索栏
 
     QHBoxLayout* hlayout_all;        //中心widget的布局
