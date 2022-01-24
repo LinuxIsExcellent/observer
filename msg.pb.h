@@ -1460,8 +1460,7 @@ class field_squence final :
 
   enum : int {
     kLevelsFieldNumber = 1,
-    kFieldFieldNumber = 2,
-    kFiledTypesFieldNumber = 3,
+    kFieldsFieldNumber = 2,
   };
   // repeated int32 levels = 1;
   int levels_size() const;
@@ -1485,52 +1484,28 @@ class field_squence final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
       mutable_levels();
 
-  // repeated string field = 2;
-  int field_size() const;
+  // repeated string fields = 2;
+  int fields_size() const;
   private:
-  int _internal_field_size() const;
+  int _internal_fields_size() const;
   public:
-  void clear_field();
-  const std::string& field(int index) const;
-  std::string* mutable_field(int index);
-  void set_field(int index, const std::string& value);
-  void set_field(int index, std::string&& value);
-  void set_field(int index, const char* value);
-  void set_field(int index, const char* value, size_t size);
-  std::string* add_field();
-  void add_field(const std::string& value);
-  void add_field(std::string&& value);
-  void add_field(const char* value);
-  void add_field(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& field() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_field();
+  void clear_fields();
+  const std::string& fields(int index) const;
+  std::string* mutable_fields(int index);
+  void set_fields(int index, const std::string& value);
+  void set_fields(int index, std::string&& value);
+  void set_fields(int index, const char* value);
+  void set_fields(int index, const char* value, size_t size);
+  std::string* add_fields();
+  void add_fields(const std::string& value);
+  void add_fields(std::string&& value);
+  void add_fields(const char* value);
+  void add_fields(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& fields() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_fields();
   private:
-  const std::string& _internal_field(int index) const;
-  std::string* _internal_add_field();
-  public:
-
-  // repeated string filed_types = 3;
-  int filed_types_size() const;
-  private:
-  int _internal_filed_types_size() const;
-  public:
-  void clear_filed_types();
-  const std::string& filed_types(int index) const;
-  std::string* mutable_filed_types(int index);
-  void set_filed_types(int index, const std::string& value);
-  void set_filed_types(int index, std::string&& value);
-  void set_filed_types(int index, const char* value);
-  void set_filed_types(int index, const char* value, size_t size);
-  std::string* add_filed_types();
-  void add_filed_types(const std::string& value);
-  void add_filed_types(std::string&& value);
-  void add_filed_types(const char* value);
-  void add_filed_types(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& filed_types() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_filed_types();
-  private:
-  const std::string& _internal_filed_types(int index) const;
-  std::string* _internal_add_filed_types();
+  const std::string& _internal_fields(int index) const;
+  std::string* _internal_add_fields();
   public:
 
   // @@protoc_insertion_point(class_scope:test_2.field_squence)
@@ -1542,8 +1517,7 @@ class field_squence final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > levels_;
   mutable std::atomic<int> _levels_cached_byte_size_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> field_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> filed_types_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> fields_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -1673,8 +1647,8 @@ class table_data final :
   enum : int {
     kFiledNamesFieldNumber = 4,
     kFiledTypesFieldNumber = 5,
-    kFiledSequencesFieldNumber = 6,
-    kRowListsFieldNumber = 7,
+    kRowListsFieldNumber = 6,
+    kFiledSequencesFieldNumber = 7,
     kTableNameFieldNumber = 1,
     kRowCountFieldNumber = 2,
     kColumnCountFieldNumber = 3,
@@ -1703,49 +1677,29 @@ class table_data final :
   std::string* _internal_add_filed_names();
   public:
 
-  // repeated string filed_types = 5;
+  // repeated int32 filed_types = 5;
   int filed_types_size() const;
   private:
   int _internal_filed_types_size() const;
   public:
   void clear_filed_types();
-  const std::string& filed_types(int index) const;
-  std::string* mutable_filed_types(int index);
-  void set_filed_types(int index, const std::string& value);
-  void set_filed_types(int index, std::string&& value);
-  void set_filed_types(int index, const char* value);
-  void set_filed_types(int index, const char* value, size_t size);
-  std::string* add_filed_types();
-  void add_filed_types(const std::string& value);
-  void add_filed_types(std::string&& value);
-  void add_filed_types(const char* value);
-  void add_filed_types(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& filed_types() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_filed_types();
   private:
-  const std::string& _internal_filed_types(int index) const;
-  std::string* _internal_add_filed_types();
+  int32_t _internal_filed_types(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+      _internal_filed_types() const;
+  void _internal_add_filed_types(int32_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+      _internal_mutable_filed_types();
   public:
+  int32_t filed_types(int index) const;
+  void set_filed_types(int index, int32_t value);
+  void add_filed_types(int32_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+      filed_types() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+      mutable_filed_types();
 
-  // repeated .test_2.field_squence filed_sequences = 6;
-  int filed_sequences_size() const;
-  private:
-  int _internal_filed_sequences_size() const;
-  public:
-  void clear_filed_sequences();
-  ::test_2::field_squence* mutable_filed_sequences(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
-      mutable_filed_sequences();
-  private:
-  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
-  ::test_2::field_squence* _internal_add_filed_sequences();
-  public:
-  const ::test_2::field_squence& filed_sequences(int index) const;
-  ::test_2::field_squence* add_filed_sequences();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
-      filed_sequences() const;
-
-  // repeated .test_2.row_data row_lists = 7;
+  // repeated .test_2.row_data row_lists = 6;
   int row_lists_size() const;
   private:
   int _internal_row_lists_size() const;
@@ -1762,6 +1716,24 @@ class table_data final :
   ::test_2::row_data* add_row_lists();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >&
       row_lists() const;
+
+  // repeated .test_2.field_squence filed_sequences = 7;
+  int filed_sequences_size() const;
+  private:
+  int _internal_filed_sequences_size() const;
+  public:
+  void clear_filed_sequences();
+  ::test_2::field_squence* mutable_filed_sequences(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+      mutable_filed_sequences();
+  private:
+  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
+  ::test_2::field_squence* _internal_add_filed_sequences();
+  public:
+  const ::test_2::field_squence& filed_sequences(int index) const;
+  ::test_2::field_squence* add_filed_sequences();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+      filed_sequences() const;
 
   // string table_name = 1;
   void clear_table_name();
@@ -1803,9 +1775,10 @@ class table_data final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> filed_names_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> filed_types_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > filed_types_;
+  mutable std::atomic<int> _filed_types_cached_byte_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data > row_lists_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
   int32_t row_count_;
   int32_t column_count_;
@@ -1815,9 +1788,10 @@ class table_data final :
 // -------------------------------------------------------------------
 
 class table_info final :
-    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:test_2.table_info) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.table_info) */ {
  public:
   inline table_info() : table_info(nullptr) {}
+  ~table_info() override;
   explicit constexpr table_info(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
   table_info(const table_info& from);
@@ -1890,15 +1864,27 @@ class table_info final :
   table_info* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
     return CreateMaybeMessage<table_info>(arena);
   }
-  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
-  inline void CopyFrom(const table_info& from) {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
-  void MergeFrom(const table_info& from) {
-    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
-  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const table_info& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const table_info& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(table_info* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
@@ -1909,6 +1895,8 @@ class table_info final :
   explicit table_info(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
   public:
 
   static const ClassData _class_data_;
@@ -1920,6 +1908,42 @@ class table_info final :
 
   // accessors -------------------------------------------------------
 
+  enum : int {
+    kFiledSequencesFieldNumber = 2,
+    kTableNameFieldNumber = 1,
+  };
+  // repeated .test_2.field_squence filed_sequences = 2;
+  int filed_sequences_size() const;
+  private:
+  int _internal_filed_sequences_size() const;
+  public:
+  void clear_filed_sequences();
+  ::test_2::field_squence* mutable_filed_sequences(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+      mutable_filed_sequences();
+  private:
+  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
+  ::test_2::field_squence* _internal_add_filed_sequences();
+  public:
+  const ::test_2::field_squence& filed_sequences(int index) const;
+  ::test_2::field_squence* add_filed_sequences();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+      filed_sequences() const;
+
+  // string table_name = 1;
+  void clear_table_name();
+  const std::string& table_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_table_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_table_name();
+  PROTOBUF_NODISCARD std::string* release_table_name();
+  void set_allocated_table_name(std::string* table_name);
+  private:
+  const std::string& _internal_table_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_table_name(const std::string& value);
+  std::string* _internal_mutable_table_name();
+  public:
+
   // @@protoc_insertion_point(class_scope:test_2.table_info)
  private:
   class _Internal;
@@ -1927,6 +1951,8 @@ class table_info final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -2647,154 +2673,79 @@ field_squence::mutable_levels() {
   return _internal_mutable_levels();
 }
 
-// repeated string field = 2;
-inline int field_squence::_internal_field_size() const {
-  return field_.size();
+// repeated string fields = 2;
+inline int field_squence::_internal_fields_size() const {
+  return fields_.size();
 }
-inline int field_squence::field_size() const {
-  return _internal_field_size();
+inline int field_squence::fields_size() const {
+  return _internal_fields_size();
 }
-inline void field_squence::clear_field() {
-  field_.Clear();
+inline void field_squence::clear_fields() {
+  fields_.Clear();
 }
-inline std::string* field_squence::add_field() {
-  std::string* _s = _internal_add_field();
-  // @@protoc_insertion_point(field_add_mutable:test_2.field_squence.field)
+inline std::string* field_squence::add_fields() {
+  std::string* _s = _internal_add_fields();
+  // @@protoc_insertion_point(field_add_mutable:test_2.field_squence.fields)
   return _s;
 }
-inline const std::string& field_squence::_internal_field(int index) const {
-  return field_.Get(index);
+inline const std::string& field_squence::_internal_fields(int index) const {
+  return fields_.Get(index);
 }
-inline const std::string& field_squence::field(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.field_squence.field)
-  return _internal_field(index);
+inline const std::string& field_squence::fields(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.field_squence.fields)
+  return _internal_fields(index);
 }
-inline std::string* field_squence::mutable_field(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.field_squence.field)
-  return field_.Mutable(index);
+inline std::string* field_squence::mutable_fields(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.field_squence.fields)
+  return fields_.Mutable(index);
 }
-inline void field_squence::set_field(int index, const std::string& value) {
-  field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:test_2.field_squence.field)
+inline void field_squence::set_fields(int index, const std::string& value) {
+  fields_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:test_2.field_squence.fields)
 }
-inline void field_squence::set_field(int index, std::string&& value) {
-  field_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:test_2.field_squence.field)
+inline void field_squence::set_fields(int index, std::string&& value) {
+  fields_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:test_2.field_squence.fields)
 }
-inline void field_squence::set_field(int index, const char* value) {
+inline void field_squence::set_fields(int index, const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:test_2.field_squence.field)
+  fields_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:test_2.field_squence.fields)
 }
-inline void field_squence::set_field(int index, const char* value, size_t size) {
-  field_.Mutable(index)->assign(
+inline void field_squence::set_fields(int index, const char* value, size_t size) {
+  fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:test_2.field_squence.field)
+  // @@protoc_insertion_point(field_set_pointer:test_2.field_squence.fields)
 }
-inline std::string* field_squence::_internal_add_field() {
-  return field_.Add();
+inline std::string* field_squence::_internal_add_fields() {
+  return fields_.Add();
 }
-inline void field_squence::add_field(const std::string& value) {
-  field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:test_2.field_squence.field)
+inline void field_squence::add_fields(const std::string& value) {
+  fields_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:test_2.field_squence.fields)
 }
-inline void field_squence::add_field(std::string&& value) {
-  field_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:test_2.field_squence.field)
+inline void field_squence::add_fields(std::string&& value) {
+  fields_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:test_2.field_squence.fields)
 }
-inline void field_squence::add_field(const char* value) {
+inline void field_squence::add_fields(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:test_2.field_squence.field)
+  fields_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:test_2.field_squence.fields)
 }
-inline void field_squence::add_field(const char* value, size_t size) {
-  field_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:test_2.field_squence.field)
+inline void field_squence::add_fields(const char* value, size_t size) {
+  fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:test_2.field_squence.fields)
 }
 inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-field_squence::field() const {
-  // @@protoc_insertion_point(field_list:test_2.field_squence.field)
-  return field_;
+field_squence::fields() const {
+  // @@protoc_insertion_point(field_list:test_2.field_squence.fields)
+  return fields_;
 }
 inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-field_squence::mutable_field() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.field_squence.field)
-  return &field_;
-}
-
-// repeated string filed_types = 3;
-inline int field_squence::_internal_filed_types_size() const {
-  return filed_types_.size();
-}
-inline int field_squence::filed_types_size() const {
-  return _internal_filed_types_size();
-}
-inline void field_squence::clear_filed_types() {
-  filed_types_.Clear();
-}
-inline std::string* field_squence::add_filed_types() {
-  std::string* _s = _internal_add_filed_types();
-  // @@protoc_insertion_point(field_add_mutable:test_2.field_squence.filed_types)
-  return _s;
-}
-inline const std::string& field_squence::_internal_filed_types(int index) const {
-  return filed_types_.Get(index);
-}
-inline const std::string& field_squence::filed_types(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.field_squence.filed_types)
-  return _internal_filed_types(index);
-}
-inline std::string* field_squence::mutable_filed_types(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.field_squence.filed_types)
-  return filed_types_.Mutable(index);
-}
-inline void field_squence::set_filed_types(int index, const std::string& value) {
-  filed_types_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:test_2.field_squence.filed_types)
-}
-inline void field_squence::set_filed_types(int index, std::string&& value) {
-  filed_types_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:test_2.field_squence.filed_types)
-}
-inline void field_squence::set_filed_types(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  filed_types_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:test_2.field_squence.filed_types)
-}
-inline void field_squence::set_filed_types(int index, const char* value, size_t size) {
-  filed_types_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:test_2.field_squence.filed_types)
-}
-inline std::string* field_squence::_internal_add_filed_types() {
-  return filed_types_.Add();
-}
-inline void field_squence::add_filed_types(const std::string& value) {
-  filed_types_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:test_2.field_squence.filed_types)
-}
-inline void field_squence::add_filed_types(std::string&& value) {
-  filed_types_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:test_2.field_squence.filed_types)
-}
-inline void field_squence::add_filed_types(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  filed_types_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:test_2.field_squence.filed_types)
-}
-inline void field_squence::add_filed_types(const char* value, size_t size) {
-  filed_types_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:test_2.field_squence.filed_types)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-field_squence::filed_types() const {
-  // @@protoc_insertion_point(field_list:test_2.field_squence.filed_types)
-  return filed_types_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-field_squence::mutable_filed_types() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.field_squence.filed_types)
-  return &filed_types_;
+field_squence::mutable_fields() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.field_squence.fields)
+  return &fields_;
 }
 
 // -------------------------------------------------------------------
@@ -2967,7 +2918,7 @@ table_data::mutable_filed_names() {
   return &filed_names_;
 }
 
-// repeated string filed_types = 5;
+// repeated int32 filed_types = 5;
 inline int table_data::_internal_filed_types_size() const {
   return filed_types_.size();
 }
@@ -2977,112 +2928,44 @@ inline int table_data::filed_types_size() const {
 inline void table_data::clear_filed_types() {
   filed_types_.Clear();
 }
-inline std::string* table_data::add_filed_types() {
-  std::string* _s = _internal_add_filed_types();
-  // @@protoc_insertion_point(field_add_mutable:test_2.table_data.filed_types)
-  return _s;
-}
-inline const std::string& table_data::_internal_filed_types(int index) const {
+inline int32_t table_data::_internal_filed_types(int index) const {
   return filed_types_.Get(index);
 }
-inline const std::string& table_data::filed_types(int index) const {
+inline int32_t table_data::filed_types(int index) const {
   // @@protoc_insertion_point(field_get:test_2.table_data.filed_types)
   return _internal_filed_types(index);
 }
-inline std::string* table_data::mutable_filed_types(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.table_data.filed_types)
-  return filed_types_.Mutable(index);
-}
-inline void table_data::set_filed_types(int index, const std::string& value) {
-  filed_types_.Mutable(index)->assign(value);
+inline void table_data::set_filed_types(int index, int32_t value) {
+  filed_types_.Set(index, value);
   // @@protoc_insertion_point(field_set:test_2.table_data.filed_types)
 }
-inline void table_data::set_filed_types(int index, std::string&& value) {
-  filed_types_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:test_2.table_data.filed_types)
+inline void table_data::_internal_add_filed_types(int32_t value) {
+  filed_types_.Add(value);
 }
-inline void table_data::set_filed_types(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  filed_types_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:test_2.table_data.filed_types)
-}
-inline void table_data::set_filed_types(int index, const char* value, size_t size) {
-  filed_types_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:test_2.table_data.filed_types)
-}
-inline std::string* table_data::_internal_add_filed_types() {
-  return filed_types_.Add();
-}
-inline void table_data::add_filed_types(const std::string& value) {
-  filed_types_.Add()->assign(value);
+inline void table_data::add_filed_types(int32_t value) {
+  _internal_add_filed_types(value);
   // @@protoc_insertion_point(field_add:test_2.table_data.filed_types)
 }
-inline void table_data::add_filed_types(std::string&& value) {
-  filed_types_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:test_2.table_data.filed_types)
-}
-inline void table_data::add_filed_types(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  filed_types_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:test_2.table_data.filed_types)
-}
-inline void table_data::add_filed_types(const char* value, size_t size) {
-  filed_types_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:test_2.table_data.filed_types)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-table_data::filed_types() const {
-  // @@protoc_insertion_point(field_list:test_2.table_data.filed_types)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+table_data::_internal_filed_types() const {
   return filed_types_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-table_data::mutable_filed_types() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_types)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+table_data::filed_types() const {
+  // @@protoc_insertion_point(field_list:test_2.table_data.filed_types)
+  return _internal_filed_types();
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+table_data::_internal_mutable_filed_types() {
   return &filed_types_;
 }
-
-// repeated .test_2.field_squence filed_sequences = 6;
-inline int table_data::_internal_filed_sequences_size() const {
-  return filed_sequences_.size();
-}
-inline int table_data::filed_sequences_size() const {
-  return _internal_filed_sequences_size();
-}
-inline void table_data::clear_filed_sequences() {
-  filed_sequences_.Clear();
-}
-inline ::test_2::field_squence* table_data::mutable_filed_sequences(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.table_data.filed_sequences)
-  return filed_sequences_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
-table_data::mutable_filed_sequences() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_sequences)
-  return &filed_sequences_;
-}
-inline const ::test_2::field_squence& table_data::_internal_filed_sequences(int index) const {
-  return filed_sequences_.Get(index);
-}
-inline const ::test_2::field_squence& table_data::filed_sequences(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.table_data.filed_sequences)
-  return _internal_filed_sequences(index);
-}
-inline ::test_2::field_squence* table_data::_internal_add_filed_sequences() {
-  return filed_sequences_.Add();
-}
-inline ::test_2::field_squence* table_data::add_filed_sequences() {
-  ::test_2::field_squence* _add = _internal_add_filed_sequences();
-  // @@protoc_insertion_point(field_add:test_2.table_data.filed_sequences)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
-table_data::filed_sequences() const {
-  // @@protoc_insertion_point(field_list:test_2.table_data.filed_sequences)
-  return filed_sequences_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+table_data::mutable_filed_types() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_types)
+  return _internal_mutable_filed_types();
 }
 
-// repeated .test_2.row_data row_lists = 7;
+// repeated .test_2.row_data row_lists = 6;
 inline int table_data::_internal_row_lists_size() const {
   return row_lists_.size();
 }
@@ -3122,9 +3005,140 @@ table_data::row_lists() const {
   return row_lists_;
 }
 
+// repeated .test_2.field_squence filed_sequences = 7;
+inline int table_data::_internal_filed_sequences_size() const {
+  return filed_sequences_.size();
+}
+inline int table_data::filed_sequences_size() const {
+  return _internal_filed_sequences_size();
+}
+inline void table_data::clear_filed_sequences() {
+  filed_sequences_.Clear();
+}
+inline ::test_2::field_squence* table_data::mutable_filed_sequences(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.table_data.filed_sequences)
+  return filed_sequences_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+table_data::mutable_filed_sequences() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_sequences)
+  return &filed_sequences_;
+}
+inline const ::test_2::field_squence& table_data::_internal_filed_sequences(int index) const {
+  return filed_sequences_.Get(index);
+}
+inline const ::test_2::field_squence& table_data::filed_sequences(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.table_data.filed_sequences)
+  return _internal_filed_sequences(index);
+}
+inline ::test_2::field_squence* table_data::_internal_add_filed_sequences() {
+  return filed_sequences_.Add();
+}
+inline ::test_2::field_squence* table_data::add_filed_sequences() {
+  ::test_2::field_squence* _add = _internal_add_filed_sequences();
+  // @@protoc_insertion_point(field_add:test_2.table_data.filed_sequences)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+table_data::filed_sequences() const {
+  // @@protoc_insertion_point(field_list:test_2.table_data.filed_sequences)
+  return filed_sequences_;
+}
+
 // -------------------------------------------------------------------
 
 // table_info
+
+// string table_name = 1;
+inline void table_info::clear_table_name() {
+  table_name_.ClearToEmpty();
+}
+inline const std::string& table_info::table_name() const {
+  // @@protoc_insertion_point(field_get:test_2.table_info.table_name)
+  return _internal_table_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void table_info::set_table_name(ArgT0&& arg0, ArgT... args) {
+ 
+ table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.table_info.table_name)
+}
+inline std::string* table_info::mutable_table_name() {
+  std::string* _s = _internal_mutable_table_name();
+  // @@protoc_insertion_point(field_mutable:test_2.table_info.table_name)
+  return _s;
+}
+inline const std::string& table_info::_internal_table_name() const {
+  return table_name_.Get();
+}
+inline void table_info::_internal_set_table_name(const std::string& value) {
+  
+  table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* table_info::_internal_mutable_table_name() {
+  
+  return table_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* table_info::release_table_name() {
+  // @@protoc_insertion_point(field_release:test_2.table_info.table_name)
+  return table_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void table_info::set_allocated_table_name(std::string* table_name) {
+  if (table_name != nullptr) {
+    
+  } else {
+    
+  }
+  table_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), table_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (table_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    table_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.table_info.table_name)
+}
+
+// repeated .test_2.field_squence filed_sequences = 2;
+inline int table_info::_internal_filed_sequences_size() const {
+  return filed_sequences_.size();
+}
+inline int table_info::filed_sequences_size() const {
+  return _internal_filed_sequences_size();
+}
+inline void table_info::clear_filed_sequences() {
+  filed_sequences_.Clear();
+}
+inline ::test_2::field_squence* table_info::mutable_filed_sequences(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.table_info.filed_sequences)
+  return filed_sequences_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+table_info::mutable_filed_sequences() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.table_info.filed_sequences)
+  return &filed_sequences_;
+}
+inline const ::test_2::field_squence& table_info::_internal_filed_sequences(int index) const {
+  return filed_sequences_.Get(index);
+}
+inline const ::test_2::field_squence& table_info::filed_sequences(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.table_info.filed_sequences)
+  return _internal_filed_sequences(index);
+}
+inline ::test_2::field_squence* table_info::_internal_add_filed_sequences() {
+  return filed_sequences_.Add();
+}
+inline ::test_2::field_squence* table_info::add_filed_sequences() {
+  ::test_2::field_squence* _add = _internal_add_filed_sequences();
+  // @@protoc_insertion_point(field_add:test_2.table_info.filed_sequences)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+table_info::filed_sequences() const {
+  // @@protoc_insertion_point(field_list:test_2.table_info.filed_sequences)
+  return filed_sequences_;
+}
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop

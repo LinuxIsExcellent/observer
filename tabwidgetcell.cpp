@@ -114,20 +114,32 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
     if(m_tableView)
     {
         QStandardItemModel *student_model = new QStandardItemModel();
-        student_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ID")));
+
+        for (int i = 0; i < proto.filed_names_size();++i)
+        {
+            QString strField = QString::fromStdString(proto.filed_names(i));
+            m_mFieldNames.insert(strField, i);
+
+            int nType = proto.filed_types(i);
+            m_mFieldTypes.insert(strField, nType);
+
+            student_model->setHorizontalHeaderItem(i, new QStandardItem(strField));
+        }
+
         //利用setModel()方法将数据模型与QTableView绑定
         m_tableView->setModel(student_model);
 
         for (int i = 0; i < proto.row_lists_size();++i)
         {
             test_2::row_data row_data = proto.row_lists(i);
-            student_model->setItem(i, 0, new QStandardItem(QString::fromStdString(row_data.key())));
 
             for (int j = 0; j < row_data.pair_size(); ++j) {
                 test_2::pair_value pair = row_data.pair(j);
-
-                student_model->setHorizontalHeaderItem(j + 1, new QStandardItem(QString::fromStdString(pair.key())));
-                student_model->setItem(i, j + 1, new QStandardItem(QString::fromStdString(pair.value())));
+                auto iter = m_mFieldNames.find(QString::fromStdString(pair.key()));
+                if(iter != m_mFieldNames.end())
+                {
+                    student_model->setItem(i, iter.value(), new QStandardItem(QString::fromStdString(pair.value())));
+                }
             }
         }
     }

@@ -47,6 +47,8 @@ private:
     QVBoxLayout* vlayout_all;  //整个TabWidget类的垂直布局
 
     bool    m_bHeadIndexChange; //表头顺序是否被更改
+    QMap<QString, int>  m_mFieldNames; //表的字段的顺序
+    QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
 };
 
 #endif // TABWIDGETCELL_H
