@@ -11,6 +11,7 @@
 #include <QTableView>
 #include <QStandardItemModel>
 #include "logindialog.h"
+#include "tabwidgetcell.h"
 #include "Packet.h"
 #include "msg.pb.h"
 #include <google/protobuf/text_format.h>
@@ -43,7 +44,7 @@ public:
     void OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto);
 
     //收到服务器发送过来的二维表数据，刷新tableWidget
-    void OnRecvServerLuaTableData(test_2::table_info& proto);
+    void OnRecvServerLuaTableData(test_2::table_data& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 public slots:
@@ -57,6 +58,8 @@ public slots:
     void OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data);
 
     void OnClickTreeWidgetItem(QTreeWidgetItem *item, int column);
+
+    void OnCloseTabWidget(int nIndex);
 private:
     Ui::MainWindow *ui;
 
@@ -76,7 +79,7 @@ private:
 
     QTreeWidget* m_treeWidget;   //文件目录
     QTabWidget* m_tabWidget;    //数据信息tab控件
-    QMap<QString, QWidget*> m_mTabwidgetMap;  //数据信息展示widget
+    QMap<QString, TabWidgetCell*> m_mTabwidgetMap;  //数据信息展示widget
 
     QLineEdit*  m_lineEdit;     //搜索栏
 

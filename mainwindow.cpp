@@ -6,12 +6,14 @@
 #include <QDebug>
 #include <QMessageBox>
 #include "log.h"
+#include "tabwidgetcell.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    resize(1280, 720);
 
     m_ServerSockect = new QTcpSocket(this);
     //连接事件
@@ -74,6 +76,47 @@ void MainWindow::init_windows()
     setCentralWidget(m_mainWindowWidget);
 
     m_tabWidget->setMovable(true);
+    m_tabWidget->setTabsClosable(true);
+
+    connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(OnCloseTabWidget(int)));
+}
+
+void MainWindow::OnCloseTabWidget(int nIndex)
+{
+    TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->widget(nIndex);
+    if(tabCell)
+    {
+        QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("表头顺序被更改，是否保存？"));
+        QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
+        QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
+        QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
+        cancelButton->hide();
+        box.exec();
+
+        //请求保存再关闭界面
+        if( box.clickedButton() == saveButton )
+        {
+            m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
+            m_tabWidget->removeTab(nIndex);
+
+            delete tabCell;
+            tabCell = nullptr;
+        }
+        //直接关闭界面
+        else if ( box.clickedButton() == quitButton )
+        {
+            m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
+            m_tabWidget->removeTab(nIndex);
+
+            delete tabCell;
+            tabCell = nullptr;
+        }
+        //退出message对话框（直接关闭messageBox对话框）
+        else if ( box.clickedButton() == cancelButton )
+        {
+            return;
+        }
+    }
 }
 
 //窗口关闭事件
@@ -128,7 +171,7 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int column)
             std::string output;
             quest.SerializeToString(&output);
 
-            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_INFO, output);
+            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
         }
     }
 }
@@ -263,7 +306,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
         }
         else if (nCmd == test_2::server_msg::SEND_LUA_TABLE_DATA)
         {
-            test_2::table_info notify;
+            test_2::table_data notify;
             notify.ParseFromString(strData);
 
             OnRecvServerLuaTableData(notify);
@@ -271,7 +314,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
     }
 }
 
-void MainWindow::OnRecvServerLuaTableData(test_2::table_info& proto)
+void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
 {
     QString table_name = QString::fromStdString(proto.table_name());
     auto iter = m_mTabwidgetMap.find(table_name);
@@ -279,44 +322,59 @@ void MainWindow::OnRecvServerLuaTableData(test_2::table_info& proto)
     if (iter != m_mTabwidgetMap.end())
     {
         m_tabWidget->setCurrentWidget(iter.value());
+        iter.value()->SetProtoData(proto);
     }
     else
     {
-        QWidget* widget = new QWidget(this);
-        m_tabWidget->addTab(widget, table_name);
-        m_mTabwidgetMap.insert(table_name, widget);
-        m_tabWidget->setCurrentWidget(widget);
-
-        QTableView* tableView = new QTableView(widget);
-        if(tableView)
+        TabWidgetCell* tabCell = new TabWidgetCell(this);
+        if(tabCell)
         {
-            tableView->verticalHeader()->hide();
+            m_tabWidget->addTab(tabCell, table_name);
+            tabCell->SetProtoData(proto);
 
-            QHBoxLayout* layout = new QHBoxLayout(widget);
-            layout->addWidget(tableView);
-            widget->setLayout(layout);
-
-            QStandardItemModel *student_model = new QStandardItemModel();
-            student_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ID")));
-            //利用setModel()方法将数据模型与QTableView绑定
-            tableView->setModel(student_model);
-
-            int nRow = proto.row_count();
-            int nColumn = proto.column_count();
-
-            for (int i = 0; i < proto.row_lists_size();++i)
-            {
-                test_2::row_data row_data = proto.row_lists(i);
-                student_model->setItem(i, 0, new QStandardItem(QString::fromStdString(row_data.key())));
-
-                for (int j = 0; j < row_data.pair_size(); ++j) {
-                    test_2::pair_value pair = row_data.pair(j);
-
-                    student_model->setHorizontalHeaderItem(j + 1, new QStandardItem(QString::fromStdString(pair.key())));
-                    student_model->setItem(i, j + 1, new QStandardItem(QString::fromStdString(pair.value())));
-                }
-            }
+            m_mTabwidgetMap.insert(table_name, tabCell);
+            m_tabWidget->setCurrentWidget(tabCell);
         }
+
+//        QWidget* widget = new QWidget(this);
+//        m_tabWidget->addTab(widget, table_name);
+//        m_mTabwidgetMap.insert(table_name, widget);
+//        m_tabWidget->setCurrentWidget(widget);
+
+
+//        QTableView* tableView = new QTableView(widget);
+//        if(tableView)
+//        {
+//            tableView->verticalHeader()->hide();
+//            tableView->horizontalHeader()->setSectionsMovable(true);
+
+//            QHBoxLayout* layout = new QHBoxLayout(widget);
+//            layout->addWidget(tableView);
+//            widget->setLayout(layout);
+
+//            QStandardItemModel *student_model = new QStandardItemModel();
+//            student_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ID")));
+//            //利用setModel()方法将数据模型与QTableView绑定
+//            tableView->setModel(student_model);
+
+//            int nRow = proto.row_count();
+//            int nColumn = proto.column_count();
+
+//            for (int i = 0; i < proto.row_lists_size();++i)
+//            {
+//                test_2::row_data row_data = proto.row_lists(i);
+//                student_model->setItem(i, 0, new QStandardItem(QString::fromStdString(row_data.key())));
+
+//                for (int j = 0; j < row_data.pair_size(); ++j) {
+//                    test_2::pair_value pair = row_data.pair(j);
+
+//                    student_model->setHorizontalHeaderItem(j + 1, new QStandardItem(QString::fromStdString(pair.key())));
+//                    student_model->setItem(i, j + 1, new QStandardItem(QString::fromStdString(pair.value())));
+//                }
+//            }
+
+//            tableView->resizeColumnsToContents();
+//        }
     }
 }
 

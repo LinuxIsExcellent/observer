@@ -23,7 +23,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     msg.pb.cc \
-    parseconfig.cpp
+    parseconfig.cpp \
+    tabwidgetcell.cpp
 
 HEADERS += \
     Packet.h \
@@ -32,11 +33,13 @@ HEADERS += \
     logindialog.h \
     mainwindow.h \
     msg.pb.h \
-    parseconfig.h
+    parseconfig.h \
+    tabwidgetcell.h
 
 FORMS += \
     logindialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    tabwidgetcell.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
