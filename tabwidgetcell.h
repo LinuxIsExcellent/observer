@@ -15,6 +15,12 @@ namespace Ui {
 class TabWidgetCell;
 }
 
+typedef struct fieldSquence
+{
+    std::vector<uint16_t> vNLevels;         //深度队列
+    std::vector<std::string> vSFieldSquences;       //对应的字段顺序
+}FIELDSQUENCE;
+
 class TabWidgetCell : public QWidget
 {
     Q_OBJECT
@@ -28,6 +34,11 @@ public:
     inline bool IsHeadIndexChange()
     {
         return m_bHeadIndexChange;
+    }
+
+    inline bool IsTableDataChange()
+    {
+        return m_bTableDataChange;
     }
 private slots:
     void sectionMovableBtnClicked();
@@ -47,8 +58,11 @@ private:
     QVBoxLayout* vlayout_all;  //整个TabWidget类的垂直布局
 
     bool    m_bHeadIndexChange; //表头顺序是否被更改
+    bool    m_bTableDataChange; //表的数据是否被更改
     QMap<QString, int>  m_mFieldNames; //表的字段的顺序
     QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
+
+    QVector<FIELDSQUENCE>  m_vFieldSquences; //表字段的排序
 };
 
 #endif // TABWIDGETCELL_H

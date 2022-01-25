@@ -7,6 +7,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 {
     ui->setupUi(this);
     m_bHeadIndexChange = false;
+    m_bTableDataChange = false;
 
     //初始化上边的widget和layout
     m_topWidget = new QWidget(this);
@@ -113,8 +114,33 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
 {
     if(m_tableView)
     {
+//        QMap<QString, int> mTableInfoFieldSquence;
+        for (int i = 0; i < proto.filed_sequences_size();++i)
+        {
+            test_2::field_squence fieldSquence = proto.filed_sequences(i);
+            for (int j = 0; j < fieldSquence.levels_size();++j)
+            {
+                int nLevel = fieldSquence.levels(j);
+//                qDebug() << "nLevel = " << nLevel;
+            }
+
+            for (int j = 0; j < fieldSquence.fields_size();++j)
+            {
+                QString strField = QString::fromStdString(fieldSquence.fields(j));
+
+//                qDebug() << "strField = " << strField;
+
+//                //最外层设置的字段顺序
+//                if (fieldSquence.levels_size() == 0)
+//                {
+//                    mTableInfoFieldSquence.insert(strField, j);
+//                }
+            }
+        }
+
         QStandardItemModel *student_model = new QStandardItemModel();
 
+        //设置表头
         for (int i = 0; i < proto.filed_names_size();++i)
         {
             QString strField = QString::fromStdString(proto.filed_names(i));
@@ -123,7 +149,15 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
             int nType = proto.filed_types(i);
             m_mFieldTypes.insert(strField, nType);
 
-            student_model->setHorizontalHeaderItem(i, new QStandardItem(strField));
+            qDebug() << "strField = " << strField;
+            int visualColumn = i;
+//            //如果有人为设定列展示的顺序
+//            if (mTableInfoFieldSquence.find(strField) != mTableInfoFieldSquence.end())
+//            {
+//                visualColumn = mTableInfoFieldSquence.find(strField).value();
+//            }
+
+            student_model->setHorizontalHeaderItem(visualColumn, new QStandardItem(strField));
         }
 
         //利用setModel()方法将数据模型与QTableView绑定
@@ -135,11 +169,24 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
 
             for (int j = 0; j < row_data.pair_size(); ++j) {
                 test_2::pair_value pair = row_data.pair(j);
-                auto iter = m_mFieldNames.find(QString::fromStdString(pair.key()));
+
+                QString strFieldName = QString::fromStdString(pair.key());
+                auto iter = m_mFieldNames.find(strFieldName);
+
+                int visualColumn = j;
+
                 if(iter != m_mFieldNames.end())
                 {
-                    student_model->setItem(i, iter.value(), new QStandardItem(QString::fromStdString(pair.value())));
+                    visualColumn = iter.value();
                 }
+
+//                //如果有人为设定列展示的顺序
+//                if (mTableInfoFieldSquence.find(strFieldName) != mTableInfoFieldSquence.end())
+//                {
+//                    visualColumn = mTableInfoFieldSquence.find(strFieldName).value();
+//                }
+
+                student_model->setItem(i, visualColumn, new QStandardItem(QString::fromStdString(pair.value())));
             }
         }
     }

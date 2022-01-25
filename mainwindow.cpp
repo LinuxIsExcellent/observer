@@ -78,43 +78,57 @@ void MainWindow::init_windows()
     m_tabWidget->setMovable(true);
     m_tabWidget->setTabsClosable(true);
 
-    connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(OnCloseTabWidget(int)));
+    connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(OnCloseTabWidgetSlot(int)));
 }
 
-void MainWindow::OnCloseTabWidget(int nIndex)
+void MainWindow::OnCloseTabWidget(QWidget* widget)
+{
+    if(!widget) return;
+
+    int nIndex = m_tabWidget->indexOf(widget);
+
+    m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
+    m_tabWidget->removeTab(nIndex);
+
+    delete widget;
+    widget = nullptr;
+}
+
+void MainWindow::OnCloseTabWidgetSlot(int nIndex)
 {
     TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->widget(nIndex);
     if(tabCell)
     {
-        QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("表头顺序被更改，是否保存？"));
-        QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
-        QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
-        QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
-        cancelButton->hide();
-        box.exec();
-
-        //请求保存再关闭界面
-        if( box.clickedButton() == saveButton )
+        //如果表头顺序有变化
+        if (tabCell->IsHeadIndexChange())
         {
-            m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
-            m_tabWidget->removeTab(nIndex);
+            QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("表头顺序被更改，是否保存？"));
+            QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
+            QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
+            QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
+            cancelButton->hide();
+            box.exec();
 
-            delete tabCell;
-            tabCell = nullptr;
+            //请求保存再关闭界面
+            if( box.clickedButton() == saveButton )
+            {
+                //请求保存修改 TODO
+                OnCloseTabWidget(tabCell);
+            }
+            //直接关闭界面
+            else if ( box.clickedButton() == quitButton )
+            {
+                OnCloseTabWidget(tabCell);
+            }
+            //退出message对话框（直接关闭messageBox对话框）
+            else if ( box.clickedButton() == cancelButton )
+            {
+                return;
+            }
         }
-        //直接关闭界面
-        else if ( box.clickedButton() == quitButton )
+        else
         {
-            m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
-            m_tabWidget->removeTab(nIndex);
-
-            delete tabCell;
-            tabCell = nullptr;
-        }
-        //退出message对话框（直接关闭messageBox对话框）
-        else if ( box.clickedButton() == cancelButton )
-        {
-            return;
+            OnCloseTabWidget(tabCell);
         }
     }
 }

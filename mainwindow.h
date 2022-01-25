@@ -39,6 +39,7 @@ public:
 
     void OnNetMsgProcess(Packet& packet);
 
+    void OnCloseTabWidget(QWidget* widget);
 public:
     //刷新左边的列表数据
     void OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto);
@@ -59,7 +60,7 @@ public slots:
 
     void OnClickTreeWidgetItem(QTreeWidgetItem *item, int column);
 
-    void OnCloseTabWidget(int nIndex);
+    void OnCloseTabWidgetSlot(int nIndex);
 private:
     Ui::MainWindow *ui;
 
