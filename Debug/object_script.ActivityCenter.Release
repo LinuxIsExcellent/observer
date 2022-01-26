@@ -1,0 +1,13 @@
+INPUT(
+./release\globalconfig.o
+./release\log.o
+./release\logindialog.o
+./release\main.o
+./release\mainwindow.o
+./release\msg.pb.o
+./release\parseconfig.o
+./release\tabwidgetcell.o
+./release\moc_logindialog.o
+./release\moc_mainwindow.o
+./release\moc_tabwidgetcell.o
+);
