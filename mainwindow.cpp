@@ -100,9 +100,9 @@ void MainWindow::OnCloseTabWidgetSlot(int nIndex)
     if(tabCell)
     {
         //如果表头顺序有变化
-        if (tabCell->IsHeadIndexChange())
+        if (tabCell->IsHeadIndexChange() || tabCell->IsTableDataChange())
         {
-            QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("提示"),QString::fromLocal8Bit("表头顺序被更改，是否保存？"));
+            QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("保存修改？"),QString::fromLocal8Bit("表被修改，是否保存？"));
             QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
             QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
             QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
@@ -138,6 +138,19 @@ void MainWindow::closeEvent(QCloseEvent *)
 {
     //如果不加这行的处理，会因为有一个隐藏的loginDialog而卡住
     QApplication::setQuitOnLastWindowClosed(true);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *ev)
+{
+    if (ev->key() == Qt::Key_S  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+       TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->currentWidget();
+       if(tabCell)
+       {
+           tabCell->OnRequestSaveData();
+       }
+       return;
+    }
 }
 
 //请求连接到特定服务器
@@ -340,9 +353,12 @@ void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
     }
     else
     {
-        TabWidgetCell* tabCell = new TabWidgetCell(this);
+        TabWidgetCell* tabCell = new TabWidgetCell(m_tabWidget);
         if(tabCell)
         {
+            tabCell->SetTabWidget(m_tabWidget);
+            tabCell->SetManWindows(this);
+
             m_tabWidget->addTab(tabCell, table_name);
             tabCell->SetProtoData(proto);
 

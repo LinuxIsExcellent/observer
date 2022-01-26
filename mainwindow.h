@@ -19,6 +19,7 @@
 #define RECV_BUFFER_SIZE 10 * 1024 * 1024
 
 class LoginDialog;
+class TabWidgetCell;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -48,6 +49,8 @@ public:
     void OnRecvServerLuaTableData(test_2::table_data& proto);
 protected:
     void closeEvent(QCloseEvent *event);
+
+    virtual void keyPressEvent(QKeyEvent *ev);
 public slots:
 
     void OnServerConnect();

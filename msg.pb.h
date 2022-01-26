@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[10]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -62,6 +62,9 @@ extern client_login_requestDefaultTypeInternal _client_login_request_default_ins
 class client_lua_table_data_quest;
 struct client_lua_table_data_questDefaultTypeInternal;
 extern client_lua_table_data_questDefaultTypeInternal _client_lua_table_data_quest_default_instance_;
+class client_save_table_data_request;
+struct client_save_table_data_requestDefaultTypeInternal;
+extern client_save_table_data_requestDefaultTypeInternal _client_save_table_data_request_default_instance_;
 class field_squence;
 struct field_squenceDefaultTypeInternal;
 extern field_squenceDefaultTypeInternal _field_squence_default_instance_;
@@ -90,6 +93,7 @@ extern table_infoDefaultTypeInternal _table_info_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::test_2::client_login_request* Arena::CreateMaybeMessage<::test_2::client_login_request>(Arena*);
 template<> ::test_2::client_lua_table_data_quest* Arena::CreateMaybeMessage<::test_2::client_lua_table_data_quest>(Arena*);
+template<> ::test_2::client_save_table_data_request* Arena::CreateMaybeMessage<::test_2::client_save_table_data_request>(Arena*);
 template<> ::test_2::field_squence* Arena::CreateMaybeMessage<::test_2::field_squence>(Arena*);
 template<> ::test_2::net_packet* Arena::CreateMaybeMessage<::test_2::net_packet>(Arena*);
 template<> ::test_2::pair_value* Arena::CreateMaybeMessage<::test_2::pair_value>(Arena*);
@@ -104,12 +108,13 @@ namespace test_2 {
 enum client_msg : int {
   REQUEST_LOGIN = 0,
   REQUSET_LUA_TABLE_DATA = 1,
+  REQUSET_SAVE_TABLE_DATA = 2,
   client_msg_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   client_msg_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool client_msg_IsValid(int value);
 constexpr client_msg client_msg_MIN = REQUEST_LOGIN;
-constexpr client_msg client_msg_MAX = REQUSET_LUA_TABLE_DATA;
+constexpr client_msg client_msg_MAX = REQUSET_SAVE_TABLE_DATA;
 constexpr int client_msg_ARRAYSIZE = client_msg_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* client_msg_descriptor();
@@ -1956,6 +1961,177 @@ class table_info final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
+// -------------------------------------------------------------------
+
+class client_save_table_data_request final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.client_save_table_data_request) */ {
+ public:
+  inline client_save_table_data_request() : client_save_table_data_request(nullptr) {}
+  ~client_save_table_data_request() override;
+  explicit constexpr client_save_table_data_request(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  client_save_table_data_request(const client_save_table_data_request& from);
+  client_save_table_data_request(client_save_table_data_request&& from) noexcept
+    : client_save_table_data_request() {
+    *this = ::std::move(from);
+  }
+
+  inline client_save_table_data_request& operator=(const client_save_table_data_request& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline client_save_table_data_request& operator=(client_save_table_data_request&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const client_save_table_data_request& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const client_save_table_data_request* internal_default_instance() {
+    return reinterpret_cast<const client_save_table_data_request*>(
+               &_client_save_table_data_request_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(client_save_table_data_request& a, client_save_table_data_request& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(client_save_table_data_request* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(client_save_table_data_request* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  client_save_table_data_request* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<client_save_table_data_request>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const client_save_table_data_request& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const client_save_table_data_request& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(client_save_table_data_request* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.client_save_table_data_request";
+  }
+  protected:
+  explicit client_save_table_data_request(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kRowListsFieldNumber = 2,
+    kTableNameFieldNumber = 1,
+  };
+  // repeated .test_2.row_data row_lists = 2;
+  int row_lists_size() const;
+  private:
+  int _internal_row_lists_size() const;
+  public:
+  void clear_row_lists();
+  ::test_2::row_data* mutable_row_lists(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >*
+      mutable_row_lists();
+  private:
+  const ::test_2::row_data& _internal_row_lists(int index) const;
+  ::test_2::row_data* _internal_add_row_lists();
+  public:
+  const ::test_2::row_data& row_lists(int index) const;
+  ::test_2::row_data* add_row_lists();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >&
+      row_lists() const;
+
+  // string table_name = 1;
+  void clear_table_name();
+  const std::string& table_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_table_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_table_name();
+  PROTOBUF_NODISCARD std::string* release_table_name();
+  void set_allocated_table_name(std::string* table_name);
+  private:
+  const std::string& _internal_table_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_table_name(const std::string& value);
+  std::string* _internal_mutable_table_name();
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.client_save_table_data_request)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data > row_lists_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
 // ===================================================================
 
 
@@ -3140,9 +3316,106 @@ table_info::filed_sequences() const {
   return filed_sequences_;
 }
 
+// -------------------------------------------------------------------
+
+// client_save_table_data_request
+
+// string table_name = 1;
+inline void client_save_table_data_request::clear_table_name() {
+  table_name_.ClearToEmpty();
+}
+inline const std::string& client_save_table_data_request::table_name() const {
+  // @@protoc_insertion_point(field_get:test_2.client_save_table_data_request.table_name)
+  return _internal_table_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void client_save_table_data_request::set_table_name(ArgT0&& arg0, ArgT... args) {
+ 
+ table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.client_save_table_data_request.table_name)
+}
+inline std::string* client_save_table_data_request::mutable_table_name() {
+  std::string* _s = _internal_mutable_table_name();
+  // @@protoc_insertion_point(field_mutable:test_2.client_save_table_data_request.table_name)
+  return _s;
+}
+inline const std::string& client_save_table_data_request::_internal_table_name() const {
+  return table_name_.Get();
+}
+inline void client_save_table_data_request::_internal_set_table_name(const std::string& value) {
+  
+  table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* client_save_table_data_request::_internal_mutable_table_name() {
+  
+  return table_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* client_save_table_data_request::release_table_name() {
+  // @@protoc_insertion_point(field_release:test_2.client_save_table_data_request.table_name)
+  return table_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void client_save_table_data_request::set_allocated_table_name(std::string* table_name) {
+  if (table_name != nullptr) {
+    
+  } else {
+    
+  }
+  table_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), table_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (table_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    table_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.client_save_table_data_request.table_name)
+}
+
+// repeated .test_2.row_data row_lists = 2;
+inline int client_save_table_data_request::_internal_row_lists_size() const {
+  return row_lists_.size();
+}
+inline int client_save_table_data_request::row_lists_size() const {
+  return _internal_row_lists_size();
+}
+inline void client_save_table_data_request::clear_row_lists() {
+  row_lists_.Clear();
+}
+inline ::test_2::row_data* client_save_table_data_request::mutable_row_lists(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.client_save_table_data_request.row_lists)
+  return row_lists_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >*
+client_save_table_data_request::mutable_row_lists() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.client_save_table_data_request.row_lists)
+  return &row_lists_;
+}
+inline const ::test_2::row_data& client_save_table_data_request::_internal_row_lists(int index) const {
+  return row_lists_.Get(index);
+}
+inline const ::test_2::row_data& client_save_table_data_request::row_lists(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.client_save_table_data_request.row_lists)
+  return _internal_row_lists(index);
+}
+inline ::test_2::row_data* client_save_table_data_request::_internal_add_row_lists() {
+  return row_lists_.Add();
+}
+inline ::test_2::row_data* client_save_table_data_request::add_row_lists() {
+  ::test_2::row_data* _add = _internal_add_row_lists();
+  // @@protoc_insertion_point(field_add:test_2.client_save_table_data_request.row_lists)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >&
+client_save_table_data_request::row_lists() const {
+  // @@protoc_insertion_point(field_list:test_2.client_save_table_data_request.row_lists)
+  return row_lists_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
