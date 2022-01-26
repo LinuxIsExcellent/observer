@@ -104,6 +104,8 @@ private:
     //设置数据有改变
     void SetDataModify(bool modify);
 private slots:
+    void slotContextMenu(QPoint pos);
+
     void OnItemDataChange(QStandardItem *item);
 
     void sectionMovableBtnClicked();

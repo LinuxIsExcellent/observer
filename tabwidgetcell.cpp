@@ -58,13 +58,21 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         connect(sectionMovableBtn, SIGNAL(clicked()), this, SLOT(sectionMovableBtnClicked()));
     }
     m_tableView->setAlternatingRowColors(true);
+    m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    connect(m_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotContextMenu(QPoint)));
     connect(m_tableView->horizontalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
 }
 
 TabWidgetCell::~TabWidgetCell()
 {
     delete ui;
+}
+
+void TabWidgetCell::slotContextMenu(QPoint pos)
+{
+    qDebug() << "x = " << pos.x();
+    qDebug() << "y = " << pos.y();
 }
 
 void TabWidgetCell::OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex)
