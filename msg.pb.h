@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[14]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -65,6 +65,9 @@ extern client_lua_table_data_questDefaultTypeInternal _client_lua_table_data_que
 class client_save_table_data_request;
 struct client_save_table_data_requestDefaultTypeInternal;
 extern client_save_table_data_requestDefaultTypeInternal _client_save_table_data_request_default_instance_;
+class client_shell_option_quest;
+struct client_shell_option_questDefaultTypeInternal;
+extern client_shell_option_questDefaultTypeInternal _client_shell_option_quest_default_instance_;
 class field_squence;
 struct field_squenceDefaultTypeInternal;
 extern field_squenceDefaultTypeInternal _field_squence_default_instance_;
@@ -77,12 +80,18 @@ extern pair_valueDefaultTypeInternal _pair_value_default_instance_;
 class row_data;
 struct row_dataDefaultTypeInternal;
 extern row_dataDefaultTypeInternal _row_data_default_instance_;
+class send_shell_option_print_notify;
+struct send_shell_option_print_notifyDefaultTypeInternal;
+extern send_shell_option_print_notifyDefaultTypeInternal _send_shell_option_print_notify_default_instance_;
 class server_send_current_time_notify;
 struct server_send_current_time_notifyDefaultTypeInternal;
 extern server_send_current_time_notifyDefaultTypeInternal _server_send_current_time_notify_default_instance_;
 class server_send_file_tree_notify;
 struct server_send_file_tree_notifyDefaultTypeInternal;
 extern server_send_file_tree_notifyDefaultTypeInternal _server_send_file_tree_notify_default_instance_;
+class server_send_shell_config_notify;
+struct server_send_shell_config_notifyDefaultTypeInternal;
+extern server_send_shell_config_notifyDefaultTypeInternal _server_send_shell_config_notify_default_instance_;
 class table_data;
 struct table_dataDefaultTypeInternal;
 extern table_dataDefaultTypeInternal _table_data_default_instance_;
@@ -94,12 +103,15 @@ PROTOBUF_NAMESPACE_OPEN
 template<> ::test_2::client_login_request* Arena::CreateMaybeMessage<::test_2::client_login_request>(Arena*);
 template<> ::test_2::client_lua_table_data_quest* Arena::CreateMaybeMessage<::test_2::client_lua_table_data_quest>(Arena*);
 template<> ::test_2::client_save_table_data_request* Arena::CreateMaybeMessage<::test_2::client_save_table_data_request>(Arena*);
+template<> ::test_2::client_shell_option_quest* Arena::CreateMaybeMessage<::test_2::client_shell_option_quest>(Arena*);
 template<> ::test_2::field_squence* Arena::CreateMaybeMessage<::test_2::field_squence>(Arena*);
 template<> ::test_2::net_packet* Arena::CreateMaybeMessage<::test_2::net_packet>(Arena*);
 template<> ::test_2::pair_value* Arena::CreateMaybeMessage<::test_2::pair_value>(Arena*);
 template<> ::test_2::row_data* Arena::CreateMaybeMessage<::test_2::row_data>(Arena*);
+template<> ::test_2::send_shell_option_print_notify* Arena::CreateMaybeMessage<::test_2::send_shell_option_print_notify>(Arena*);
 template<> ::test_2::server_send_current_time_notify* Arena::CreateMaybeMessage<::test_2::server_send_current_time_notify>(Arena*);
 template<> ::test_2::server_send_file_tree_notify* Arena::CreateMaybeMessage<::test_2::server_send_file_tree_notify>(Arena*);
+template<> ::test_2::server_send_shell_config_notify* Arena::CreateMaybeMessage<::test_2::server_send_shell_config_notify>(Arena*);
 template<> ::test_2::table_data* Arena::CreateMaybeMessage<::test_2::table_data>(Arena*);
 template<> ::test_2::table_info* Arena::CreateMaybeMessage<::test_2::table_info>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -109,12 +121,13 @@ enum client_msg : int {
   REQUEST_LOGIN = 0,
   REQUSET_LUA_TABLE_DATA = 1,
   REQUSET_SAVE_TABLE_DATA = 2,
+  REQUSET_SHELL_OPTIONS = 3,
   client_msg_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   client_msg_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool client_msg_IsValid(int value);
 constexpr client_msg client_msg_MIN = REQUEST_LOGIN;
-constexpr client_msg client_msg_MAX = REQUSET_SAVE_TABLE_DATA;
+constexpr client_msg client_msg_MAX = REQUSET_SHELL_OPTIONS;
 constexpr int client_msg_ARRAYSIZE = client_msg_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* client_msg_descriptor();
@@ -135,12 +148,14 @@ enum server_msg : int {
   SEND_FILE_TREE_INFO = 0,
   SEND_SERVER_TIME = 1,
   SEND_LUA_TABLE_DATA = 2,
+  SEND_SHELL_CONFIG = 3,
+  SEND_OPTION_SHELL_PRINT = 4,
   server_msg_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   server_msg_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool server_msg_IsValid(int value);
 constexpr server_msg server_msg_MIN = SEND_FILE_TREE_INFO;
-constexpr server_msg server_msg_MAX = SEND_LUA_TABLE_DATA;
+constexpr server_msg server_msg_MAX = SEND_OPTION_SHELL_PRINT;
 constexpr int server_msg_ARRAYSIZE = server_msg_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* server_msg_descriptor();
@@ -691,6 +706,167 @@ class server_send_file_tree_notify final :
 };
 // -------------------------------------------------------------------
 
+class server_send_shell_config_notify final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.server_send_shell_config_notify) */ {
+ public:
+  inline server_send_shell_config_notify() : server_send_shell_config_notify(nullptr) {}
+  ~server_send_shell_config_notify() override;
+  explicit constexpr server_send_shell_config_notify(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  server_send_shell_config_notify(const server_send_shell_config_notify& from);
+  server_send_shell_config_notify(server_send_shell_config_notify&& from) noexcept
+    : server_send_shell_config_notify() {
+    *this = ::std::move(from);
+  }
+
+  inline server_send_shell_config_notify& operator=(const server_send_shell_config_notify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline server_send_shell_config_notify& operator=(server_send_shell_config_notify&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const server_send_shell_config_notify& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const server_send_shell_config_notify* internal_default_instance() {
+    return reinterpret_cast<const server_send_shell_config_notify*>(
+               &_server_send_shell_config_notify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(server_send_shell_config_notify& a, server_send_shell_config_notify& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(server_send_shell_config_notify* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(server_send_shell_config_notify* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  server_send_shell_config_notify* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<server_send_shell_config_notify>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const server_send_shell_config_notify& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const server_send_shell_config_notify& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(server_send_shell_config_notify* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.server_send_shell_config_notify";
+  }
+  protected:
+  explicit server_send_shell_config_notify(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kShellOpsFieldNumber = 1,
+  };
+  // repeated string shell_ops = 1;
+  int shell_ops_size() const;
+  private:
+  int _internal_shell_ops_size() const;
+  public:
+  void clear_shell_ops();
+  const std::string& shell_ops(int index) const;
+  std::string* mutable_shell_ops(int index);
+  void set_shell_ops(int index, const std::string& value);
+  void set_shell_ops(int index, std::string&& value);
+  void set_shell_ops(int index, const char* value);
+  void set_shell_ops(int index, const char* value, size_t size);
+  std::string* add_shell_ops();
+  void add_shell_ops(const std::string& value);
+  void add_shell_ops(std::string&& value);
+  void add_shell_ops(const char* value);
+  void add_shell_ops(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& shell_ops() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_shell_ops();
+  private:
+  const std::string& _internal_shell_ops(int index) const;
+  std::string* _internal_add_shell_ops();
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.server_send_shell_config_notify)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> shell_ops_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
+// -------------------------------------------------------------------
+
 class client_lua_table_data_quest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.client_lua_table_data_quest) */ {
  public:
@@ -739,7 +915,7 @@ class client_lua_table_data_quest final :
                &_client_lua_table_data_quest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(client_lua_table_data_quest& a, client_lua_table_data_quest& b) {
     a.Swap(&b);
@@ -842,6 +1018,157 @@ class client_lua_table_data_quest final :
 };
 // -------------------------------------------------------------------
 
+class client_shell_option_quest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.client_shell_option_quest) */ {
+ public:
+  inline client_shell_option_quest() : client_shell_option_quest(nullptr) {}
+  ~client_shell_option_quest() override;
+  explicit constexpr client_shell_option_quest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  client_shell_option_quest(const client_shell_option_quest& from);
+  client_shell_option_quest(client_shell_option_quest&& from) noexcept
+    : client_shell_option_quest() {
+    *this = ::std::move(from);
+  }
+
+  inline client_shell_option_quest& operator=(const client_shell_option_quest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline client_shell_option_quest& operator=(client_shell_option_quest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const client_shell_option_quest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const client_shell_option_quest* internal_default_instance() {
+    return reinterpret_cast<const client_shell_option_quest*>(
+               &_client_shell_option_quest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(client_shell_option_quest& a, client_shell_option_quest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(client_shell_option_quest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(client_shell_option_quest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  client_shell_option_quest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<client_shell_option_quest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const client_shell_option_quest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const client_shell_option_quest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(client_shell_option_quest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.client_shell_option_quest";
+  }
+  protected:
+  explicit client_shell_option_quest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kOptionFieldNumber = 1,
+  };
+  // string option = 1;
+  void clear_option();
+  const std::string& option() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_option(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_option();
+  PROTOBUF_NODISCARD std::string* release_option();
+  void set_allocated_option(std::string* option);
+  private:
+  const std::string& _internal_option() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_option(const std::string& value);
+  std::string* _internal_mutable_option();
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.client_shell_option_quest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr option_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
+// -------------------------------------------------------------------
+
 class server_send_current_time_notify final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.server_send_current_time_notify) */ {
  public:
@@ -890,7 +1217,7 @@ class server_send_current_time_notify final :
                &_server_send_current_time_notify_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(server_send_current_time_notify& a, server_send_current_time_notify& b) {
     a.Swap(&b);
@@ -1052,7 +1379,7 @@ class pair_value final :
                &_pair_value_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(pair_value& a, pair_value& b) {
     a.Swap(&b);
@@ -1219,7 +1546,7 @@ class row_data final :
                &_row_data_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    8;
 
   friend void swap(row_data& a, row_data& b) {
     a.Swap(&b);
@@ -1390,7 +1717,7 @@ class field_squence final :
                &_field_squence_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    9;
 
   friend void swap(field_squence& a, field_squence& b) {
     a.Swap(&b);
@@ -1576,7 +1903,7 @@ class table_data final :
                &_table_data_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    10;
 
   friend void swap(table_data& a, table_data& b) {
     a.Swap(&b);
@@ -1840,7 +2167,7 @@ class table_info final :
                &_table_info_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    11;
 
   friend void swap(table_info& a, table_info& b) {
     a.Swap(&b);
@@ -2011,7 +2338,7 @@ class client_save_table_data_request final :
                &_client_save_table_data_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    12;
 
   friend void swap(client_save_table_data_request& a, client_save_table_data_request& b) {
     a.Swap(&b);
@@ -2129,6 +2456,168 @@ class client_save_table_data_request final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data > row_lists_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
+// -------------------------------------------------------------------
+
+class send_shell_option_print_notify final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.send_shell_option_print_notify) */ {
+ public:
+  inline send_shell_option_print_notify() : send_shell_option_print_notify(nullptr) {}
+  ~send_shell_option_print_notify() override;
+  explicit constexpr send_shell_option_print_notify(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  send_shell_option_print_notify(const send_shell_option_print_notify& from);
+  send_shell_option_print_notify(send_shell_option_print_notify&& from) noexcept
+    : send_shell_option_print_notify() {
+    *this = ::std::move(from);
+  }
+
+  inline send_shell_option_print_notify& operator=(const send_shell_option_print_notify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline send_shell_option_print_notify& operator=(send_shell_option_print_notify&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const send_shell_option_print_notify& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const send_shell_option_print_notify* internal_default_instance() {
+    return reinterpret_cast<const send_shell_option_print_notify*>(
+               &_send_shell_option_print_notify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(send_shell_option_print_notify& a, send_shell_option_print_notify& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(send_shell_option_print_notify* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(send_shell_option_print_notify* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  send_shell_option_print_notify* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<send_shell_option_print_notify>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const send_shell_option_print_notify& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const send_shell_option_print_notify& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(send_shell_option_print_notify* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.send_shell_option_print_notify";
+  }
+  protected:
+  explicit send_shell_option_print_notify(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kLineFieldNumber = 1,
+    kFlagFieldNumber = 2,
+  };
+  // string line = 1;
+  void clear_line();
+  const std::string& line() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_line(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_line();
+  PROTOBUF_NODISCARD std::string* release_line();
+  void set_allocated_line(std::string* line);
+  private:
+  const std::string& _internal_line() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_line(const std::string& value);
+  std::string* _internal_mutable_line();
+  public:
+
+  // int32 flag = 2;
+  void clear_flag();
+  int32_t flag() const;
+  void set_flag(int32_t value);
+  private:
+  int32_t _internal_flag() const;
+  void _internal_set_flag(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.send_shell_option_print_notify)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr line_;
+  int32_t flag_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -2469,6 +2958,85 @@ server_send_file_tree_notify::mutable_group_names() {
 
 // -------------------------------------------------------------------
 
+// server_send_shell_config_notify
+
+// repeated string shell_ops = 1;
+inline int server_send_shell_config_notify::_internal_shell_ops_size() const {
+  return shell_ops_.size();
+}
+inline int server_send_shell_config_notify::shell_ops_size() const {
+  return _internal_shell_ops_size();
+}
+inline void server_send_shell_config_notify::clear_shell_ops() {
+  shell_ops_.Clear();
+}
+inline std::string* server_send_shell_config_notify::add_shell_ops() {
+  std::string* _s = _internal_add_shell_ops();
+  // @@protoc_insertion_point(field_add_mutable:test_2.server_send_shell_config_notify.shell_ops)
+  return _s;
+}
+inline const std::string& server_send_shell_config_notify::_internal_shell_ops(int index) const {
+  return shell_ops_.Get(index);
+}
+inline const std::string& server_send_shell_config_notify::shell_ops(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.server_send_shell_config_notify.shell_ops)
+  return _internal_shell_ops(index);
+}
+inline std::string* server_send_shell_config_notify::mutable_shell_ops(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.server_send_shell_config_notify.shell_ops)
+  return shell_ops_.Mutable(index);
+}
+inline void server_send_shell_config_notify::set_shell_ops(int index, const std::string& value) {
+  shell_ops_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::set_shell_ops(int index, std::string&& value) {
+  shell_ops_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::set_shell_ops(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  shell_ops_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::set_shell_ops(int index, const char* value, size_t size) {
+  shell_ops_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline std::string* server_send_shell_config_notify::_internal_add_shell_ops() {
+  return shell_ops_.Add();
+}
+inline void server_send_shell_config_notify::add_shell_ops(const std::string& value) {
+  shell_ops_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::add_shell_ops(std::string&& value) {
+  shell_ops_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::add_shell_ops(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  shell_ops_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline void server_send_shell_config_notify::add_shell_ops(const char* value, size_t size) {
+  shell_ops_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:test_2.server_send_shell_config_notify.shell_ops)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+server_send_shell_config_notify::shell_ops() const {
+  // @@protoc_insertion_point(field_list:test_2.server_send_shell_config_notify.shell_ops)
+  return shell_ops_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+server_send_shell_config_notify::mutable_shell_ops() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.server_send_shell_config_notify.shell_ops)
+  return &shell_ops_;
+}
+
+// -------------------------------------------------------------------
+
 // client_lua_table_data_quest
 
 // string file_name = 1;
@@ -2520,6 +3088,61 @@ inline void client_lua_table_data_quest::set_allocated_file_name(std::string* fi
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:test_2.client_lua_table_data_quest.file_name)
+}
+
+// -------------------------------------------------------------------
+
+// client_shell_option_quest
+
+// string option = 1;
+inline void client_shell_option_quest::clear_option() {
+  option_.ClearToEmpty();
+}
+inline const std::string& client_shell_option_quest::option() const {
+  // @@protoc_insertion_point(field_get:test_2.client_shell_option_quest.option)
+  return _internal_option();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void client_shell_option_quest::set_option(ArgT0&& arg0, ArgT... args) {
+ 
+ option_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.client_shell_option_quest.option)
+}
+inline std::string* client_shell_option_quest::mutable_option() {
+  std::string* _s = _internal_mutable_option();
+  // @@protoc_insertion_point(field_mutable:test_2.client_shell_option_quest.option)
+  return _s;
+}
+inline const std::string& client_shell_option_quest::_internal_option() const {
+  return option_.Get();
+}
+inline void client_shell_option_quest::_internal_set_option(const std::string& value) {
+  
+  option_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* client_shell_option_quest::_internal_mutable_option() {
+  
+  return option_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* client_shell_option_quest::release_option() {
+  // @@protoc_insertion_point(field_release:test_2.client_shell_option_quest.option)
+  return option_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void client_shell_option_quest::set_allocated_option(std::string* option) {
+  if (option != nullptr) {
+    
+  } else {
+    
+  }
+  option_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), option,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (option_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    option_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.client_shell_option_quest.option)
 }
 
 // -------------------------------------------------------------------
@@ -3411,9 +4034,90 @@ client_save_table_data_request::row_lists() const {
   return row_lists_;
 }
 
+// -------------------------------------------------------------------
+
+// send_shell_option_print_notify
+
+// string line = 1;
+inline void send_shell_option_print_notify::clear_line() {
+  line_.ClearToEmpty();
+}
+inline const std::string& send_shell_option_print_notify::line() const {
+  // @@protoc_insertion_point(field_get:test_2.send_shell_option_print_notify.line)
+  return _internal_line();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void send_shell_option_print_notify::set_line(ArgT0&& arg0, ArgT... args) {
+ 
+ line_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.send_shell_option_print_notify.line)
+}
+inline std::string* send_shell_option_print_notify::mutable_line() {
+  std::string* _s = _internal_mutable_line();
+  // @@protoc_insertion_point(field_mutable:test_2.send_shell_option_print_notify.line)
+  return _s;
+}
+inline const std::string& send_shell_option_print_notify::_internal_line() const {
+  return line_.Get();
+}
+inline void send_shell_option_print_notify::_internal_set_line(const std::string& value) {
+  
+  line_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* send_shell_option_print_notify::_internal_mutable_line() {
+  
+  return line_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* send_shell_option_print_notify::release_line() {
+  // @@protoc_insertion_point(field_release:test_2.send_shell_option_print_notify.line)
+  return line_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void send_shell_option_print_notify::set_allocated_line(std::string* line) {
+  if (line != nullptr) {
+    
+  } else {
+    
+  }
+  line_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), line,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (line_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    line_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.send_shell_option_print_notify.line)
+}
+
+// int32 flag = 2;
+inline void send_shell_option_print_notify::clear_flag() {
+  flag_ = 0;
+}
+inline int32_t send_shell_option_print_notify::_internal_flag() const {
+  return flag_;
+}
+inline int32_t send_shell_option_print_notify::flag() const {
+  // @@protoc_insertion_point(field_get:test_2.send_shell_option_print_notify.flag)
+  return _internal_flag();
+}
+inline void send_shell_option_print_notify::_internal_set_flag(int32_t value) {
+  
+  flag_ = value;
+}
+inline void send_shell_option_print_notify::set_flag(int32_t value) {
+  _internal_set_flag(value);
+  // @@protoc_insertion_point(field_set:test_2.send_shell_option_print_notify.flag)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -24,6 +24,7 @@ SOURCES += \
     mainwindow.cpp \
     msg.pb.cc \
     parseconfig.cpp \
+    showmsgdialog.cpp \
     tabwidgetcell.cpp
 
 HEADERS += \
@@ -34,11 +35,13 @@ HEADERS += \
     mainwindow.h \
     msg.pb.h \
     parseconfig.h \
+    showmsgdialog.h \
     tabwidgetcell.h
 
 FORMS += \
     logindialog.ui \
     mainwindow.ui \
+    showmsgdialog.ui \
     tabwidgetcell.ui
 
 # Default rules for deployment.

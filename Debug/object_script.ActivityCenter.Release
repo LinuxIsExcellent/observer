@@ -6,8 +6,10 @@ INPUT(
 ./release\mainwindow.o
 ./release\msg.pb.o
 ./release\parseconfig.o
+./release\showmsgdialog.o
 ./release\tabwidgetcell.o
 ./release\moc_logindialog.o
 ./release\moc_mainwindow.o
+./release\moc_showmsgdialog.o
 ./release\moc_tabwidgetcell.o
 );

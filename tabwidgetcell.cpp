@@ -59,9 +59,80 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     }
     m_tableView->setAlternatingRowColors(true);
     m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(m_tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotContextMenu(QPoint)));
-    connect(m_tableView->horizontalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
+    //初始化菜单栏
+    m_tableCellMenu = new QMenu(this);
+
+    //增加数据单元格的菜单
+    connect(m_tableView, &QAbstractItemView::customContextMenuRequested, m_tableView,[=](const QPoint& pos){
+        int nHeight = m_tableView->horizontalHeader()->height();
+        int nWidth = m_tableView->verticalHeader()->width();
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos + QPoint(nWidth, nHeight);
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        QModelIndex index = m_tableView->indexAt(pos);
+        if (!index.isValid()){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        m_tableCellMenu->addAction(index.data().toString(), this, SLOT(slot_function1()));
+
+        m_tableCellMenu->exec(pt);
+    });
+
+    //增加列表头的菜单
+    connect(m_tableView->horizontalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->horizontalHeader(),[=](const QPoint& pos){
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        int nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
+        qDebug() << "index = " << nIndex;
+        if (nIndex < 0){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        m_tableCellMenu->addAction(QString::number(nIndex), this, SLOT(slot_function1()));
+
+        m_tableCellMenu->exec(pt);
+    });
+
+    //增加行表头的菜单
+    connect(m_tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->verticalHeader(),[=](const QPoint& pos){
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        int nIndex = m_tableView->verticalHeader()->logicalIndexAt(pos);
+        qDebug() << "index = " << nIndex;
+        if (nIndex < 0){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        m_tableCellMenu->addAction("插入行", this, [=](){
+            qDebug() << "插入一行 :" << nIndex;
+        });
+
+        m_tableCellMenu->addAction("增加行", this, [=](){
+            qDebug() << "增加一行 :" << nIndex;
+        });
+
+        m_tableCellMenu->exec(pt);
+    });
+
+    connect(m_tableView->verticalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
 }
 
 TabWidgetCell::~TabWidgetCell()

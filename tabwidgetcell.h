@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QMenu>
 #include "mainwindow.h"
 #include "msg.pb.h"
 #include <google/protobuf/text_format.h>
@@ -140,6 +141,8 @@ private:
     QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
 
     QVector<RowState>   m_vBRowDataChange;  //行数据是否被改变(数据变化存储以二维表的行为粒度)
+
+    QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
 };
 
 #endif // TABWIDGETCELL_H

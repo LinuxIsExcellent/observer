@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QMessageBox>
+#include <QMenu>
 #include "log.h"
 #include "tabwidgetcell.h"
 
@@ -14,6 +15,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     resize(1280, 720);
+
+    m_menu_bar = new QMenuBar(this);             //创建一个菜单栏
+    this->setMenuBar(m_menu_bar);
+
+    QMenu *file_menu = new QMenu("文件(&F)",m_menu_bar);
+    m_menu_bar->addMenu(file_menu);
+
+    m_dShellScriptOpPrintDlg = new ShowMsgDialog(this);
 
     m_ServerSockect = new QTcpSocket(this);
     //连接事件
@@ -79,6 +88,21 @@ void MainWindow::init_windows()
     m_tabWidget->setTabsClosable(true);
 
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(OnCloseTabWidgetSlot(int)));
+}
+
+void MainWindow::OnMenuActionTriggered()
+{
+    QAction* qAction = qobject_cast<QAction *>(sender());
+    if (qAction)
+    {
+        test_2::client_shell_option_quest quest;
+        quest.set_option(qAction->text().toStdString());
+
+        std::string output;
+        quest.SerializeToString(&output);
+
+        OnSndServerMsg(0, test_2::client_msg::REQUSET_SHELL_OPTIONS, output);
+    }
 }
 
 void MainWindow::OnCloseTabWidget(QWidget* widget)
@@ -235,6 +259,7 @@ void MainWindow::OnServerMsgRecv()
 {
     //把内核缓冲区中所有的字节流读取出来
     QByteArray data = m_ServerSockect->readAll();
+    if (data.count() <= 0) return;
 
     quint32 nBufferSize = m_RecvBuffer.size();
     if (nBufferSize <= RECV_BUFFER_SIZE)
@@ -247,71 +272,38 @@ void MainWindow::OnServerMsgRecv()
         m_RecvBuffer.clear();
     }
 
-    nBufferSize = m_RecvBuffer.size();
-
-    QByteArray header = m_RecvBuffer.left(4);
-    quint32 nLength = *(quint32*)header.data();
-
-    qDebug() << "数据包的大小为: " << nLength;
-    qDebug() << "接收到的流的大小为: " << data.size();
-    qDebug() << "数据缓冲区的大小: " << nBufferSize;
-
-    if (nBufferSize - 4 >= nLength)
+    bool bProcessLoop = true;
+    while(bProcessLoop)
     {
-        char* packetStr = m_RecvBuffer.data();
-        Packet packet(packetStr + 4, nLength);
-        OnNetMsgProcess(packet);
+        nBufferSize = m_RecvBuffer.size();
 
-        //重新设置接收缓冲区的数据
-        if (nBufferSize - 4 > nLength)
+        QByteArray header = m_RecvBuffer.left(4);
+        quint32 nLength = *(quint32*)header.data();
+
+        if (nBufferSize - 4 >= nLength)
         {
-            QByteArray rightData = m_RecvBuffer.right(nBufferSize - nLength - 4);
-            m_RecvBuffer.clear();
-            m_RecvBuffer = rightData;
+            char* packetStr = m_RecvBuffer.data();
+            Packet packet(packetStr + 4, nLength);
+            OnNetMsgProcess(packet);
 
-            qDebug() << "重置缓冲区";
+            //重新设置接收缓冲区的数据
+            if (nBufferSize - 4 > nLength)
+            {
+                QByteArray rightData = m_RecvBuffer.right(nBufferSize - nLength - 4);
+                m_RecvBuffer.clear();
+                m_RecvBuffer = rightData;
+            }
+            else
+            {
+                m_RecvBuffer.clear();
+                bProcessLoop = false;
+            }
         }
         else
         {
-            m_RecvBuffer.clear();
-
-            qDebug() << "重置缓冲区";
+            bProcessLoop = false;
         }
     }
-//    qDebug() << "head = " << data/*.size()*/;
-
-//    //先解析数据头，整个数据包包含多少个字节
-//    char headStr[4];
-//    if(m_ServerSockect->read(headStr, 4) == 0)
-//    {
-//        qDebug() << "服务器请求断开连接";
-//        return;
-//    }
-
-//    int nMax = 0x3FFFFFF;
-//    qDebug() << "nMax = " << nMax;
-
-//    int packetLength = *(int*)headStr;
-//    if (packetLength <= 0 || packetLength >= 65536)
-//    {
-//        qDebug() << "数据包头读取出错：" << packetLength;
-//        m_ServerSockect->readAll();
-//        return;
-//    }
-//    //解析数据部分
-//    char dataStr[packetLength];
-//    quint16 readCount = m_ServerSockect->read(dataStr, packetLength);
-//    qDebug() << "readCount = " << readCount;
-//    qDebug() << "packetLength = " << packetLength;
-//    if (readCount != packetLength)
-//    {
-//        qDebug() << "数据包解析错误，丢弃当前数据包";
-//        QByteArray data = m_ServerSockect->readAll();
-//        qDebug() << "size = " << data.size();
-//        return;
-//    }
-//    Packet packet(dataStr, packetLength);
-//    OnNetMsgProcess(packet);
 }
 
 void MainWindow::OnNetMsgProcess(Packet& packet)
@@ -338,7 +330,66 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
             OnRecvServerLuaTableData(notify);
         }
+        else if (nCmd == test_2::server_msg::SEND_SHELL_CONFIG)
+        {
+            test_2::server_send_shell_config_notify notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerShellOpsData(notify);
+        }
+        else if (nCmd == test_2::server_msg::SEND_OPTION_SHELL_PRINT)
+        {
+            test_2::send_shell_option_print_notify notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerShellOptionPrint(notify);
+        }
     }
+}
+
+void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto)
+{
+    //执行结束
+    qDebug() << proto.flag();
+    qDebug() << QString::fromStdString(proto.line());
+    if (proto.flag() == 0)
+    {
+        if (m_dShellScriptOpPrintDlg->isHidden())
+        {
+            m_dShellScriptOpPrintDlg->setModal(true);
+            m_dShellScriptOpPrintDlg->show();
+            m_dShellScriptOpPrintDlg->SetCloseBtnDisable(true);
+            m_dShellScriptOpPrintDlg->ClearTextEditLine();
+        }
+    }
+    else if(proto.flag() == 1)
+    {
+        m_dShellScriptOpPrintDlg->SetCloseBtnDisable(false);
+    }
+
+    m_dShellScriptOpPrintDlg->AppendMsg(QString::fromStdString(proto.line()));
+//    if (proto.flag() == 0)
+//    {
+//        qDebug() << proto.flag();
+//        qDebug() << QString::fromStdString(proto.line());
+//    }
+}
+
+void MainWindow::OnRecvServerShellOpsData(test_2::server_send_shell_config_notify& proto)
+{
+    QMenu *edit_menu = new QMenu("脚本(&S)",m_menu_bar);
+    for (int i = 0; i < proto.shell_ops_size();++i)
+    {
+        std::string file_name = proto.shell_ops(i);
+
+        QAction *new_action = new QAction(QString::fromStdString(file_name));
+        new_action->trigger();
+        edit_menu->addAction(new_action);
+
+        connect(new_action, SIGNAL(triggered()), this, SLOT(OnMenuActionTriggered()));
+    }
+
+    m_menu_bar->addMenu(edit_menu);
 }
 
 void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)

@@ -6,8 +6,10 @@ INPUT(
 ./debug\mainwindow.o
 ./debug\msg.pb.o
 ./debug\parseconfig.o
+./debug\showmsgdialog.o
 ./debug\tabwidgetcell.o
 ./debug\moc_logindialog.o
 ./debug\moc_mainwindow.o
+./debug\moc_showmsgdialog.o
 ./debug\moc_tabwidgetcell.o
 );
