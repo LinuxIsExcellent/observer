@@ -132,7 +132,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         m_tableCellMenu->exec(pt);
     });
 
-    connect(m_tableView->verticalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
+    connect(m_tableView->horizontalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
 }
 
 TabWidgetCell::~TabWidgetCell()
@@ -140,25 +140,20 @@ TabWidgetCell::~TabWidgetCell()
     delete ui;
 }
 
-void TabWidgetCell::slotContextMenu(QPoint pos)
-{
-    qDebug() << "x = " << pos.x();
-    qDebug() << "y = " << pos.y();
-}
-
 void TabWidgetCell::OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex)
 {
     m_bHeadIndexChange = true;
-//    qDebug() << "logicalIndex = " << logicalIndex;
-//    qDebug() << "oldVisualIndex = " << oldVisualIndex;
-//    qDebug() << "newVisualIndex = " << newVisualIndex;
+    SetDataModify(true);
+    qDebug() << "logicalIndex = " << logicalIndex;
+    qDebug() << "oldVisualIndex = " << oldVisualIndex;
+    qDebug() << "newVisualIndex = " << newVisualIndex;
 
-//    //当前显示的表头顺序
-//    for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
-//    {
-//        int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-//        qDebug() << m_tableView->model()->headerData(nVisualIndex, Qt::Horizontal).toString();
-//    }
+    //当前显示的表头顺序
+    for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
+    {
+        int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
+        qDebug() << m_tableView->model()->headerData(nVisualIndex, Qt::Horizontal).toString();
+    }
 }
 
 void TabWidgetCell::sectionMovableBtnClicked()
@@ -274,20 +269,32 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
         m_tableData.nRow = proto.row_count();
         m_tableData.nColumn = proto.column_count();
 
+        m_vFieldSquence.clear();
         //TODO 二维深层次展开的时候需要用上
         for (int i = 0; i < proto.filed_sequences_size();++i)
         {
             test_2::field_squence fieldSquence = proto.filed_sequences(i);
+
+            FIELDSQUENCE squence;
             for (int j = 0; j < fieldSquence.levels_size();++j)
             {
                 int nLevel = fieldSquence.levels(j);
+
+                squence.vNLevels.push_back(nLevel);
             }
+
 
             for (int j = 0; j < fieldSquence.fields_size();++j)
             {
                 QString strField = QString::fromStdString(fieldSquence.fields(j));
+
+                squence.vSFieldSquences.push_back(strField);
             }
+
+            m_vFieldSquence.push_back(squence);
         }
+
+//        qDebug() << "深度队列： " << m_vFieldSquence;
 
         //设置表头
         m_mFieldLists.clear();
@@ -351,6 +358,29 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
 void TabWidgetCell::OnRequestSaveData()
 {
     qDebug() << "请求保存数据";
+    //如果表的信息有变化
+    if (m_bHeadIndexChange)
+    {
+        //请求保存表的信息
+        test_2::client_save_table_info_request quest;
+        quest.set_table_name(m_tableData.sTableName.toStdString());
+
+        for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
+        {
+            int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
+
+            std::string* field = quest.add_field();
+            if(field)
+            {
+                *field = m_tableView->model()->headerData(nVisualIndex, Qt::Horizontal).toString().toStdString();
+            }
+        }
+
+        std::string output;
+        quest.SerializeToString(&output);
+
+        m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
+    }
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {

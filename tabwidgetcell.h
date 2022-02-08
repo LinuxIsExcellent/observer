@@ -105,8 +105,6 @@ private:
     //设置数据有改变
     void SetDataModify(bool modify);
 private slots:
-    void slotContextMenu(QPoint pos);
-
     void OnItemDataChange(QStandardItem *item);
 
     void sectionMovableBtnClicked();
@@ -139,6 +137,8 @@ private:
     bool    m_bTableDataChange; //表的数据是否被更改
     QMap<QString, int>  m_mFieldNames; //表的字段的顺序
     QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
+
+    QVector<FIELDSQUENCE>   m_vFieldSquence;   //二维表的表头顺序
 
     QVector<RowState>   m_vBRowDataChange;  //行数据是否被改变(数据变化存储以二维表的行为粒度)
 

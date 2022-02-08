@@ -203,8 +203,21 @@ struct send_shell_option_print_notifyDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT send_shell_option_print_notifyDefaultTypeInternal _send_shell_option_print_notify_default_instance_;
+constexpr client_save_table_info_request::client_save_table_info_request(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : field_()
+  , table_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct client_save_table_info_requestDefaultTypeInternal {
+  constexpr client_save_table_info_requestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~client_save_table_info_requestDefaultTypeInternal() {}
+  union {
+    client_save_table_info_request _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT client_save_table_info_requestDefaultTypeInternal _client_save_table_info_request_default_instance_;
 }  // namespace test_2
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_msg_2eproto[14];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_msg_2eproto[15];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_msg_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_msg_2eproto = nullptr;
 
@@ -323,6 +336,14 @@ const uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::test_2::send_shell_option_print_notify, line_),
   PROTOBUF_FIELD_OFFSET(::test_2::send_shell_option_print_notify, flag_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::test_2::client_save_table_info_request, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::test_2::client_save_table_info_request, table_name_),
+  PROTOBUF_FIELD_OFFSET(::test_2::client_save_table_info_request, field_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::test_2::net_packet)},
@@ -339,6 +360,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 90, -1, -1, sizeof(::test_2::table_info)},
   { 98, -1, -1, sizeof(::test_2::client_save_table_data_request)},
   { 106, -1, -1, sizeof(::test_2::send_shell_option_print_notify)},
+  { 114, -1, -1, sizeof(::test_2::client_save_table_info_request)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -356,6 +378,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::test_2::_table_info_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::test_2::_client_save_table_data_request_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::test_2::_send_shell_option_print_notify_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::test_2::_client_save_table_info_request_default_instance_),
 };
 
 const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -384,21 +407,23 @@ const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "_table_data_request\022\022\n\ntable_name\030\001 \001(\t\022"
   "#\n\trow_lists\030\002 \003(\0132\020.test_2.row_data\"<\n\036"
   "send_shell_option_print_notify\022\014\n\004line\030\001"
-  " \001(\t\022\014\n\004flag\030\002 \001(\005*s\n\nclient_msg\022\021\n\rREQU"
-  "EST_LOGIN\020\000\022\032\n\026REQUSET_LUA_TABLE_DATA\020\001\022"
-  "\033\n\027REQUSET_SAVE_TABLE_DATA\020\002\022\031\n\025REQUSET_"
-  "SHELL_OPTIONS\020\003*\210\001\n\nserver_msg\022\027\n\023SEND_F"
-  "ILE_TREE_INFO\020\000\022\024\n\020SEND_SERVER_TIME\020\001\022\027\n"
-  "\023SEND_LUA_TABLE_DATA\020\002\022\025\n\021SEND_SHELL_CON"
-  "FIG\020\003\022\033\n\027SEND_OPTION_SHELL_PRINT\020\004*W\n\tDA"
-  "TA_TYPE\022\014\n\010L_NUMBER\020\000\022\014\n\010L_STRING\020\001\022\n\n\006L"
-  "_BOOL\020\002\022\022\n\016L_TABLE_STRING\020\003\022\016\n\nL_FUNCTIO"
-  "N\020\004b\006proto3"
+  " \001(\t\022\014\n\004flag\030\002 \001(\005\"C\n\036client_save_table_"
+  "info_request\022\022\n\ntable_name\030\001 \001(\t\022\r\n\005fiel"
+  "d\030\002 \003(\t*\220\001\n\nclient_msg\022\021\n\rREQUEST_LOGIN\020"
+  "\000\022\032\n\026REQUSET_LUA_TABLE_DATA\020\001\022\033\n\027REQUSET"
+  "_SAVE_TABLE_DATA\020\002\022\031\n\025REQUSET_SHELL_OPTI"
+  "ONS\020\003\022\033\n\027REQUEST_SAVE_TABLE_INFO\020\004*\210\001\n\ns"
+  "erver_msg\022\027\n\023SEND_FILE_TREE_INFO\020\000\022\024\n\020SE"
+  "ND_SERVER_TIME\020\001\022\027\n\023SEND_LUA_TABLE_DATA\020"
+  "\002\022\025\n\021SEND_SHELL_CONFIG\020\003\022\033\n\027SEND_OPTION_"
+  "SHELL_PRINT\020\004*W\n\tDATA_TYPE\022\014\n\010L_NUMBER\020\000"
+  "\022\014\n\010L_STRING\020\001\022\n\n\006L_BOOL\020\002\022\022\n\016L_TABLE_ST"
+  "RING\020\003\022\016\n\nL_FUNCTION\020\004b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_msg_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_msg_2eproto = {
-  false, false, 1371, descriptor_table_protodef_msg_2eproto, "msg.proto", 
-  &descriptor_table_msg_2eproto_once, nullptr, 0, 14,
+  false, false, 1470, descriptor_table_protodef_msg_2eproto, "msg.proto", 
+  &descriptor_table_msg_2eproto_once, nullptr, 0, 15,
   schemas, file_default_instances, TableStruct_msg_2eproto::offsets,
   file_level_metadata_msg_2eproto, file_level_enum_descriptors_msg_2eproto, file_level_service_descriptors_msg_2eproto,
 };
@@ -419,6 +444,7 @@ bool client_msg_IsValid(int value) {
     case 1:
     case 2:
     case 3:
+    case 4:
       return true;
     default:
       return false;
@@ -3679,6 +3705,247 @@ void send_shell_option_print_notify::InternalSwap(send_shell_option_print_notify
       file_level_metadata_msg_2eproto[13]);
 }
 
+// ===================================================================
+
+class client_save_table_info_request::_Internal {
+ public:
+};
+
+client_save_table_info_request::client_save_table_info_request(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  field_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:test_2.client_save_table_info_request)
+}
+client_save_table_info_request::client_save_table_info_request(const client_save_table_info_request& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      field_(from.field_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  table_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    table_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_table_name().empty()) {
+    table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_table_name(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:test_2.client_save_table_info_request)
+}
+
+inline void client_save_table_info_request::SharedCtor() {
+table_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  table_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+client_save_table_info_request::~client_save_table_info_request() {
+  // @@protoc_insertion_point(destructor:test_2.client_save_table_info_request)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void client_save_table_info_request::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  table_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void client_save_table_info_request::ArenaDtor(void* object) {
+  client_save_table_info_request* _this = reinterpret_cast< client_save_table_info_request* >(object);
+  (void)_this;
+}
+void client_save_table_info_request::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void client_save_table_info_request::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void client_save_table_info_request::Clear() {
+// @@protoc_insertion_point(message_clear_start:test_2.client_save_table_info_request)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  field_.Clear();
+  table_name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* client_save_table_info_request::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string table_name = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_table_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.client_save_table_info_request.table_name"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated string field = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_field();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.client_save_table_info_request.field"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* client_save_table_info_request::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:test_2.client_save_table_info_request)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string table_name = 1;
+  if (!this->_internal_table_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_table_name().data(), static_cast<int>(this->_internal_table_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "test_2.client_save_table_info_request.table_name");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_table_name(), target);
+  }
+
+  // repeated string field = 2;
+  for (int i = 0, n = this->_internal_field_size(); i < n; i++) {
+    const auto& s = this->_internal_field(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "test_2.client_save_table_info_request.field");
+    target = stream->WriteString(2, s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:test_2.client_save_table_info_request)
+  return target;
+}
+
+size_t client_save_table_info_request::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:test_2.client_save_table_info_request)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string field = 2;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(field_.size());
+  for (int i = 0, n = field_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      field_.Get(i));
+  }
+
+  // string table_name = 1;
+  if (!this->_internal_table_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_table_name());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData client_save_table_info_request::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    client_save_table_info_request::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*client_save_table_info_request::GetClassData() const { return &_class_data_; }
+
+void client_save_table_info_request::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<client_save_table_info_request *>(to)->MergeFrom(
+      static_cast<const client_save_table_info_request &>(from));
+}
+
+
+void client_save_table_info_request::MergeFrom(const client_save_table_info_request& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:test_2.client_save_table_info_request)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  field_.MergeFrom(from.field_);
+  if (!from._internal_table_name().empty()) {
+    _internal_set_table_name(from._internal_table_name());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void client_save_table_info_request::CopyFrom(const client_save_table_info_request& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:test_2.client_save_table_info_request)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool client_save_table_info_request::IsInitialized() const {
+  return true;
+}
+
+void client_save_table_info_request::InternalSwap(client_save_table_info_request* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  field_.InternalSwap(&other->field_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &table_name_, lhs_arena,
+      &other->table_name_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata client_save_table_info_request::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_msg_2eproto_getter, &descriptor_table_msg_2eproto_once,
+      file_level_metadata_msg_2eproto[14]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace test_2
 PROTOBUF_NAMESPACE_OPEN
@@ -3723,6 +3990,9 @@ template<> PROTOBUF_NOINLINE ::test_2::client_save_table_data_request* Arena::Cr
 }
 template<> PROTOBUF_NOINLINE ::test_2::send_shell_option_print_notify* Arena::CreateMaybeMessage< ::test_2::send_shell_option_print_notify >(Arena* arena) {
   return Arena::CreateMessageInternal< ::test_2::send_shell_option_print_notify >(arena);
+}
+template<> PROTOBUF_NOINLINE ::test_2::client_save_table_info_request* Arena::CreateMaybeMessage< ::test_2::client_save_table_info_request >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::test_2::client_save_table_info_request >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
