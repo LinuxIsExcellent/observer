@@ -22,6 +22,7 @@ SOURCES += \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    modifyservertimewidget.cpp \
     msg.pb.cc \
     parseconfig.cpp \
     showmsgdialog.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     log.h \
     logindialog.h \
     mainwindow.h \
+    modifyservertimewidget.h \
     msg.pb.h \
     parseconfig.h \
     showmsgdialog.h \
@@ -41,6 +43,7 @@ HEADERS += \
 FORMS += \
     logindialog.ui \
     mainwindow.ui \
+    modifyservertimewidget.ui \
     showmsgdialog.ui \
     tabwidgetcell.ui
 

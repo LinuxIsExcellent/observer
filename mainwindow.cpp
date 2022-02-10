@@ -34,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     init_windows();
 
+    //设置去掉右下角的三角
+    ui->statusbar->setSizeGripEnabled(false);
+
     connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
 }
 
@@ -88,6 +91,48 @@ void MainWindow::init_windows()
     m_tabWidget->setTabsClosable(true);
 
     connect(m_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(OnCloseTabWidgetSlot(int)));
+
+    m_timeLabel=new QLabel(this);
+    m_timeLabel->setFrameStyle(QFrame::Box|QFrame::Sunken);
+    m_timeLabel->setToolTip(tr("双击修改服务器时间"));
+    ui->statusbar->addPermanentWidget(m_timeLabel);//显示永久信息
+
+    m_timeLabel->installEventFilter(this);
+
+    m_1sTimer = new QTimer(this);
+    connect(m_1sTimer, SIGNAL(timeout()), this, SLOT(On1STimerUpdate()));
+
+    m_1sTimer->start(1000);
+
+    m_timeWidget = new ModifyServerTimeWidget(this);
+    m_timeWidget->hide();
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (qobject_cast<QLabel*>(watched) == m_timeLabel && event->type() == QEvent::MouseButtonDblClick)
+    {
+        m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
+                                  ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
+        m_timeWidget->SetTime(m_serverTimeStamp);
+        m_timeWidget->show();
+    }
+    return false;
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
+                              ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
+}
+
+void MainWindow::On1STimerUpdate()
+{
+    m_serverTimeStamp += 1;
+    QDateTime time = QDateTime::fromTime_t(m_serverTimeStamp);
+    QString strTime = time.toString("yyyy-MM-dd hh:mm:ss");
+
+    m_timeLabel->setText(tr("服务器时间：") + strTime);
 }
 
 void MainWindow::OnMenuActionTriggered()
@@ -362,7 +407,10 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
 void MainWindow::OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto)
 {
-    proto.time();
+    quint64 nTime = proto.time();
+
+    m_serverTimeStamp = nTime;
+    On1STimerUpdate();
 }
 
 void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto)
@@ -427,46 +475,6 @@ void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
             m_mTabwidgetMap.insert(table_name, tabCell);
             m_tabWidget->setCurrentWidget(tabCell);
         }
-
-//        QWidget* widget = new QWidget(this);
-//        m_tabWidget->addTab(widget, table_name);
-//        m_mTabwidgetMap.insert(table_name, widget);
-//        m_tabWidget->setCurrentWidget(widget);
-
-
-//        QTableView* tableView = new QTableView(widget);
-//        if(tableView)
-//        {
-//            tableView->verticalHeader()->hide();
-//            tableView->horizontalHeader()->setSectionsMovable(true);
-
-//            QHBoxLayout* layout = new QHBoxLayout(widget);
-//            layout->addWidget(tableView);
-//            widget->setLayout(layout);
-
-//            QStandardItemModel *student_model = new QStandardItemModel();
-//            student_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ID")));
-//            //利用setModel()方法将数据模型与QTableView绑定
-//            tableView->setModel(student_model);
-
-//            int nRow = proto.row_count();
-//            int nColumn = proto.column_count();
-
-//            for (int i = 0; i < proto.row_lists_size();++i)
-//            {
-//                test_2::row_data row_data = proto.row_lists(i);
-//                student_model->setItem(i, 0, new QStandardItem(QString::fromStdString(row_data.key())));
-
-//                for (int j = 0; j < row_data.pair_size(); ++j) {
-//                    test_2::pair_value pair = row_data.pair(j);
-
-//                    student_model->setHorizontalHeaderItem(j + 1, new QStandardItem(QString::fromStdString(pair.key())));
-//                    student_model->setItem(i, j + 1, new QStandardItem(QString::fromStdString(pair.value())));
-//                }
-//            }
-
-//            tableView->resizeColumnsToContents();
-//        }
     }
 }
 

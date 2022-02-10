@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[18];
-    char stringdata0[232];
+    QByteArrayData data[19];
+    char stringdata0[248];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,8 @@ QT_MOC_LITERAL(13, 160, 16), // "QTreeWidgetItem*"
 QT_MOC_LITERAL(14, 177, 4), // "item"
 QT_MOC_LITERAL(15, 182, 20), // "OnCloseTabWidgetSlot"
 QT_MOC_LITERAL(16, 203, 6), // "nIndex"
-QT_MOC_LITERAL(17, 210, 21) // "OnMenuActionTriggered"
+QT_MOC_LITERAL(17, 210, 21), // "OnMenuActionTriggered"
+QT_MOC_LITERAL(18, 232, 15) // "On1STimerUpdate"
 
     },
     "MainWindow\0OnServerConnect\0\0OnSocketError\0"
@@ -56,7 +57,8 @@ QT_MOC_LITERAL(17, 210, 21) // "OnMenuActionTriggered"
     "OnServerMsgRecv\0OnSndServerMsg\0nSystem\0"
     "nCmd\0std::string\0data\0OnClickTreeWidgetItem\0"
     "QTreeWidgetItem*\0item\0OnCloseTabWidgetSlot\0"
-    "nIndex\0OnMenuActionTriggered"
+    "nIndex\0OnMenuActionTriggered\0"
+    "On1STimerUpdate"
 };
 #undef QT_MOC_LITERAL
 
@@ -66,7 +68,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,13 +76,14 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   49,    2, 0x0a /* Public */,
-       3,    1,   50,    2, 0x0a /* Public */,
-       6,    0,   53,    2, 0x0a /* Public */,
-       7,    3,   54,    2, 0x0a /* Public */,
-      12,    2,   61,    2, 0x0a /* Public */,
-      15,    1,   66,    2, 0x0a /* Public */,
-      17,    0,   69,    2, 0x0a /* Public */,
+       1,    0,   54,    2, 0x0a /* Public */,
+       3,    1,   55,    2, 0x0a /* Public */,
+       6,    0,   58,    2, 0x0a /* Public */,
+       7,    3,   59,    2, 0x0a /* Public */,
+      12,    2,   66,    2, 0x0a /* Public */,
+      15,    1,   71,    2, 0x0a /* Public */,
+      17,    0,   74,    2, 0x0a /* Public */,
+      18,    0,   75,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -89,6 +92,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::UShort, QMetaType::UShort, 0x80000000 | 10,    8,    9,   11,
     QMetaType::Void, 0x80000000 | 13, QMetaType::Int,   14,    2,
     QMetaType::Void, QMetaType::Int,   16,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -107,6 +111,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 4: _t->OnClickTreeWidgetItem((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 5: _t->OnCloseTabWidgetSlot((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: _t->OnMenuActionTriggered(); break;
+        case 7: _t->On1STimerUpdate(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -148,13 +153,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

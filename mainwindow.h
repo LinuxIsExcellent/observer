@@ -10,9 +10,13 @@
 #include <QVBoxLayout>
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QLabel>
+#include <QDateTimeEdit>
+#include <QTimer>
 #include "logindialog.h"
 #include "showmsgdialog.h"
 #include "tabwidgetcell.h"
+#include "modifyservertimewidget.h"
 #include "Packet.h"
 #include "msg.pb.h"
 #include <google/protobuf/text_format.h>
@@ -62,6 +66,10 @@ protected:
     void closeEvent(QCloseEvent *event);
 
     virtual void keyPressEvent(QKeyEvent *ev);
+
+    bool eventFilter(QObject *watched, QEvent *event);
+
+    void resizeEvent(QResizeEvent *event);
 public slots:
 
     void OnServerConnect();
@@ -77,6 +85,8 @@ public slots:
     void OnCloseTabWidgetSlot(int nIndex);
 
     void OnMenuActionTriggered();
+
+    void On1STimerUpdate();
 private:
     Ui::MainWindow *ui;
 
@@ -104,5 +114,11 @@ private:
     QLineEdit*  m_lineEdit;     //搜索栏
 
     QHBoxLayout* hlayout_all;        //中心widget的布局
+
+    quint64     m_serverTimeStamp;  //服务器时间戳
+    QTimer*     m_1sTimer;      //每秒定时器
+    QLabel*     m_timeLabel;      //显示时间的标签
+
+    ModifyServerTimeWidget* m_timeWidget; //修改服务器时间widget
 };
 #endif // MAINWINDOW_H
