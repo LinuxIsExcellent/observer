@@ -109,9 +109,15 @@ void MainWindow::OnCloseTabWidget(QWidget* widget)
 {
     if(!widget) return;
 
-    int nIndex = m_tabWidget->indexOf(widget);
+    TabWidgetCell* tabCell = (TabWidgetCell*)widget;
+    if (tabCell)
+    {
+        QString sTableName = m_mTabwidgetMap.key(tabCell);
 
-    m_mTabwidgetMap.erase(m_mTabwidgetMap.find(m_tabWidget->tabText(nIndex)));
+        m_mTabwidgetMap.erase(m_mTabwidgetMap.find(sTableName));
+    }
+
+    int nIndex = m_tabWidget->indexOf(widget);
     m_tabWidget->removeTab(nIndex);
 
     delete widget;
@@ -207,7 +213,7 @@ void MainWindow::OnSocketError(QAbstractSocket::SocketError error)
 }
 
 //双击文件树的item
-void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int column)
+void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
 {
     if(item && item->parent())
     {
@@ -323,6 +329,13 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
             OnLeftTreeViewData(notify);
         }
+        else if (nCmd == test_2::server_msg::SEND_SERVER_TIME)
+        {
+            test_2::send_server_current_time_nofity notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerSendCurrentTime(notify);
+        }
         else if (nCmd == test_2::server_msg::SEND_LUA_TABLE_DATA)
         {
             test_2::table_data notify;
@@ -347,11 +360,14 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
     }
 }
 
+void MainWindow::OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto)
+{
+    proto.time();
+}
+
 void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto)
 {
     //执行结束
-    qDebug() << proto.flag();
-    qDebug() << QString::fromStdString(proto.line());
     if (proto.flag() == 0)
     {
         if (m_dShellScriptOpPrintDlg->isHidden())
@@ -368,11 +384,6 @@ void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_no
     }
 
     m_dShellScriptOpPrintDlg->AppendMsg(QString::fromStdString(proto.line()));
-//    if (proto.flag() == 0)
-//    {
-//        qDebug() << proto.flag();
-//        qDebug() << QString::fromStdString(proto.line());
-//    }
 }
 
 void MainWindow::OnRecvServerShellOpsData(test_2::server_send_shell_config_notify& proto)

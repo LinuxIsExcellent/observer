@@ -15,7 +15,8 @@ bool GlobalConfig::LoadConfig(lua_State* L, QString fileName)
 
     if (!L) return false;
 
-    int ret = luaL_dofile(L, luaPathStr);
+    qDebug () << "加载服务连接配置 : " << fileName;
+    int ret = luaL_dofile(L, fileName.toStdString().c_str());
     if (ret)
     {
         qCritical() << lua_tostring(L,-1);

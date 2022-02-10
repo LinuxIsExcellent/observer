@@ -99,12 +99,17 @@ public:
     {
         return m_bTableDataChange;
     }
+
+    //调整表的字段顺序
+    void ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences);
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 private:
     //设置数据有改变
     void SetDataModify(bool modify);
 private slots:
+    void AddAnnotation();
+
     void OnItemDataChange(QStandardItem *item);
 
     void sectionMovableBtnClicked();

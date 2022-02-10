@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[15]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[17]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -74,6 +74,9 @@ extern client_shell_option_questDefaultTypeInternal _client_shell_option_quest_d
 class field_squence;
 struct field_squenceDefaultTypeInternal;
 extern field_squenceDefaultTypeInternal _field_squence_default_instance_;
+class field_type_pair;
+struct field_type_pairDefaultTypeInternal;
+extern field_type_pairDefaultTypeInternal _field_type_pair_default_instance_;
 class net_packet;
 struct net_packetDefaultTypeInternal;
 extern net_packetDefaultTypeInternal _net_packet_default_instance_;
@@ -83,6 +86,9 @@ extern pair_valueDefaultTypeInternal _pair_value_default_instance_;
 class row_data;
 struct row_dataDefaultTypeInternal;
 extern row_dataDefaultTypeInternal _row_data_default_instance_;
+class send_server_current_time_nofity;
+struct send_server_current_time_nofityDefaultTypeInternal;
+extern send_server_current_time_nofityDefaultTypeInternal _send_server_current_time_nofity_default_instance_;
 class send_shell_option_print_notify;
 struct send_shell_option_print_notifyDefaultTypeInternal;
 extern send_shell_option_print_notifyDefaultTypeInternal _send_shell_option_print_notify_default_instance_;
@@ -109,9 +115,11 @@ template<> ::test_2::client_save_table_data_request* Arena::CreateMaybeMessage<:
 template<> ::test_2::client_save_table_info_request* Arena::CreateMaybeMessage<::test_2::client_save_table_info_request>(Arena*);
 template<> ::test_2::client_shell_option_quest* Arena::CreateMaybeMessage<::test_2::client_shell_option_quest>(Arena*);
 template<> ::test_2::field_squence* Arena::CreateMaybeMessage<::test_2::field_squence>(Arena*);
+template<> ::test_2::field_type_pair* Arena::CreateMaybeMessage<::test_2::field_type_pair>(Arena*);
 template<> ::test_2::net_packet* Arena::CreateMaybeMessage<::test_2::net_packet>(Arena*);
 template<> ::test_2::pair_value* Arena::CreateMaybeMessage<::test_2::pair_value>(Arena*);
 template<> ::test_2::row_data* Arena::CreateMaybeMessage<::test_2::row_data>(Arena*);
+template<> ::test_2::send_server_current_time_nofity* Arena::CreateMaybeMessage<::test_2::send_server_current_time_nofity>(Arena*);
 template<> ::test_2::send_shell_option_print_notify* Arena::CreateMaybeMessage<::test_2::send_shell_option_print_notify>(Arena*);
 template<> ::test_2::server_send_current_time_notify* Arena::CreateMaybeMessage<::test_2::server_send_current_time_notify>(Arena*);
 template<> ::test_2::server_send_file_tree_notify* Arena::CreateMaybeMessage<::test_2::server_send_file_tree_notify>(Arena*);
@@ -1503,6 +1511,168 @@ class pair_value final :
 };
 // -------------------------------------------------------------------
 
+class field_type_pair final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.field_type_pair) */ {
+ public:
+  inline field_type_pair() : field_type_pair(nullptr) {}
+  ~field_type_pair() override;
+  explicit constexpr field_type_pair(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  field_type_pair(const field_type_pair& from);
+  field_type_pair(field_type_pair&& from) noexcept
+    : field_type_pair() {
+    *this = ::std::move(from);
+  }
+
+  inline field_type_pair& operator=(const field_type_pair& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline field_type_pair& operator=(field_type_pair&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const field_type_pair& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const field_type_pair* internal_default_instance() {
+    return reinterpret_cast<const field_type_pair*>(
+               &_field_type_pair_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(field_type_pair& a, field_type_pair& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(field_type_pair* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(field_type_pair* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  field_type_pair* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<field_type_pair>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const field_type_pair& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const field_type_pair& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(field_type_pair* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.field_type_pair";
+  }
+  protected:
+  explicit field_type_pair(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kKeyFieldNumber = 1,
+    kLuaTypeFieldNumber = 2,
+  };
+  // string key = 1;
+  void clear_key();
+  const std::string& key() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_key(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_key();
+  PROTOBUF_NODISCARD std::string* release_key();
+  void set_allocated_key(std::string* key);
+  private:
+  const std::string& _internal_key() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_key(const std::string& value);
+  std::string* _internal_mutable_key();
+  public:
+
+  // int32 lua_type = 2;
+  void clear_lua_type();
+  int32_t lua_type() const;
+  void set_lua_type(int32_t value);
+  private:
+  int32_t _internal_lua_type() const;
+  void _internal_set_lua_type(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.field_type_pair)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr key_;
+  int32_t lua_type_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
+// -------------------------------------------------------------------
+
 class row_data final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.row_data) */ {
  public:
@@ -1551,7 +1721,7 @@ class row_data final :
                &_row_data_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(row_data& a, row_data& b) {
     a.Swap(&b);
@@ -1722,7 +1892,7 @@ class field_squence final :
                &_field_squence_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(field_squence& a, field_squence& b) {
     a.Swap(&b);
@@ -1908,7 +2078,7 @@ class table_data final :
                &_table_data_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(table_data& a, table_data& b) {
     a.Swap(&b);
@@ -2014,27 +2184,23 @@ class table_data final :
   std::string* _internal_add_filed_names();
   public:
 
-  // repeated int32 filed_types = 5;
+  // repeated .test_2.field_type_pair filed_types = 5;
   int filed_types_size() const;
   private:
   int _internal_filed_types_size() const;
   public:
   void clear_filed_types();
-  private:
-  int32_t _internal_filed_types(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-      _internal_filed_types() const;
-  void _internal_add_filed_types(int32_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-      _internal_mutable_filed_types();
-  public:
-  int32_t filed_types(int index) const;
-  void set_filed_types(int index, int32_t value);
-  void add_filed_types(int32_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-      filed_types() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+  ::test_2::field_type_pair* mutable_filed_types(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_pair >*
       mutable_filed_types();
+  private:
+  const ::test_2::field_type_pair& _internal_filed_types(int index) const;
+  ::test_2::field_type_pair* _internal_add_filed_types();
+  public:
+  const ::test_2::field_type_pair& filed_types(int index) const;
+  ::test_2::field_type_pair* add_filed_types();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_pair >&
+      filed_types() const;
 
   // repeated .test_2.row_data row_lists = 6;
   int row_lists_size() const;
@@ -2112,8 +2278,7 @@ class table_data final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> filed_names_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > filed_types_;
-  mutable std::atomic<int> _filed_types_cached_byte_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_pair > filed_types_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data > row_lists_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
@@ -2172,7 +2337,7 @@ class table_info final :
                &_table_info_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(table_info& a, table_info& b) {
     a.Swap(&b);
@@ -2343,7 +2508,7 @@ class client_save_table_data_request final :
                &_client_save_table_data_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(client_save_table_data_request& a, client_save_table_data_request& b) {
     a.Swap(&b);
@@ -2514,7 +2679,7 @@ class send_shell_option_print_notify final :
                &_send_shell_option_print_notify_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(send_shell_option_print_notify& a, send_shell_option_print_notify& b) {
     a.Swap(&b);
@@ -2676,7 +2841,7 @@ class client_save_table_info_request final :
                &_client_save_table_info_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(client_save_table_info_request& a, client_save_table_info_request& b) {
     a.Swap(&b);
@@ -2750,32 +2915,26 @@ class client_save_table_info_request final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kFieldFieldNumber = 2,
+    kFiledSequencesFieldNumber = 2,
     kTableNameFieldNumber = 1,
   };
-  // repeated string field = 2;
-  int field_size() const;
+  // repeated .test_2.field_squence filed_sequences = 2;
+  int filed_sequences_size() const;
   private:
-  int _internal_field_size() const;
+  int _internal_filed_sequences_size() const;
   public:
-  void clear_field();
-  const std::string& field(int index) const;
-  std::string* mutable_field(int index);
-  void set_field(int index, const std::string& value);
-  void set_field(int index, std::string&& value);
-  void set_field(int index, const char* value);
-  void set_field(int index, const char* value, size_t size);
-  std::string* add_field();
-  void add_field(const std::string& value);
-  void add_field(std::string&& value);
-  void add_field(const char* value);
-  void add_field(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& field() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_field();
+  void clear_filed_sequences();
+  ::test_2::field_squence* mutable_filed_sequences(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+      mutable_filed_sequences();
   private:
-  const std::string& _internal_field(int index) const;
-  std::string* _internal_add_field();
+  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
+  ::test_2::field_squence* _internal_add_filed_sequences();
   public:
+  const ::test_2::field_squence& filed_sequences(int index) const;
+  ::test_2::field_squence* add_filed_sequences();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+      filed_sequences() const;
 
   // string table_name = 1;
   void clear_table_name();
@@ -2798,8 +2957,154 @@ class client_save_table_info_request final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> field_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
+// -------------------------------------------------------------------
+
+class send_server_current_time_nofity final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.send_server_current_time_nofity) */ {
+ public:
+  inline send_server_current_time_nofity() : send_server_current_time_nofity(nullptr) {}
+  ~send_server_current_time_nofity() override;
+  explicit constexpr send_server_current_time_nofity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  send_server_current_time_nofity(const send_server_current_time_nofity& from);
+  send_server_current_time_nofity(send_server_current_time_nofity&& from) noexcept
+    : send_server_current_time_nofity() {
+    *this = ::std::move(from);
+  }
+
+  inline send_server_current_time_nofity& operator=(const send_server_current_time_nofity& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline send_server_current_time_nofity& operator=(send_server_current_time_nofity&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const send_server_current_time_nofity& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const send_server_current_time_nofity* internal_default_instance() {
+    return reinterpret_cast<const send_server_current_time_nofity*>(
+               &_send_server_current_time_nofity_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(send_server_current_time_nofity& a, send_server_current_time_nofity& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(send_server_current_time_nofity* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(send_server_current_time_nofity* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  send_server_current_time_nofity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<send_server_current_time_nofity>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const send_server_current_time_nofity& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const send_server_current_time_nofity& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(send_server_current_time_nofity* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.send_server_current_time_nofity";
+  }
+  protected:
+  explicit send_server_current_time_nofity(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTimeFieldNumber = 1,
+  };
+  // int64 time = 1;
+  void clear_time();
+  int64_t time() const;
+  void set_time(int64_t value);
+  private:
+  int64_t _internal_time() const;
+  void _internal_set_time(int64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.send_server_current_time_nofity)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int64_t time_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -3510,6 +3815,81 @@ inline void pair_value::set_allocated_value(std::string* value) {
 
 // -------------------------------------------------------------------
 
+// field_type_pair
+
+// string key = 1;
+inline void field_type_pair::clear_key() {
+  key_.ClearToEmpty();
+}
+inline const std::string& field_type_pair::key() const {
+  // @@protoc_insertion_point(field_get:test_2.field_type_pair.key)
+  return _internal_key();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void field_type_pair::set_key(ArgT0&& arg0, ArgT... args) {
+ 
+ key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.field_type_pair.key)
+}
+inline std::string* field_type_pair::mutable_key() {
+  std::string* _s = _internal_mutable_key();
+  // @@protoc_insertion_point(field_mutable:test_2.field_type_pair.key)
+  return _s;
+}
+inline const std::string& field_type_pair::_internal_key() const {
+  return key_.Get();
+}
+inline void field_type_pair::_internal_set_key(const std::string& value) {
+  
+  key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* field_type_pair::_internal_mutable_key() {
+  
+  return key_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* field_type_pair::release_key() {
+  // @@protoc_insertion_point(field_release:test_2.field_type_pair.key)
+  return key_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void field_type_pair::set_allocated_key(std::string* key) {
+  if (key != nullptr) {
+    
+  } else {
+    
+  }
+  key_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), key,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (key_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    key_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.field_type_pair.key)
+}
+
+// int32 lua_type = 2;
+inline void field_type_pair::clear_lua_type() {
+  lua_type_ = 0;
+}
+inline int32_t field_type_pair::_internal_lua_type() const {
+  return lua_type_;
+}
+inline int32_t field_type_pair::lua_type() const {
+  // @@protoc_insertion_point(field_get:test_2.field_type_pair.lua_type)
+  return _internal_lua_type();
+}
+inline void field_type_pair::_internal_set_lua_type(int32_t value) {
+  
+  lua_type_ = value;
+}
+inline void field_type_pair::set_lua_type(int32_t value) {
+  _internal_set_lua_type(value);
+  // @@protoc_insertion_point(field_set:test_2.field_type_pair.lua_type)
+}
+
+// -------------------------------------------------------------------
+
 // row_data
 
 // string key = 1;
@@ -3899,7 +4279,7 @@ table_data::mutable_filed_names() {
   return &filed_names_;
 }
 
-// repeated int32 filed_types = 5;
+// repeated .test_2.field_type_pair filed_types = 5;
 inline int table_data::_internal_filed_types_size() const {
   return filed_types_.size();
 }
@@ -3909,41 +4289,34 @@ inline int table_data::filed_types_size() const {
 inline void table_data::clear_filed_types() {
   filed_types_.Clear();
 }
-inline int32_t table_data::_internal_filed_types(int index) const {
+inline ::test_2::field_type_pair* table_data::mutable_filed_types(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.table_data.filed_types)
+  return filed_types_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_pair >*
+table_data::mutable_filed_types() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_types)
+  return &filed_types_;
+}
+inline const ::test_2::field_type_pair& table_data::_internal_filed_types(int index) const {
   return filed_types_.Get(index);
 }
-inline int32_t table_data::filed_types(int index) const {
+inline const ::test_2::field_type_pair& table_data::filed_types(int index) const {
   // @@protoc_insertion_point(field_get:test_2.table_data.filed_types)
   return _internal_filed_types(index);
 }
-inline void table_data::set_filed_types(int index, int32_t value) {
-  filed_types_.Set(index, value);
-  // @@protoc_insertion_point(field_set:test_2.table_data.filed_types)
+inline ::test_2::field_type_pair* table_data::_internal_add_filed_types() {
+  return filed_types_.Add();
 }
-inline void table_data::_internal_add_filed_types(int32_t value) {
-  filed_types_.Add(value);
-}
-inline void table_data::add_filed_types(int32_t value) {
-  _internal_add_filed_types(value);
+inline ::test_2::field_type_pair* table_data::add_filed_types() {
+  ::test_2::field_type_pair* _add = _internal_add_filed_types();
   // @@protoc_insertion_point(field_add:test_2.table_data.filed_types)
+  return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-table_data::_internal_filed_types() const {
-  return filed_types_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_pair >&
 table_data::filed_types() const {
   // @@protoc_insertion_point(field_list:test_2.table_data.filed_types)
-  return _internal_filed_types();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-table_data::_internal_mutable_filed_types() {
-  return &filed_types_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-table_data::mutable_filed_types() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.table_data.filed_types)
-  return _internal_mutable_filed_types();
+  return filed_types_;
 }
 
 // repeated .test_2.row_data row_lists = 6;
@@ -4346,84 +4719,77 @@ inline void client_save_table_info_request::set_allocated_table_name(std::string
   // @@protoc_insertion_point(field_set_allocated:test_2.client_save_table_info_request.table_name)
 }
 
-// repeated string field = 2;
-inline int client_save_table_info_request::_internal_field_size() const {
-  return field_.size();
+// repeated .test_2.field_squence filed_sequences = 2;
+inline int client_save_table_info_request::_internal_filed_sequences_size() const {
+  return filed_sequences_.size();
 }
-inline int client_save_table_info_request::field_size() const {
-  return _internal_field_size();
+inline int client_save_table_info_request::filed_sequences_size() const {
+  return _internal_filed_sequences_size();
 }
-inline void client_save_table_info_request::clear_field() {
-  field_.Clear();
+inline void client_save_table_info_request::clear_filed_sequences() {
+  filed_sequences_.Clear();
 }
-inline std::string* client_save_table_info_request::add_field() {
-  std::string* _s = _internal_add_field();
-  // @@protoc_insertion_point(field_add_mutable:test_2.client_save_table_info_request.field)
-  return _s;
+inline ::test_2::field_squence* client_save_table_info_request::mutable_filed_sequences(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.client_save_table_info_request.filed_sequences)
+  return filed_sequences_.Mutable(index);
 }
-inline const std::string& client_save_table_info_request::_internal_field(int index) const {
-  return field_.Get(index);
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+client_save_table_info_request::mutable_filed_sequences() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.client_save_table_info_request.filed_sequences)
+  return &filed_sequences_;
 }
-inline const std::string& client_save_table_info_request::field(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.client_save_table_info_request.field)
-  return _internal_field(index);
+inline const ::test_2::field_squence& client_save_table_info_request::_internal_filed_sequences(int index) const {
+  return filed_sequences_.Get(index);
 }
-inline std::string* client_save_table_info_request::mutable_field(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.client_save_table_info_request.field)
-  return field_.Mutable(index);
+inline const ::test_2::field_squence& client_save_table_info_request::filed_sequences(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.client_save_table_info_request.filed_sequences)
+  return _internal_filed_sequences(index);
 }
-inline void client_save_table_info_request::set_field(int index, const std::string& value) {
-  field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set:test_2.client_save_table_info_request.field)
+inline ::test_2::field_squence* client_save_table_info_request::_internal_add_filed_sequences() {
+  return filed_sequences_.Add();
 }
-inline void client_save_table_info_request::set_field(int index, std::string&& value) {
-  field_.Mutable(index)->assign(std::move(value));
-  // @@protoc_insertion_point(field_set:test_2.client_save_table_info_request.field)
+inline ::test_2::field_squence* client_save_table_info_request::add_filed_sequences() {
+  ::test_2::field_squence* _add = _internal_add_filed_sequences();
+  // @@protoc_insertion_point(field_add:test_2.client_save_table_info_request.filed_sequences)
+  return _add;
 }
-inline void client_save_table_info_request::set_field(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  field_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:test_2.client_save_table_info_request.field)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+client_save_table_info_request::filed_sequences() const {
+  // @@protoc_insertion_point(field_list:test_2.client_save_table_info_request.filed_sequences)
+  return filed_sequences_;
 }
-inline void client_save_table_info_request::set_field(int index, const char* value, size_t size) {
-  field_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:test_2.client_save_table_info_request.field)
+
+// -------------------------------------------------------------------
+
+// send_server_current_time_nofity
+
+// int64 time = 1;
+inline void send_server_current_time_nofity::clear_time() {
+  time_ = int64_t{0};
 }
-inline std::string* client_save_table_info_request::_internal_add_field() {
-  return field_.Add();
+inline int64_t send_server_current_time_nofity::_internal_time() const {
+  return time_;
 }
-inline void client_save_table_info_request::add_field(const std::string& value) {
-  field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:test_2.client_save_table_info_request.field)
+inline int64_t send_server_current_time_nofity::time() const {
+  // @@protoc_insertion_point(field_get:test_2.send_server_current_time_nofity.time)
+  return _internal_time();
 }
-inline void client_save_table_info_request::add_field(std::string&& value) {
-  field_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:test_2.client_save_table_info_request.field)
+inline void send_server_current_time_nofity::_internal_set_time(int64_t value) {
+  
+  time_ = value;
 }
-inline void client_save_table_info_request::add_field(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  field_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:test_2.client_save_table_info_request.field)
-}
-inline void client_save_table_info_request::add_field(const char* value, size_t size) {
-  field_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:test_2.client_save_table_info_request.field)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-client_save_table_info_request::field() const {
-  // @@protoc_insertion_point(field_list:test_2.client_save_table_info_request.field)
-  return field_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-client_save_table_info_request::mutable_field() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.client_save_table_info_request.field)
-  return &field_;
+inline void send_server_current_time_nofity::set_time(int64_t value) {
+  _internal_set_time(value);
+  // @@protoc_insertion_point(field_set:test_2.send_server_current_time_nofity.time)
 }
 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

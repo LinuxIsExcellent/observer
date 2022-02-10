@@ -7,6 +7,7 @@
 #include <QDataStream>
 #include <iostream>
 #include <QObject>
+#include <log.h>
 
 using namespace std;
 

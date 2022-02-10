@@ -1,5 +1,7 @@
 #include "tabwidgetcell.h"
 #include "ui_tabwidgetcell.h"
+#include <QTableWidget>
+
 TabWidgetCell::TabWidgetCell(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabWidgetCell)
@@ -49,7 +51,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
     QPushButton* sectionMovableBtn = new QPushButton(this);
     QListWidgetItem *item1 = new QListWidgetItem(m_rightButtonList);
-    if (item)
+    if (item1)
     {
         sectionMovableBtn->setText(tr("移动列"));
         m_rightButtonList->addItem(item1);
@@ -101,7 +103,8 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         }
 
         m_tableCellMenu->clear();
-        m_tableCellMenu->addAction(QString::number(nIndex), this, SLOT(slot_function1()));
+        m_tableCellMenu->addAction("编辑批注", this, SLOT(AddAnnotation()));
+        m_tableCellMenu->addAction("增加关联", this, SLOT(slot_function1()));
 
         m_tableCellMenu->exec(pt);
     });
@@ -140,20 +143,55 @@ TabWidgetCell::~TabWidgetCell()
     delete ui;
 }
 
-void TabWidgetCell::OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex)
+void TabWidgetCell::AddAnnotation()
+{
+    qDebug() << "add annotation";
+}
+
+//调整表的字段顺序
+void TabWidgetCell::ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences)
+{
+    bool isHas = false;
+    for (auto& data : m_vFieldSquence)
+    {
+        if (data.vNLevels == vNLevels)
+        {
+            data.vSFieldSquences = vSFieldSquences;
+
+            isHas = true;
+            break;
+        }
+    }
+
+    if (!isHas)
+    {
+        FIELDSQUENCE fieldSquence;
+        fieldSquence.vNLevels = vNLevels;
+        fieldSquence.vSFieldSquences = vSFieldSquences;
+
+        m_vFieldSquence.push_back(fieldSquence);
+    }
+}
+
+void TabWidgetCell::OnTableViewSectionMoved(int, int, int)
 {
     m_bHeadIndexChange = true;
     SetDataModify(true);
-    qDebug() << "logicalIndex = " << logicalIndex;
-    qDebug() << "oldVisualIndex = " << oldVisualIndex;
-    qDebug() << "newVisualIndex = " << newVisualIndex;
 
-    //当前显示的表头顺序
+    QVector<QString> sFields;
+
+    //按照当前的表格显示顺序排序
+    sFields.resize(m_tableView->model()->columnCount());
     for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
     {
         int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-        qDebug() << m_tableView->model()->headerData(nVisualIndex, Qt::Horizontal).toString();
+
+        sFields[nVisualIndex] = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
     }
+
+    QVector<quint16> vNLevels;
+
+    ModifyFieldSquences(vNLevels, sFields);
 }
 
 void TabWidgetCell::sectionMovableBtnClicked()
@@ -207,7 +245,7 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
         int nRow = item->index().row();
         if (nRow <= m_vBRowDataChange.count())
         {
-            m_vBRowDataChange[nRow] = MODIFY;
+//            m_vBRowDataChange[nRow] = MODIFY;
         }
         else
         {
@@ -221,15 +259,50 @@ void TabWidgetCell::Flush()
 {
     if(m_tableView && m_tableData.dataList.count() > 0)
     {
-        QStandardItemModel *student_model = new QStandardItemModel();
+        QStandardItemModel *student_model = nullptr;
+        if (m_tableView->model())
+        {
+            student_model = qobject_cast<QStandardItemModel*>(m_tableView->model());
+        }
+        else
+        {
+            student_model = new QStandardItemModel();
+        }
 
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
         {
             QString strField = m_mFieldLists[i];
+            student_model->setHorizontalHeaderItem(i, new QStandardItem(strField));
 
-            int visualColumn = i;
-            student_model->setHorizontalHeaderItem(visualColumn, new QStandardItem(strField));
+            QString dataTypeStr;
+            switch (m_mFieldTypes.find(strField).value()) {
+                case LUA_TTABLE:
+                {
+                    dataTypeStr = "表";
+                    break;
+                }
+                case LUA_TNIL:
+                case LUA_TNUMBER:
+                {
+                    dataTypeStr = "数字";
+                    break;
+                }
+                case LUA_TSTRING:
+                {
+                    dataTypeStr = "字符串";
+                    break;
+                }
+                case LUA_TBOOLEAN:
+                {
+                    dataTypeStr = "0为否，1为是";
+                    break;
+                }
+            }
+
+            QStandardItem* item = new QStandardItem(dataTypeStr);
+            item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+            student_model->setItem(0, i, item);
         }
 
         //利用setModel()方法将数据模型与QTableView绑定
@@ -251,11 +324,19 @@ void TabWidgetCell::Flush()
                     visualColumn = iter.value();
                 }
 
-                student_model->setItem(i, visualColumn, new QStandardItem(strFieldValue));
+                if(m_mFieldTypes.find(strFieldName).value() == LUA_TSTRING)
+                {
+                    strFieldValue = strFieldValue.replace('\n',"\\n");
+                    strFieldValue = strFieldValue.replace('\"', "\\\"");
+                }
+                QStandardItem* dataItem = new QStandardItem(strFieldValue);
+                student_model->setItem(i + 1, visualColumn, dataItem);
             }
         }
 
+        m_tableView->update();
         m_bTableDataChange = false;
+        m_bHeadIndexChange = false;
         SetDataModify(false);
         connect(student_model, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     }
@@ -306,8 +387,8 @@ void TabWidgetCell::SetProtoData(test_2::table_data& proto)
             m_mFieldLists.push_back(strField);
 
             m_mFieldNames.insert(strField, i);
-            int nType = proto.filed_types(i);
-            m_mFieldTypes.insert(strField, nType);
+            test_2::field_type_pair type_pairs = proto.filed_types(i);
+            m_mFieldTypes.insert(strField, type_pairs.lua_type());
         }
 
         m_tableData.sTableName = QString::fromStdString(proto.table_name());
@@ -365,14 +446,24 @@ void TabWidgetCell::OnRequestSaveData()
         test_2::client_save_table_info_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
 
-        for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
+        for (auto data : m_vFieldSquence)
         {
-            int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-
-            std::string* field = quest.add_field();
-            if(field)
+            test_2::field_squence* field_squence = quest.add_filed_sequences();
+            if (field_squence)
             {
-                *field = m_tableView->model()->headerData(nVisualIndex, Qt::Horizontal).toString().toStdString();
+                for (auto nLevel : data.vNLevels)
+                {
+                    field_squence->add_levels(nLevel);
+                }
+
+                for (auto sData : data.vSFieldSquences)
+                {
+                    std::string* sField = field_squence->add_fields();
+                    if (sField)
+                    {
+                        *sField = sData.toStdString();
+                    }
+                }
             }
         }
 
@@ -386,13 +477,10 @@ void TabWidgetCell::OnRequestSaveData()
     {
         QAbstractItemModel* model = m_tableView->model();
 
-        qDebug() << model->rowCount();
-        qDebug() << model->columnCount();
-
         test_2::client_save_table_data_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
 
-        for (int i = 0; i < model->rowCount(); ++i)
+        for (int i = 1; i < model->rowCount(); ++i)
         {
             test_2::row_data* row_lists = quest.add_row_lists();
 
@@ -407,8 +495,17 @@ void TabWidgetCell::OnRequestSaveData()
                     {
                         row_lists->set_key(strValue.toStdString());
                     }
+
+                    if(m_mFieldTypes.find(strField).value() == LUA_TSTRING)
+                    {
+                        strValue = strValue.replace("\\n", "\n");
+                        strValue = strValue.replace("\\\"", "\"");
+                    }
+
                     pairValue->set_key(strField.toStdString());
                     pairValue->set_value(strValue.toStdString());
+
+                    qDebug() << strField << " = " << strValue;
                 }
             }
         }

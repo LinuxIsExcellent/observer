@@ -55,6 +55,9 @@ public:
 
     //收到服务器发过来的shell指令执行的打印
     void OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto);
+
+    //收到服务器推送的服务器时间
+    void OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -69,7 +72,7 @@ public slots:
 
     void OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data);
 
-    void OnClickTreeWidgetItem(QTreeWidgetItem *item, int column);
+    void OnClickTreeWidgetItem(QTreeWidgetItem *item, int);
 
     void OnCloseTabWidgetSlot(int nIndex);
 

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[19];
-    char stringdata0[239];
+    QByteArrayData data[18];
+    char stringdata0[232];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,19 +46,17 @@ QT_MOC_LITERAL(11, 133, 4), // "data"
 QT_MOC_LITERAL(12, 138, 21), // "OnClickTreeWidgetItem"
 QT_MOC_LITERAL(13, 160, 16), // "QTreeWidgetItem*"
 QT_MOC_LITERAL(14, 177, 4), // "item"
-QT_MOC_LITERAL(15, 182, 6), // "column"
-QT_MOC_LITERAL(16, 189, 20), // "OnCloseTabWidgetSlot"
-QT_MOC_LITERAL(17, 210, 6), // "nIndex"
-QT_MOC_LITERAL(18, 217, 21) // "OnMenuActionTriggered"
+QT_MOC_LITERAL(15, 182, 20), // "OnCloseTabWidgetSlot"
+QT_MOC_LITERAL(16, 203, 6), // "nIndex"
+QT_MOC_LITERAL(17, 210, 21) // "OnMenuActionTriggered"
 
     },
     "MainWindow\0OnServerConnect\0\0OnSocketError\0"
     "QAbstractSocket::SocketError\0error\0"
     "OnServerMsgRecv\0OnSndServerMsg\0nSystem\0"
     "nCmd\0std::string\0data\0OnClickTreeWidgetItem\0"
-    "QTreeWidgetItem*\0item\0column\0"
-    "OnCloseTabWidgetSlot\0nIndex\0"
-    "OnMenuActionTriggered"
+    "QTreeWidgetItem*\0item\0OnCloseTabWidgetSlot\0"
+    "nIndex\0OnMenuActionTriggered"
 };
 #undef QT_MOC_LITERAL
 
@@ -81,16 +79,16 @@ static const uint qt_meta_data_MainWindow[] = {
        6,    0,   53,    2, 0x0a /* Public */,
        7,    3,   54,    2, 0x0a /* Public */,
       12,    2,   61,    2, 0x0a /* Public */,
-      16,    1,   66,    2, 0x0a /* Public */,
-      18,    0,   69,    2, 0x0a /* Public */,
+      15,    1,   66,    2, 0x0a /* Public */,
+      17,    0,   69,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 4,    5,
     QMetaType::Void,
     QMetaType::Void, QMetaType::UShort, QMetaType::UShort, 0x80000000 | 10,    8,    9,   11,
-    QMetaType::Void, 0x80000000 | 13, QMetaType::Int,   14,   15,
-    QMetaType::Void, QMetaType::Int,   17,
+    QMetaType::Void, 0x80000000 | 13, QMetaType::Int,   14,    2,
+    QMetaType::Void, QMetaType::Int,   16,
     QMetaType::Void,
 
        0        // eod
