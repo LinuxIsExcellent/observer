@@ -16,6 +16,8 @@ public:
     ~ModifyServerTimeWidget();
 
     void SetTime(quint64 nTime);
+signals:
+    void OnClickConfirmBtn(quint64 nTime);
 private:
     Ui::ModifyServerTimeWidget *ui;
 };

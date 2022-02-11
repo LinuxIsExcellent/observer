@@ -87,6 +87,9 @@ public slots:
     void OnMenuActionTriggered();
 
     void On1STimerUpdate();
+
+    //请求修改服务器时间
+    void OnRequestModifyServerTime(quint64 nTime);
 private:
     Ui::MainWindow *ui;
 

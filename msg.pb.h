@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[17]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[18]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -62,6 +62,9 @@ extern client_login_requestDefaultTypeInternal _client_login_request_default_ins
 class client_lua_table_data_quest;
 struct client_lua_table_data_questDefaultTypeInternal;
 extern client_lua_table_data_questDefaultTypeInternal _client_lua_table_data_quest_default_instance_;
+class client_modify_server_time_quest;
+struct client_modify_server_time_questDefaultTypeInternal;
+extern client_modify_server_time_questDefaultTypeInternal _client_modify_server_time_quest_default_instance_;
 class client_save_table_data_request;
 struct client_save_table_data_requestDefaultTypeInternal;
 extern client_save_table_data_requestDefaultTypeInternal _client_save_table_data_request_default_instance_;
@@ -111,6 +114,7 @@ extern table_infoDefaultTypeInternal _table_info_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::test_2::client_login_request* Arena::CreateMaybeMessage<::test_2::client_login_request>(Arena*);
 template<> ::test_2::client_lua_table_data_quest* Arena::CreateMaybeMessage<::test_2::client_lua_table_data_quest>(Arena*);
+template<> ::test_2::client_modify_server_time_quest* Arena::CreateMaybeMessage<::test_2::client_modify_server_time_quest>(Arena*);
 template<> ::test_2::client_save_table_data_request* Arena::CreateMaybeMessage<::test_2::client_save_table_data_request>(Arena*);
 template<> ::test_2::client_save_table_info_request* Arena::CreateMaybeMessage<::test_2::client_save_table_info_request>(Arena*);
 template<> ::test_2::client_shell_option_quest* Arena::CreateMaybeMessage<::test_2::client_shell_option_quest>(Arena*);
@@ -135,12 +139,13 @@ enum client_msg : int {
   REQUSET_SAVE_TABLE_DATA = 2,
   REQUSET_SHELL_OPTIONS = 3,
   REQUEST_SAVE_TABLE_INFO = 4,
+  REQUEST_MODIFY_SERVER_TIME = 5,
   client_msg_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   client_msg_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool client_msg_IsValid(int value);
 constexpr client_msg client_msg_MIN = REQUEST_LOGIN;
-constexpr client_msg client_msg_MAX = REQUEST_SAVE_TABLE_INFO;
+constexpr client_msg client_msg_MAX = REQUEST_MODIFY_SERVER_TIME;
 constexpr int client_msg_ARRAYSIZE = client_msg_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* client_msg_descriptor();
@@ -3108,6 +3113,152 @@ class send_server_current_time_nofity final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
+// -------------------------------------------------------------------
+
+class client_modify_server_time_quest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.client_modify_server_time_quest) */ {
+ public:
+  inline client_modify_server_time_quest() : client_modify_server_time_quest(nullptr) {}
+  ~client_modify_server_time_quest() override;
+  explicit constexpr client_modify_server_time_quest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  client_modify_server_time_quest(const client_modify_server_time_quest& from);
+  client_modify_server_time_quest(client_modify_server_time_quest&& from) noexcept
+    : client_modify_server_time_quest() {
+    *this = ::std::move(from);
+  }
+
+  inline client_modify_server_time_quest& operator=(const client_modify_server_time_quest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline client_modify_server_time_quest& operator=(client_modify_server_time_quest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const client_modify_server_time_quest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const client_modify_server_time_quest* internal_default_instance() {
+    return reinterpret_cast<const client_modify_server_time_quest*>(
+               &_client_modify_server_time_quest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(client_modify_server_time_quest& a, client_modify_server_time_quest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(client_modify_server_time_quest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(client_modify_server_time_quest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  client_modify_server_time_quest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<client_modify_server_time_quest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const client_modify_server_time_quest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const client_modify_server_time_quest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(client_modify_server_time_quest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.client_modify_server_time_quest";
+  }
+  protected:
+  explicit client_modify_server_time_quest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTimeFieldNumber = 1,
+  };
+  // int64 time = 1;
+  void clear_time();
+  int64_t time() const;
+  void set_time(int64_t value);
+  private:
+  int64_t _internal_time() const;
+  void _internal_set_time(int64_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:test_2.client_modify_server_time_quest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int64_t time_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
 // ===================================================================
 
 
@@ -4783,9 +4934,35 @@ inline void send_server_current_time_nofity::set_time(int64_t value) {
   // @@protoc_insertion_point(field_set:test_2.send_server_current_time_nofity.time)
 }
 
+// -------------------------------------------------------------------
+
+// client_modify_server_time_quest
+
+// int64 time = 1;
+inline void client_modify_server_time_quest::clear_time() {
+  time_ = int64_t{0};
+}
+inline int64_t client_modify_server_time_quest::_internal_time() const {
+  return time_;
+}
+inline int64_t client_modify_server_time_quest::time() const {
+  // @@protoc_insertion_point(field_get:test_2.client_modify_server_time_quest.time)
+  return _internal_time();
+}
+inline void client_modify_server_time_quest::_internal_set_time(int64_t value) {
+  
+  time_ = value;
+}
+inline void client_modify_server_time_quest::set_time(int64_t value) {
+  _internal_set_time(value);
+  // @@protoc_insertion_point(field_set:test_2.client_modify_server_time_quest.time)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -9,7 +9,8 @@ ModifyServerTimeWidget::ModifyServerTimeWidget(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->pushButton, &QPushButton::clicked, this,[=](){
-
+        emit OnClickConfirmBtn(ui->dateTimeEdit->dateTime().toTime_t());
+        this->hide();
     });
 
     connect(ui->pushButton_2, &QPushButton::clicked, this,[=](){

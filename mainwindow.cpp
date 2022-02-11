@@ -105,6 +105,7 @@ void MainWindow::init_windows()
     m_1sTimer->start(1000);
 
     m_timeWidget = new ModifyServerTimeWidget(this);
+    connect(m_timeWidget, SIGNAL(OnClickConfirmBtn(quint64)), this, SLOT(OnRequestModifyServerTime(quint64)));
     m_timeWidget->hide();
 }
 
@@ -226,6 +227,18 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
        }
        return;
     }
+}
+
+void MainWindow::OnRequestModifyServerTime(quint64 nTime)
+{
+    qDebug() << "asdsa = " << nTime;
+    test_2::client_modify_server_time_quest quest;
+    quest.set_time(nTime);
+
+    std::string output;
+    quest.SerializeToString(&output);
+
+    OnSndServerMsg(0, test_2::client_msg::REQUEST_MODIFY_SERVER_TIME, output);
 }
 
 //请求连接到特定服务器
