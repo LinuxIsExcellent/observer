@@ -66,7 +66,7 @@ public:
     //请求保存数据
     virtual void OnRequestSaveData() {};
 
-    inline bool IsTableDataChange()
+    virtual inline bool IsTableDataChange()
     {
         return m_bTableDataChange;
     }
@@ -83,8 +83,6 @@ private slots:
     void AddAnnotation();
 
     void OnItemDataChange(QStandardItem *item);
-
-    void sectionMovableBtnClicked();
 public:
     Ui::TabWidgetCell *ui;
 
@@ -95,6 +93,8 @@ public:
 
     QTableView*   m_tableView;  //展示数据的二维表
     QListWidget*    m_rightButtonList;  //右边的操作按钮
+
+    QStandardItemModel*  m_standardItemModel;   //view对应的model
 
     QHBoxLayout* hlayout_top;  //上面的水平布局
 

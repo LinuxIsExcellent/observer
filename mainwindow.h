@@ -26,6 +26,7 @@ class LoginDialog;
 class ShowMsgDialog;
 class TabWidgetCell;
 class LuaTableDataWidget;
+class LuaListDataWidget;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -62,6 +63,9 @@ public:
 
     //收到服务器推送的服务器时间
     void OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto);
+
+    //收到服务器发来的一维表数据
+    void OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 

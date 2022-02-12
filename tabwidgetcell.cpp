@@ -48,20 +48,14 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         connect(resizeContentBtn, SIGNAL(clicked()), m_tableView, SLOT(resizeColumnsToContents()));
     }
 
-    QPushButton* sectionMovableBtn = new QPushButton(this);
-    QListWidgetItem *item1 = new QListWidgetItem(m_rightButtonList);
-    if (item1)
-    {
-        sectionMovableBtn->setText(tr("移动列"));
-        m_rightButtonList->addItem(item1);
-        m_rightButtonList->setItemWidget(item1, sectionMovableBtn);
-
-        connect(sectionMovableBtn, SIGNAL(clicked()), this, SLOT(sectionMovableBtnClicked()));
-    }
     m_tableView->setAlternatingRowColors(true);
     m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    m_standardItemModel = new QStandardItemModel(m_tableView);
+    m_tableView->setModel(m_standardItemModel);
+    connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
@@ -143,33 +137,6 @@ TabWidgetCell::~TabWidgetCell()
 void TabWidgetCell::AddAnnotation()
 {
     qDebug() << "add annotation";
-}
-
-void TabWidgetCell::sectionMovableBtnClicked()
-{
-    QObject* sender = QObject::sender();
-    QPushButton* btn = nullptr;
-    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
-    {
-        btn = qobject_cast<QPushButton*>(sender);
-    }
-
-    if(m_tableView->horizontalHeader()->sectionsMovable())
-    {
-        m_tableView->horizontalHeader()->setSectionsMovable(false);
-        if(btn)
-        {
-            btn->setText(tr("移动列"));
-        }
-    }
-    else
-    {
-        m_tableView->horizontalHeader()->setSectionsMovable(true);
-        if(btn)
-        {
-            btn->setText(tr("不可移动"));
-        }
-    }
 }
 
 void TabWidgetCell::SetDataModify(bool modify)

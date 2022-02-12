@@ -8,6 +8,7 @@
 #include <QMenu>
 #include "log.h"
 #include "luatabledatawidget.h"
+#include "lualistdatawidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -160,7 +161,7 @@ void MainWindow::OnCloseTabWidget(QWidget* widget)
 {
     if(!widget) return;
 
-    LuaTableDataWidget* tabCell = (LuaTableDataWidget*)widget;
+    TabWidgetCell* tabCell = (TabWidgetCell*)widget;
     if (tabCell)
     {
         QString sTableName = m_mTabwidgetMap.key(tabCell);
@@ -177,11 +178,11 @@ void MainWindow::OnCloseTabWidget(QWidget* widget)
 
 void MainWindow::OnCloseTabWidgetSlot(int nIndex)
 {
-    LuaTableDataWidget* tabCell = (LuaTableDataWidget*)m_tabWidget->widget(nIndex);
+    TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->widget(nIndex);
     if(tabCell)
     {
         //如果表头顺序有变化
-        if (tabCell->IsHeadIndexChange() || tabCell->IsTableDataChange())
+        if (tabCell->IsTableDataChange())
         {
             QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("保存修改？"),QString::fromLocal8Bit("表被修改，是否保存？"));
             QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
@@ -292,6 +293,16 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
             quest.SerializeToString(&output);
 
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
+        }
+        else if (item->parent()->text(0) == tr("全局一维表"))
+        {
+            test_2::client_lua_table_data_quest quest;
+            quest.set_file_name(item->text(0).toStdString());
+
+            std::string output;
+            quest.SerializeToString(&output);
+
+            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_LIST_DATA, output);
         }
     }
 }
@@ -420,6 +431,13 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
             OnRecvServerShellOptionPrint(notify);
         }
+        else if (nCmd == test_2::server_msg::SEND_LUA_LIST_DATA)
+        {
+            test_2::send_lua_list_data_notify notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerLuaListData(notify);
+        }
     }
 }
 
@@ -467,6 +485,36 @@ void MainWindow::OnRecvServerShellOpsData(test_2::server_send_shell_config_notif
     }
 
     m_menu_bar->addMenu(edit_menu);
+}
+
+void MainWindow::OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto)
+{
+    qDebug() << QString::fromStdString(proto.table_name());
+
+    QString table_name = QString::fromStdString(proto.table_name());
+    auto iter = m_mTabwidgetMap.find(table_name);
+    //如果tab里面有这个widget
+    if (iter != m_mTabwidgetMap.end())
+    {
+        m_tabWidget->setCurrentWidget(iter.value());
+        qobject_cast<LuaListDataWidget*>(iter.value())->SetProtoData(proto);
+    }
+    else
+    {
+        LuaListDataWidget* tabCell = new LuaListDataWidget(m_tabWidget);
+        if(tabCell)
+        {
+            tabCell->SetTabWidget(m_tabWidget);
+            tabCell->SetManWindows(this);
+
+            m_tabWidget->addTab(tabCell, table_name);
+            tabCell->SetName(table_name);
+            tabCell->SetProtoData(proto);
+
+            m_mTabwidgetMap.insert(table_name, tabCell);
+            m_tabWidget->setCurrentWidget(tabCell);
+        }
+    }
 }
 
 void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
@@ -527,5 +575,14 @@ void MainWindow::OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto)
         QTreeWidgetItem *itemFileName = new QTreeWidgetItem;
         itemFileName->setText(0, QString::fromStdString(file_name));
         first->addChild(itemFileName);
+    }
+
+    for (int i = 0; i < proto.lua_file_names_size();++i)
+    {
+        std::string file_name = proto.lua_file_names(i);
+
+        QTreeWidgetItem *itemFileName = new QTreeWidgetItem;
+        itemFileName->setText(0, QString::fromStdString(file_name));
+        second->addChild(itemFileName);
     }
 }

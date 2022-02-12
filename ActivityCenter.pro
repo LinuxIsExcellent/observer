@@ -20,6 +20,7 @@ SOURCES += \
     globalconfig.cpp \
     log.cpp \
     logindialog.cpp \
+    lualistdatawidget.cpp \
     main.cpp \
     modifyservertimewidget.cpp \
     msg.pb.cc \
@@ -34,6 +35,7 @@ HEADERS += \
     globalconfig.h \
     log.h \
     logindialog.h \
+    lualistdatawidget.h \
     modifyservertimewidget.h \
     msg.pb.h \
     parseconfig.h \

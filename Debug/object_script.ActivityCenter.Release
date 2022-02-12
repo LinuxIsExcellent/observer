@@ -2,6 +2,7 @@ INPUT(
 ./release\globalconfig.o
 ./release\log.o
 ./release\logindialog.o
+./release\lualistdatawidget.o
 ./release\main.o
 ./release\modifyservertimewidget.o
 ./release\msg.pb.o
@@ -11,6 +12,7 @@ INPUT(
 ./release\luatabledatawidget.o
 ./release\mainwindow.o
 ./release\moc_logindialog.o
+./release\moc_lualistdatawidget.o
 ./release\moc_modifyservertimewidget.o
 ./release\moc_showmsgdialog.o
 ./release\moc_tabwidgetcell.o

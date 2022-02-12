@@ -39,10 +39,6 @@ typedef struct tableData
     QVector<ROWDATA> dataList;
 }TABLEDATA;
 
-//namespace Ui {
-//class TabWidgetCell;
-//}
-
 //lua的二维数据表界面
 class LuaTableDataWidget : public TabWidgetCell
 {
@@ -57,6 +53,11 @@ public:
         return m_bHeadIndexChange;
     }
 
+    virtual inline bool IsTableDataChange()
+    {
+        return m_bHeadIndexChange | m_bTableDataChange;
+    }
+
     //调整表的字段顺序
     void ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences);
 
@@ -66,6 +67,8 @@ public:
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);
+
+    void sectionMovableBtnClicked();
 
     virtual void Flush();
 private:

@@ -2,6 +2,7 @@ INPUT(
 ./debug\globalconfig.o
 ./debug\log.o
 ./debug\logindialog.o
+./debug\lualistdatawidget.o
 ./debug\main.o
 ./debug\modifyservertimewidget.o
 ./debug\msg.pb.o
@@ -11,6 +12,7 @@ INPUT(
 ./debug\luatabledatawidget.o
 ./debug\mainwindow.o
 ./debug\moc_logindialog.o
+./debug\moc_lualistdatawidget.o
 ./debug\moc_modifyservertimewidget.o
 ./debug\moc_showmsgdialog.o
 ./debug\moc_tabwidgetcell.o

@@ -5,6 +5,44 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
     m_bHeadIndexChange = false;
 
     connect(m_tableView->horizontalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(OnTableViewSectionMoved(int, int, int)));
+
+    QPushButton* sectionMovableBtn = new QPushButton(this);
+    QListWidgetItem *item1 = new QListWidgetItem(m_rightButtonList);
+    if (item1)
+    {
+        sectionMovableBtn->setText(tr("移动列"));
+        m_rightButtonList->addItem(item1);
+        m_rightButtonList->setItemWidget(item1, sectionMovableBtn);
+
+        connect(sectionMovableBtn, SIGNAL(clicked()), this, SLOT(sectionMovableBtnClicked()));
+    }
+}
+
+void LuaTableDataWidget::sectionMovableBtnClicked()
+{
+    QObject* sender = QObject::sender();
+    QPushButton* btn = nullptr;
+    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
+    {
+        btn = qobject_cast<QPushButton*>(sender);
+    }
+
+    if(m_tableView->horizontalHeader()->sectionsMovable())
+    {
+        m_tableView->horizontalHeader()->setSectionsMovable(false);
+        if(btn)
+        {
+            btn->setText(tr("移动列"));
+        }
+    }
+    else
+    {
+        m_tableView->horizontalHeader()->setSectionsMovable(true);
+        if(btn)
+        {
+            btn->setText(tr("不可移动"));
+        }
+    }
 }
 
 //调整表的字段顺序
@@ -57,21 +95,12 @@ void LuaTableDataWidget::Flush()
 {
     if(m_tableView && m_tableData.dataList.count() > 0)
     {
-        QStandardItemModel *student_model = nullptr;
-        if (m_tableView->model())
-        {
-            student_model = qobject_cast<QStandardItemModel*>(m_tableView->model());
-        }
-        else
-        {
-            student_model = new QStandardItemModel();
-        }
-
+        m_standardItemModel->clear();
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
         {
             QString strField = m_mFieldLists[i];
-            student_model->setHorizontalHeaderItem(i, new QStandardItem(strField));
+            m_standardItemModel->setHorizontalHeaderItem(i, new QStandardItem(strField));
 
             QString dataTypeStr;
             switch (m_mFieldTypes.find(strField).value()) {
@@ -100,11 +129,8 @@ void LuaTableDataWidget::Flush()
 
             QStandardItem* item = new QStandardItem(dataTypeStr);
             item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-            student_model->setItem(0, i, item);
+            m_standardItemModel->setItem(0, i, item);
         }
-
-        //利用setModel()方法将数据模型与QTableView绑定
-        m_tableView->setModel(student_model);
 
         for (int i = 0; i < m_tableData.dataList.count(); ++i)
         {
@@ -128,15 +154,13 @@ void LuaTableDataWidget::Flush()
                     strFieldValue = strFieldValue.replace('\"', "\\\"");
                 }
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
-                student_model->setItem(i + 1, visualColumn, dataItem);
+                m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }
 
-        m_tableView->update();
         m_bTableDataChange = false;
         m_bHeadIndexChange = false;
         SetDataModify(false);
-        connect(student_model, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     }
 }
 
