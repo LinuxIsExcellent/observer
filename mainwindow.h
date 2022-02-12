@@ -15,10 +15,9 @@
 #include <QTimer>
 #include "logindialog.h"
 #include "showmsgdialog.h"
-#include "tabwidgetcell.h"
-#include "modifyservertimewidget.h"
 #include "Packet.h"
 #include "msg.pb.h"
+#include "modifyservertimewidget.h"
 #include <google/protobuf/text_format.h>
 
 #define RECV_BUFFER_SIZE 20 * 1024 * 1024
@@ -26,6 +25,7 @@
 class LoginDialog;
 class ShowMsgDialog;
 class TabWidgetCell;
+class LuaTableDataWidget;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

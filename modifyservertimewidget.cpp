@@ -27,10 +27,22 @@ ModifyServerTimeWidget::~ModifyServerTimeWidget()
     delete ui;
 }
 
+void ModifyServerTimeWidget::ShowTimeInfo()
+{
+    QDateTime time = QDateTime::fromTime_t(m_nTime);
+    ui->calendarWidget->setMinimumDate(time.date());
+    ui->dateTimeEdit->setDateTime(time);
+}
+
+void ModifyServerTimeWidget::TimeTick()
+{
+    m_nTime = ui->dateTimeEdit->dateTime().toTime_t() + 1;
+    ShowTimeInfo();
+}
+
 void ModifyServerTimeWidget::SetTime(quint64 nTime)
 {
-    QDateTime time = QDateTime::fromTime_t(nTime);
-    ui->calendarWidget->setMinimumDate(time.date());
+    m_nTime = nTime;
     ui->dateTimeEdit->setDisplayFormat("yyyy-MM-dd hh:mm:ss");
-    ui->dateTimeEdit->setDateTime(time);
+    ShowTimeInfo();
 }

@@ -21,31 +21,33 @@ SOURCES += \
     log.cpp \
     logindialog.cpp \
     main.cpp \
-    mainwindow.cpp \
     modifyservertimewidget.cpp \
     msg.pb.cc \
     parseconfig.cpp \
     showmsgdialog.cpp \
-    tabwidgetcell.cpp
+    tabwidgetcell.cpp \
+    luatabledatawidget.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     Packet.h \
     globalconfig.h \
     log.h \
     logindialog.h \
-    mainwindow.h \
     modifyservertimewidget.h \
     msg.pb.h \
     parseconfig.h \
     showmsgdialog.h \
-    tabwidgetcell.h
+    tabwidgetcell.h \
+    luatabledatawidget.h \
+    mainwindow.h
 
 FORMS += \
     logindialog.ui \
-    mainwindow.ui \
     modifyservertimewidget.ui \
     showmsgdialog.ui \
-    tabwidgetcell.ui
+    tabwidgetcell.ui \
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

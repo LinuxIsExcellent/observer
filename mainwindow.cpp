@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include "log.h"
-#include "tabwidgetcell.h"
+#include "luatabledatawidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -134,6 +134,11 @@ void MainWindow::On1STimerUpdate()
     QString strTime = time.toString("yyyy-MM-dd hh:mm:ss");
 
     m_timeLabel->setText(tr("服务器时间：") + strTime);
+
+    if (!m_timeWidget->isHidden())
+    {
+        m_timeWidget->TimeTick();
+    }
 }
 
 void MainWindow::OnMenuActionTriggered()
@@ -155,7 +160,7 @@ void MainWindow::OnCloseTabWidget(QWidget* widget)
 {
     if(!widget) return;
 
-    TabWidgetCell* tabCell = (TabWidgetCell*)widget;
+    LuaTableDataWidget* tabCell = (LuaTableDataWidget*)widget;
     if (tabCell)
     {
         QString sTableName = m_mTabwidgetMap.key(tabCell);
@@ -172,7 +177,7 @@ void MainWindow::OnCloseTabWidget(QWidget* widget)
 
 void MainWindow::OnCloseTabWidgetSlot(int nIndex)
 {
-    TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->widget(nIndex);
+    LuaTableDataWidget* tabCell = (LuaTableDataWidget*)m_tabWidget->widget(nIndex);
     if(tabCell)
     {
         //如果表头顺序有变化
@@ -472,17 +477,18 @@ void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
     if (iter != m_mTabwidgetMap.end())
     {
         m_tabWidget->setCurrentWidget(iter.value());
-        iter.value()->SetProtoData(proto);
+        qobject_cast<LuaTableDataWidget*>(iter.value())->SetProtoData(proto);
     }
     else
     {
-        TabWidgetCell* tabCell = new TabWidgetCell(m_tabWidget);
+        LuaTableDataWidget* tabCell = new LuaTableDataWidget(m_tabWidget);
         if(tabCell)
         {
             tabCell->SetTabWidget(m_tabWidget);
             tabCell->SetManWindows(this);
 
             m_tabWidget->addTab(tabCell, table_name);
+            tabCell->SetName(table_name);
             tabCell->SetProtoData(proto);
 
             m_mTabwidgetMap.insert(table_name, tabCell);

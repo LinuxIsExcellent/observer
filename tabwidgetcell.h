@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include "mainwindow.h"
-#include "msg.pb.h"
+
 #include <google/protobuf/text_format.h>
 
 //红色的是删除的行
@@ -25,8 +25,6 @@ namespace Ui {
 class TabWidgetCell;
 }
 
-class MainWindow;
-
 enum RowState
 {
     NONE = 0,
@@ -35,43 +33,23 @@ enum RowState
     DELETE = 3,
 };
 
-//表的字段顺序信息
-typedef struct fieldSquence
-{
-    QVector<quint16> vNLevels;         //深度队列
-    QVector<QString> vSFieldSquences;       //对应的字段顺序
-}FIELDSQUENCE;
-
-//键值对
-typedef struct oneValuePair
-{
-    QString sField;
-    QString sValue;
-}VALUEPAIR;
-
-//一行的数据
-typedef struct oneRowData
-{
-    qint16 id;
-    QVector<VALUEPAIR> dataList;
-}ROWDATA;
-
-//表的数据
-typedef struct tableData
-{
-    QString sTableName;
-    quint16 nRow;
-    quint16 nColumn;
-    QVector<ROWDATA> dataList;
-}TABLEDATA;
-
 class TabWidgetCell : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TabWidgetCell(QWidget *parent = nullptr);
-    ~TabWidgetCell();
+    TabWidgetCell(QWidget *parent = nullptr);
+    virtual ~TabWidgetCell();
+
+    void SetName(QString sName)
+    {
+        m_sName = sName;
+    }
+
+    QString GetName()
+    {
+        return m_sName;
+    }
 
     //把tabwidget对象的指针也带进来
     void SetTabWidget(QTabWidget* tabwidget)
@@ -85,41 +63,29 @@ public:
         m_mainWindow = mainWindows;
     }
 
-    void SetProtoData(test_2::table_data& proto);
-
     //请求保存数据
-    void OnRequestSaveData();
-
-    inline bool IsHeadIndexChange()
-    {
-        return m_bHeadIndexChange;
-    }
+    virtual void OnRequestSaveData() {};
 
     inline bool IsTableDataChange()
     {
         return m_bTableDataChange;
     }
 
-    //调整表的字段顺序
-    void ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences);
-protected:
-    virtual void keyPressEvent(QKeyEvent *ev);
-private:
     //设置数据有改变
     void SetDataModify(bool modify);
+public slots:
+    //刷新界面
+    virtual void Flush() {};
+
+protected:
+    virtual void keyPressEvent(QKeyEvent *ev);
 private slots:
     void AddAnnotation();
 
     void OnItemDataChange(QStandardItem *item);
 
     void sectionMovableBtnClicked();
-
-    //移动列
-    void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);
-
-    //刷新界面
-    void Flush();
-private:
+public:
     Ui::TabWidgetCell *ui;
 
     QTabWidget* m_tabWidget;    //所在的tabwidget
@@ -135,19 +101,10 @@ private:
     QListWidget*    m_bottomButtonList; //底部的显示按钮列表
     QVBoxLayout* vlayout_all;  //整个TabWidget类的垂直布局
 
-    TABLEDATA   m_tableData;    //表的数据
-    QVector<QString> m_mFieldLists;  //字段的列表
-
-    bool    m_bHeadIndexChange; //表头顺序是否被更改
-    bool    m_bTableDataChange; //表的数据是否被更改
-    QMap<QString, int>  m_mFieldNames; //表的字段的顺序
-    QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
-
-    QVector<FIELDSQUENCE>   m_vFieldSquence;   //二维表的表头顺序
-
-    QVector<RowState>   m_vBRowDataChange;  //行数据是否被改变(数据变化存储以二维表的行为粒度)
-
     QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
+    bool    m_bTableDataChange; //表的数据是否被更改
+
+    QString m_sName;      //表的名字
 };
 
 #endif // TABWIDGETCELL_H

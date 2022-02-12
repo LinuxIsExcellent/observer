@@ -16,10 +16,16 @@ public:
     ~ModifyServerTimeWidget();
 
     void SetTime(quint64 nTime);
+
+    void TimeTick();
+
+    void ShowTimeInfo();
 signals:
     void OnClickConfirmBtn(quint64 nTime);
 private:
     Ui::ModifyServerTimeWidget *ui;
+
+    quint64     m_nTime;    //时间戳
 };
 
 #endif // MODIFYSERVERTIMEWIDGET_H
