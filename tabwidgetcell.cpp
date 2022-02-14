@@ -15,6 +15,10 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_tableView = new QTableView(this);
     m_rightButtonList = new QListWidget(this);
 
+    m_annonationWidget = new AnnonationEditWidget(this);
+    m_annonationWidget->raise();
+    m_annonationWidget->hide();
+
     hlayout_top = new QHBoxLayout(m_topWidget);
 
     hlayout_top->addWidget(m_tableView);
@@ -35,7 +39,16 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     vlayout_all->setStretchFactor(m_topWidget, 10);
     vlayout_all->setStretchFactor(m_bottomButtonList, 1);
 
-    setLayout(vlayout_all);
+
+
+    ui->bottom_widget->setGeometry(0, 0, parent->width(), parent->height());
+    ui->bottom_widget->setLayout(vlayout_all);
+//    setLayout(vlayout_all);
+
+    qDebug() << "width() = " << width();
+    qDebug() << "height() = " << height();
+    qDebug() << parent->width();
+    qDebug() << parent->height();
 
     QPushButton* resizeContentBtn = new QPushButton(this);
     QListWidgetItem *item = new QListWidgetItem(m_rightButtonList);
@@ -81,27 +94,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         m_tableCellMenu->exec(pt);
     });
 
-    //增加列表头的菜单
-    connect(m_tableView->horizontalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->horizontalHeader(),[=](const QPoint& pos){
-        //mapToGlobal获取m_tableView全局坐标
-        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
-        //pos鼠标点击时在表格中的相对位置
-        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
-        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
-        int nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
-        qDebug() << "index = " << nIndex;
-        if (nIndex < 0){
-            //m_tableView->clearSelection();
-            return;
-        }
-
-        m_tableCellMenu->clear();
-        m_tableCellMenu->addAction("编辑批注", this, SLOT(AddAnnotation()));
-        m_tableCellMenu->addAction("增加关联", this, SLOT(slot_function1()));
-
-        m_tableCellMenu->exec(pt);
-    });
-
     //增加行表头的菜单
     connect(m_tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->verticalHeader(),[=](const QPoint& pos){
         //mapToGlobal获取m_tableView全局坐标
@@ -132,11 +124,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 TabWidgetCell::~TabWidgetCell()
 {
     delete ui;
-}
-
-void TabWidgetCell::AddAnnotation()
-{
-    qDebug() << "add annotation";
 }
 
 void TabWidgetCell::SetDataModify(bool modify)
@@ -171,6 +158,11 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
 //        }
         SetDataModify(true);
     }
+}
+
+void TabWidgetCell::moveEvent(QMoveEvent *ev)
+{
+    qDebug() << "MoveEvent";
 }
 
 void TabWidgetCell::keyPressEvent(QKeyEvent *ev)

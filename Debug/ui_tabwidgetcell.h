@@ -21,12 +21,16 @@ QT_BEGIN_NAMESPACE
 class Ui_TabWidgetCell
 {
 public:
+    QWidget *bottom_widget;
 
     void setupUi(QWidget *TabWidgetCell)
     {
         if (TabWidgetCell->objectName().isEmpty())
             TabWidgetCell->setObjectName(QStringLiteral("TabWidgetCell"));
         TabWidgetCell->resize(400, 300);
+        bottom_widget = new QWidget(TabWidgetCell);
+        bottom_widget->setObjectName(QStringLiteral("bottom_widget"));
+        bottom_widget->setGeometry(QRect(120, 150, 120, 80));
 
         retranslateUi(TabWidgetCell);
 

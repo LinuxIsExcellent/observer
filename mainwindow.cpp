@@ -122,10 +122,11 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
+void MainWindow::resizeEvent(QResizeEvent *)
 {
-    m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
-                              ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
+    qDebug() << "resize event";
+//    m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
+//                              ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
 }
 
 void MainWindow::On1STimerUpdate()
@@ -230,8 +231,17 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
        if(tabCell)
        {
            tabCell->OnRequestSaveData();
+           return;
        }
-       return;
+    }
+    else if (ev->key() == Qt::Key_Escape)
+    {
+        TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->currentWidget();
+        if(tabCell)
+        {
+            tabCell->GlobalKeyPressEevent(ev);
+            return;
+        }
     }
 }
 

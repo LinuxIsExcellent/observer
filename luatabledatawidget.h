@@ -64,6 +64,8 @@ public:
     void SetProtoData(test_2::table_data& proto);
 
     virtual void OnRequestSaveData();
+
+    virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);
@@ -71,6 +73,8 @@ private slots:
     void sectionMovableBtnClicked();
 
     virtual void Flush();
+
+    virtual void AddAnnotation();
 private:
 
     TABLEDATA   m_tableData;    //表的数据

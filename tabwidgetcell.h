@@ -11,6 +11,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include "mainwindow.h"
+#include "annonationeditwidget.h"
 
 #include <google/protobuf/text_format.h>
 
@@ -25,13 +26,13 @@ namespace Ui {
 class TabWidgetCell;
 }
 
-enum RowState
-{
-    NONE = 0,
-    MODIFY = 1,
-    ADD = 2,
-    DELETE = 3,
-};
+//enum RowState
+//{
+//    NONE = 0,
+//    MODIFY = 1,
+//    ADD = 2,
+//    DELETE = 3,
+//};
 
 class TabWidgetCell : public QWidget
 {
@@ -73,14 +74,19 @@ public:
 
     //设置数据有改变
     void SetDataModify(bool modify);
+
+    //mainwindow传过来的键盘事件
+    virtual void GlobalKeyPressEevent(QKeyEvent *ev){};
 public slots:
     //刷新界面
     virtual void Flush() {};
 
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
+
+    virtual void moveEvent(QMoveEvent *ev);
 private slots:
-    void AddAnnotation();
+    virtual void AddAnnotation() {};
 
     void OnItemDataChange(QStandardItem *item);
 public:
@@ -103,6 +109,8 @@ public:
 
     QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
     bool    m_bTableDataChange; //表的数据是否被更改
+
+    AnnonationEditWidget* m_annonationWidget;   //批注界面
 
     QString m_sName;      //表的名字
 };

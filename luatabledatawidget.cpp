@@ -1,4 +1,5 @@
 #include "luatabledatawidget.h"
+#include "annonationeditwidget.h"
 
 LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 {
@@ -16,6 +17,40 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
         connect(sectionMovableBtn, SIGNAL(clicked()), this, SLOT(sectionMovableBtnClicked()));
     }
+
+    //增加列表头的菜单
+    connect(m_tableView->horizontalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->horizontalHeader(),[=](const QPoint& pos){
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        int nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
+        qDebug() << "index = " << nIndex;
+        if (nIndex < 0){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        m_tableCellMenu->addAction("编辑批注", this, SLOT(AddAnnotation()));
+        m_tableCellMenu->addAction("增加关联", this, SLOT(slot_function1()));
+
+        m_tableCellMenu->exec(pt);
+    });
+}
+
+void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
+{
+    if (ev->key() == Qt::Key_Escape)
+    {
+        m_annonationWidget->OnQuit();
+    }
+}
+
+void LuaTableDataWidget::AddAnnotation()
+{
+    m_annonationWidget->OnShow(m_tableCellMenu->geometry().x(), m_tableCellMenu->geometry().y());
 }
 
 void LuaTableDataWidget::sectionMovableBtnClicked()
@@ -100,7 +135,9 @@ void LuaTableDataWidget::Flush()
         for (int i = 0; i < m_mFieldLists.count(); ++i)
         {
             QString strField = m_mFieldLists[i];
-            m_standardItemModel->setHorizontalHeaderItem(i, new QStandardItem(strField));
+            QStandardItem* fieldKeyItem = new QStandardItem(strField);
+            fieldKeyItem->setToolTip(strField);
+            m_standardItemModel->setHorizontalHeaderItem(i, fieldKeyItem);
 
             QString dataTypeStr;
             switch (m_mFieldTypes.find(strField).value()) {

@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    annonationeditwidget.cpp \
     globalconfig.cpp \
     log.cpp \
     logindialog.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
     Packet.h \
+    annonationeditwidget.h \
     globalconfig.h \
     log.h \
     logindialog.h \
@@ -45,6 +47,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    annonationeditwidget.ui \
     logindialog.ui \
     modifyservertimewidget.ui \
     showmsgdialog.ui \

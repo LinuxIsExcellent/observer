@@ -1,9 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>TabWidgetCell</class>
- <widget name="TabWidgetCell" class="QWidget">
+ <widget class="QWidget" name="TabWidgetCell">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,7 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <widget class="QWidget" name="bottom_widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>150</y>
+     <width>120</width>
+     <height>80</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>
