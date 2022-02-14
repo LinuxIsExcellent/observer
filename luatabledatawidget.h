@@ -74,7 +74,7 @@ private slots:
 
     virtual void Flush();
 
-    virtual void AddAnnotation();
+    virtual void OnSaveAnnonations(QString str, quint32 nIndex);
 private:
 
     TABLEDATA   m_tableData;    //表的数据

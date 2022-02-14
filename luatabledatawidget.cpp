@@ -25,7 +25,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         //pos鼠标点击时在表格中的相对位置
         QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
         //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
-        int nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
+        quint32 nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
         qDebug() << "index = " << nIndex;
         if (nIndex < 0){
             //m_tableView->clearSelection();
@@ -33,11 +33,21 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         }
 
         m_tableCellMenu->clear();
-        m_tableCellMenu->addAction("编辑批注", this, SLOT(AddAnnotation()));
+        m_tableCellMenu->addAction("编辑批注", this, [=](){
+//            m_annonationWidget->OnShow(pt.x(), pt.y());
+            m_annonationWidget->OnShow(pos.x(), pos.y(), m_tableView->horizontalHeader()->visualIndex(nIndex), "");
+        });
+
+
         m_tableCellMenu->addAction("增加关联", this, SLOT(slot_function1()));
 
         m_tableCellMenu->exec(pt);
     });
+}
+
+void LuaTableDataWidget::OnSaveAnnonations(QString str, quint32 nIndex)
+{
+    qDebug() << "save annonation = " << str << ", " << nIndex;
 }
 
 void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
@@ -46,11 +56,6 @@ void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
     {
         m_annonationWidget->OnQuit();
     }
-}
-
-void LuaTableDataWidget::AddAnnotation()
-{
-    m_annonationWidget->OnShow(m_tableCellMenu->geometry().x(), m_tableCellMenu->geometry().y());
 }
 
 void LuaTableDataWidget::sectionMovableBtnClicked()
@@ -165,6 +170,7 @@ void LuaTableDataWidget::Flush()
             }
 
             QStandardItem* item = new QStandardItem(dataTypeStr);
+            item->setFlags(Qt::ItemIsEnabled);
             item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
             m_standardItemModel->setItem(0, i, item);
         }

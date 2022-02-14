@@ -19,6 +19,8 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_annonationWidget->raise();
     m_annonationWidget->hide();
 
+    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, quint32)), this, SLOT(OnSaveAnnonations(QString, quint32)));
+
     hlayout_top = new QHBoxLayout(m_topWidget);
 
     hlayout_top->addWidget(m_tableView);
@@ -39,16 +41,9 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     vlayout_all->setStretchFactor(m_topWidget, 10);
     vlayout_all->setStretchFactor(m_bottomButtonList, 1);
 
-
-
-    ui->bottom_widget->setGeometry(0, 0, parent->width(), parent->height());
+    //底层的widget
     ui->bottom_widget->setLayout(vlayout_all);
 //    setLayout(vlayout_all);
-
-    qDebug() << "width() = " << width();
-    qDebug() << "height() = " << height();
-    qDebug() << parent->width();
-    qDebug() << parent->height();
 
     QPushButton* resizeContentBtn = new QPushButton(this);
     QListWidgetItem *item = new QListWidgetItem(m_rightButtonList);
@@ -160,11 +155,6 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
     }
 }
 
-void TabWidgetCell::moveEvent(QMoveEvent *ev)
-{
-    qDebug() << "MoveEvent";
-}
-
 void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
 {
     if (ev->key() == Qt::Key_S  &&  ev->modifiers() == Qt::ControlModifier)
@@ -174,4 +164,9 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
     }
 
     QWidget::keyPressEvent(ev);
+}
+
+void TabWidgetCell::resizeEvent(QResizeEvent *event)
+{
+    ui->bottom_widget->setGeometry(0, 0, width(), height());
 }

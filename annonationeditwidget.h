@@ -24,23 +24,17 @@ public:
 
     void OnQuit();
 
-    void OnShow(quint32 x, quint32 y, QString str = "");
+    void OnShow(quint32 x, quint32 y, quint32 nIndex, QString str = "");
+
+signals:
+    //保存注释
+    void SaveAnnonationsSignal(QString str, quint32 nIndex);
 protected:
-//    virtual void keyPressEvent(QKeyEvent *ev);
 
-//    bool nativeEvent(const QByteArray& EventType, void* pMessage, long* pResult);
-
-//    void mousePressEvent(QMouseEvent *event);
-
-//    void mouseMoveEvent(QMouseEvent *event);
-
-//    void mouseReleaseEvent(QMouseEvent *event);
 private:
     Ui::AnnonationEditWidget *ui;
 
-    qint32     m_boundaryWidth;        //调整拉伸生效的范围
-    QPoint     m_clickPos;
-    bool       m_bPressed;
+    quint32     m_nIndex;
 };
 
 #endif // ANNONATIONEDITWIDGET_H

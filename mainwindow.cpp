@@ -124,9 +124,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
 void MainWindow::resizeEvent(QResizeEvent *)
 {
-    qDebug() << "resize event";
-//    m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
-//                              ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
+    m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
+                              ui->statusbar->y() - m_timeWidget->height(), m_timeWidget->width(), m_timeWidget->height());
 }
 
 void MainWindow::On1STimerUpdate()

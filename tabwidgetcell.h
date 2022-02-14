@@ -65,7 +65,7 @@ public:
     }
 
     //请求保存数据
-    virtual void OnRequestSaveData() {};
+    virtual void OnRequestSaveData() {}
 
     virtual inline bool IsTableDataChange()
     {
@@ -76,7 +76,7 @@ public:
     void SetDataModify(bool modify);
 
     //mainwindow传过来的键盘事件
-    virtual void GlobalKeyPressEevent(QKeyEvent *ev){};
+    virtual void GlobalKeyPressEevent(QKeyEvent *ev){}
 public slots:
     //刷新界面
     virtual void Flush() {};
@@ -84,11 +84,13 @@ public slots:
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
-    virtual void moveEvent(QMoveEvent *ev);
+    void resizeEvent(QResizeEvent *event);
 private slots:
     virtual void AddAnnotation() {};
 
     void OnItemDataChange(QStandardItem *item);
+
+    virtual void OnSaveAnnonations(QString str, quint32 nIndex){}
 public:
     Ui::TabWidgetCell *ui;
 
