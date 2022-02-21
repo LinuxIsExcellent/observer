@@ -1,5 +1,6 @@
 #include "luatabledatawidget.h"
 #include "annonationeditwidget.h"
+#include <QComboBox>
 
 LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 {
@@ -35,7 +36,9 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         m_tableCellMenu->clear();
         m_tableCellMenu->addAction("编辑批注", this, [=](){
 //            m_annonationWidget->OnShow(pt.x(), pt.y());
-            m_annonationWidget->OnShow(pos.x(), pos.y(), m_tableView->horizontalHeader()->visualIndex(nIndex), "");
+
+            QString sToolTips = m_standardItemModel->horizontalHeaderItem(nIndex)->toolTip();
+            m_annonationWidget->OnShow(pos.x(), pos.y(), nIndex, sToolTips);
         });
 
 
@@ -47,7 +50,13 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 void LuaTableDataWidget::OnSaveAnnonations(QString str, quint32 nIndex)
 {
-    qDebug() << "save annonation = " << str << ", " << nIndex;
+    QVector<quint16> vNLevels;
+    FIELDINFO& fieldInfo = GetFieldInfos(vNLevels, nIndex);
+    fieldInfo.sFieldAnnonation = str;
+    m_bHeadIndexChange = true;
+    SetDataModify(true);
+
+    m_standardItemModel->horizontalHeaderItem(nIndex)->setToolTip(str);
 }
 
 void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
@@ -86,28 +95,34 @@ void LuaTableDataWidget::sectionMovableBtnClicked()
 }
 
 //调整表的字段顺序
-void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences)
+void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QString, quint16> mFieldSortMap)
 {
     bool isHas = false;
     for (auto& data : m_vFieldSquence)
     {
         if (data.vNLevels == vNLevels)
         {
-            data.vSFieldSquences = vSFieldSquences;
-
+            qSort(data.vSFieldSquences.begin(), data.vSFieldSquences.end(),
+                  [=](const FIELDINFO& a, const FIELDINFO& b)
+                      {
+                          quint16 aSort = mFieldSortMap.find(a.sFieldName).value();
+                          quint16 bSort = mFieldSortMap.find(b.sFieldName).value();
+                          return aSort < bSort;
+                      }
+                  );
             isHas = true;
             break;
         }
     }
 
-    if (!isHas)
-    {
-        FIELDSQUENCE fieldSquence;
-        fieldSquence.vNLevels = vNLevels;
-        fieldSquence.vSFieldSquences = vSFieldSquences;
+//    if (!isHas)
+//    {
+//        FIELDSQUENCE fieldSquence;
+//        fieldSquence.vNLevels = vNLevels;
+//        fieldSquence.vSFieldSquences = vSFieldSquences;
 
-        m_vFieldSquence.push_back(fieldSquence);
-    }
+//        m_vFieldSquence.push_back(fieldSquence);
+//    }
 }
 
 void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
@@ -119,16 +134,39 @@ void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
 
     //按照当前的表格显示顺序排序
     sFields.resize(m_tableView->model()->columnCount());
+    QMap<QString, quint16> mFieldSortMap;
     for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
     {
         int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-
-        sFields[nVisualIndex] = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+        m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+        mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
     }
 
     QVector<quint16> vNLevels;
 
-    ModifyFieldSquences(vNLevels, sFields);
+    ModifyFieldSquences(vNLevels, mFieldSortMap);
+}
+
+FIELDINFO& LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex)
+{
+    for (auto& data : m_vFieldSquence)
+    {
+        if (data.vNLevels == vNLevels)
+        {
+            return data.vSFieldSquences[nIndex];
+        }
+    }
+}
+
+const QVector<FIELDINFO>& LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels)
+{
+    for (auto& data : m_vFieldSquence)
+    {
+        if (data.vNLevels == vNLevels)
+        {
+            return data.vSFieldSquences;
+        }
+    }
 }
 
 void LuaTableDataWidget::Flush()
@@ -136,12 +174,24 @@ void LuaTableDataWidget::Flush()
     if(m_tableView && m_tableData.dataList.count() > 0)
     {
         m_standardItemModel->clear();
+
+        QVector<quint16> vNLevels;
+        const QVector<FIELDINFO>& vSFieldSquences = GetFieldInfos(vNLevels);
+
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
         {
             QString strField = m_mFieldLists[i];
             QStandardItem* fieldKeyItem = new QStandardItem(strField);
-            fieldKeyItem->setToolTip(strField);
+
+            if (i >= 0 && i < vSFieldSquences.size())
+            {
+                fieldKeyItem->setToolTip(vSFieldSquences[i].sFieldAnnonation);
+            }
+
+//            fieldKeyItem->setToolTip(strField);
+
+
             m_standardItemModel->setHorizontalHeaderItem(i, fieldKeyItem);
 
             QString dataTypeStr;
@@ -197,13 +247,14 @@ void LuaTableDataWidget::Flush()
                     strFieldValue = strFieldValue.replace('\"', "\\\"");
                 }
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
+
+//                QComboBox* cmb = new QComboBox();
+//                cmb->addItems({"男", "女"});
+//                m_tableView->setIndexWidget(m_standardItemModel->index(i + 1, visualColumn), cmb);
+
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }
-
-        m_bTableDataChange = false;
-        m_bHeadIndexChange = false;
-        SetDataModify(false);
     }
 }
 
@@ -230,11 +281,15 @@ void LuaTableDataWidget::SetProtoData(test_2::table_data& proto)
             }
 
 
-            for (int j = 0; j < fieldSquence.fields_size();++j)
+            for (int j = 0; j < fieldSquence.infos_size();++j)
             {
-                QString strField = QString::fromStdString(fieldSquence.fields(j));
+                FIELDINFO fieldInfo;
 
-                squence.vSFieldSquences.push_back(strField);
+                fieldInfo.sFieldName = QString::fromStdString(fieldSquence.infos(j).field_name());
+                fieldInfo.sFieldAnnonation = QString::fromStdString(fieldSquence.infos(j).field_desc());
+                fieldInfo.sFieldLink = QString::fromStdString(fieldSquence.infos(j).field_link());
+
+                squence.vSFieldSquences.push_back(fieldInfo);
             }
 
             m_vFieldSquence.push_back(squence);
@@ -288,6 +343,10 @@ void LuaTableDataWidget::SetProtoData(test_2::table_data& proto)
     }
 
     Flush();
+
+    m_bTableDataChange = false;
+    m_bHeadIndexChange = false;
+    SetDataModify(false);
 }
 
 void LuaTableDataWidget::OnRequestSaveData()
@@ -302,7 +361,7 @@ void LuaTableDataWidget::OnRequestSaveData()
 
         for (auto data : m_vFieldSquence)
         {
-            test_2::field_squence* field_squence = quest.add_filed_sequences();
+            test_2::field_squence* field_squence = quest.add_field_squences();
             if (field_squence)
             {
                 for (auto nLevel : data.vNLevels)
@@ -312,10 +371,12 @@ void LuaTableDataWidget::OnRequestSaveData()
 
                 for (auto sData : data.vSFieldSquences)
                 {
-                    std::string* sField = field_squence->add_fields();
-                    if (sField)
+                    test_2::field_info* fieldInfo = field_squence->add_infos();
+                    if (fieldInfo)
                     {
-                        *sField = sData.toStdString();
+                        fieldInfo->set_field_name(sData.sFieldName.toStdString());
+                        fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
+                        fieldInfo->set_field_link(sData.sFieldLink.toStdString());
                     }
                 }
             }
@@ -358,8 +419,6 @@ void LuaTableDataWidget::OnRequestSaveData()
 
                     pairValue->set_key(strField.toStdString());
                     pairValue->set_value(strValue.toStdString());
-
-                    qDebug() << strField << " = " << strValue;
                 }
             }
         }

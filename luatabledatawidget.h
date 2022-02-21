@@ -9,11 +9,18 @@
 #include "msg.pb.h"
 #include "tabwidgetcell.h"
 
-//表的字段顺序信息
+typedef struct fieldInfo
+{
+    QString sFieldName;      //字段名字
+    QString sFieldAnnonation;      //字段的备注
+    QString sFieldLink;      //字段的关联
+}FIELDINFO;
+
+//表的字段信息
 typedef struct fieldSquence
 {
     QVector<quint16> vNLevels;         //深度队列
-    QVector<QString> vSFieldSquences;       //对应的字段顺序
+    QVector<FIELDINFO> vSFieldSquences;       //对应的字段顺序
 }FIELDSQUENCE;
 
 //键值对
@@ -59,13 +66,17 @@ public:
     }
 
     //调整表的字段顺序
-    void ModifyFieldSquences(QVector<quint16>& vNLevels, QVector<QString>& vSFieldSquences);
+    void ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QString, quint16> mFieldSortMap);
 
     void SetProtoData(test_2::table_data& proto);
 
     virtual void OnRequestSaveData();
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
+
+    const QVector<FIELDINFO>& GetFieldInfos(QVector<quint16> vNLevels);
+
+    FIELDINFO& GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);

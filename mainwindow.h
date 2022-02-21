@@ -18,6 +18,7 @@
 #include "Packet.h"
 #include "msg.pb.h"
 #include "modifyservertimewidget.h"
+#include "addfieldlinkdialog.h"
 #include <google/protobuf/text_format.h>
 
 #define RECV_BUFFER_SIZE 20 * 1024 * 1024
@@ -66,6 +67,9 @@ public:
 
     //收到服务器发来的一维表数据
     void OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto);
+
+    //收到服务器发来的关联信息
+    void OnRecvServerFieldLinkInfo(test_2::send_field_link_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -127,5 +131,6 @@ private:
     QLabel*     m_timeLabel;      //显示时间的标签
 
     ModifyServerTimeWidget* m_timeWidget; //修改服务器时间widget
+    AddFieldLinkDialog*     m_addFieldLinkDialog; //增加关联的界面
 };
 #endif // MAINWINDOW_H

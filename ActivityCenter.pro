@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addfieldlinkdialog.cpp \
     annonationeditwidget.cpp \
     globalconfig.cpp \
     log.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
 
 HEADERS += \
     Packet.h \
+    addfieldlinkdialog.h \
     annonationeditwidget.h \
     globalconfig.h \
     log.h \
@@ -47,6 +49,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    addfieldlinkdialog.ui \
     annonationeditwidget.ui \
     logindialog.ui \
     modifyservertimewidget.ui \

@@ -35,6 +35,8 @@ private:
     Ui::AnnonationEditWidget *ui;
 
     quint32     m_nIndex;
+
+    bool        m_bModify;
 };
 
 #endif // ANNONATIONEDITWIDGET_H

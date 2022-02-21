@@ -108,6 +108,8 @@ void MainWindow::init_windows()
     m_timeWidget = new ModifyServerTimeWidget(this);
     connect(m_timeWidget, SIGNAL(OnClickConfirmBtn(quint64)), this, SLOT(OnRequestModifyServerTime(quint64)));
     m_timeWidget->hide();
+
+    m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
@@ -446,6 +448,13 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             notify.ParseFromString(strData);
 
             OnRecvServerLuaListData(notify);
+        }
+        else if (nCmd == test_2::server_msg::SEND_FIELD_LINK_DATA)
+        {
+            test_2::send_field_link_info notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerFieldLinkInfo(notify);
         }
     }
 }

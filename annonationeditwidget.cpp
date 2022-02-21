@@ -7,8 +7,12 @@ AnnonationEditWidget::AnnonationEditWidget(QWidget *parent) :
     ui(new Ui::AnnonationEditWidget)
 {
     ui->setupUi(this);
+    m_bModify = false;
 //    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
     setWindowFlags(Qt::Widget | Qt::FramelessWindowHint);
+    connect(ui->textEdit, &QTextEdit::textChanged, this, [=] () {
+        m_bModify = true;
+    });
 }
 
 AnnonationEditWidget::~AnnonationEditWidget()
@@ -38,10 +42,15 @@ void AnnonationEditWidget::OnShow(quint32 x, quint32 y, quint32 nIndex, QString 
     {
         SetText(str);
     }
+
+    m_bModify = false;
 }
 
 void AnnonationEditWidget::OnQuit()
 {
-    emit SaveAnnonationsSignal(ui->textEdit->toPlainText(), m_nIndex);
+    if (m_bModify)
+    {
+        emit SaveAnnonationsSignal(ui->textEdit->toPlainText(), m_nIndex);
+    }
     this->hide();
 }

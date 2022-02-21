@@ -3879,7 +3879,9 @@ debug/luatabledatawidget.o: ../luatabledatawidget.cpp ../luatabledatawidget.h \
 		../annonationeditwidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextdocument.h
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextdocument.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QComboBox \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcombobox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\luatabledatawidget.o ..\luatabledatawidget.cpp
 
 debug/mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
