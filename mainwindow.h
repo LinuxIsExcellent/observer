@@ -50,7 +50,7 @@ public:
 
     void OnCloseTabWidget(QWidget* widget);
 
-    void OnOpenAddLinkFieldDialog(QString& tableName);
+    void OnOpenAddLinkFieldDialog(QString sField = "", quint16 nIndex = 0);
 public:
     //刷新左边的列表数据
     void OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto);

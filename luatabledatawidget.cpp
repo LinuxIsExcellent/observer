@@ -43,7 +43,9 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         });
 
 
-        m_tableCellMenu->addAction("增加关联", this, SLOT(slot_function1()));
+        m_tableCellMenu->addAction("增加关联", this, [=](){
+            m_mainWindow->OnOpenAddLinkFieldDialog("", nIndex);
+        });
 
         m_tableCellMenu->exec(pt);
     });
@@ -260,7 +262,7 @@ void LuaTableDataWidget::Flush()
     }
 }
 
-void LuaTableDataWidget::SetProtoData(test_2::table_data& proto)
+void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 {
     if(m_tableView)
     {

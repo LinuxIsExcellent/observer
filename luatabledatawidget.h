@@ -68,7 +68,7 @@ public:
     //调整表的字段顺序
     void ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QString, quint16> mFieldSortMap);
 
-    void SetProtoData(test_2::table_data& proto);
+    void SetProtoData(const test_2::table_data& proto);
 
     virtual void OnRequestSaveData();
 

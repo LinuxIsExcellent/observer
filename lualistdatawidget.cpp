@@ -5,7 +5,7 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 }
 
-void LuaListDataWidget::SetProtoData(test_2::send_lua_list_data_notify& proto)
+void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& proto)
 {
     m_mDataList.clear();
 

@@ -112,6 +112,12 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
+void MainWindow::OnOpenAddLinkFieldDialog(QString sField/* = ""*/, quint16 nIndex/* = 0*/)
+{
+    m_addFieldLinkDialog->show();
+    qDebug() << "nIndex = " << nIndex;
+}
+
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (qobject_cast<QLabel*>(watched) == m_timeLabel && event->type() == QEvent::MouseButtonDblClick)
