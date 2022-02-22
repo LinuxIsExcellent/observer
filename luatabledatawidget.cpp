@@ -1,6 +1,7 @@
 #include "luatabledatawidget.h"
 #include "annonationeditwidget.h"
 #include <QComboBox>
+#include <regex>
 
 LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 {
@@ -246,6 +247,7 @@ void LuaTableDataWidget::Flush()
                     strFieldValue = strFieldValue.replace('\n',"\\n");
                     strFieldValue = strFieldValue.replace('\"', "\\\"");
                 }
+
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
 
 //                QComboBox* cmb = new QComboBox();

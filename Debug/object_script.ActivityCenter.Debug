@@ -1,4 +1,5 @@
 INPUT(
+./debug\addfieldlinkdialog.o
 ./debug\annonationeditwidget.o
 ./debug\globalconfig.o
 ./debug\log.o
@@ -12,6 +13,7 @@ INPUT(
 ./debug\tabwidgetcell.o
 ./debug\luatabledatawidget.o
 ./debug\mainwindow.o
+./debug\moc_addfieldlinkdialog.o
 ./debug\moc_annonationeditwidget.o
 ./debug\moc_logindialog.o
 ./debug\moc_lualistdatawidget.o

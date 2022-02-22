@@ -19,11 +19,17 @@
   <widget class="QDateTimeEdit" name="dateTimeEdit">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>230</y>
-     <width>194</width>
-     <height>22</height>
+     <x>20</x>
+     <y>20</y>
+     <width>211</width>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>MS Reference Sans Serif</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
@@ -50,16 +56,6 @@
    </property>
    <property name="text">
     <string>关闭</string>
-   </property>
-  </widget>
-  <widget class="QCalendarWidget" name="calendarWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>251</width>
-     <height>201</height>
-    </rect>
    </property>
   </widget>
  </widget>

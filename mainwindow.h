@@ -69,7 +69,7 @@ public:
     void OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto);
 
     //收到服务器发来的关联信息
-    void OnRecvServerFieldLinkInfo(test_2::send_field_link_info& proto);
+//    void OnRecvServerFieldLinkInfo(test_2::send_field_link_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 

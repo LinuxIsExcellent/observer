@@ -8,6 +8,8 @@ ModifyServerTimeWidget::ModifyServerTimeWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
+//    setWindowFlags(Qt::Popup/* | Qt::FramelessWindowHint*/);
+
     connect(ui->pushButton, &QPushButton::clicked, this,[=](){
         emit OnClickConfirmBtn(ui->dateTimeEdit->dateTime().toTime_t());
         this->hide();
@@ -17,9 +19,9 @@ ModifyServerTimeWidget::ModifyServerTimeWidget(QWidget *parent) :
         this->hide();
     });
 
-    connect(ui->calendarWidget, &QCalendarWidget::clicked, this, [=](const QDate &date) {
-        ui->dateTimeEdit->setDate(date);
-    });
+//    connect(ui->calendarWidget, &QCalendarWidget::clicked, this, [=](const QDate &date) {
+//        ui->dateTimeEdit->setDate(date);
+//    });
 }
 
 ModifyServerTimeWidget::~ModifyServerTimeWidget()
@@ -30,14 +32,15 @@ ModifyServerTimeWidget::~ModifyServerTimeWidget()
 void ModifyServerTimeWidget::ShowTimeInfo()
 {
     QDateTime time = QDateTime::fromTime_t(m_nTime);
-    ui->calendarWidget->setMinimumDate(time.date());
+//    ui->calendarWidget->setMinimumDate(time.date());
     ui->dateTimeEdit->setDateTime(time);
+    ui->dateTimeEdit->setCalendarPopup(true);
 }
 
 void ModifyServerTimeWidget::TimeTick()
 {
-    m_nTime = ui->dateTimeEdit->dateTime().toTime_t() + 1;
-    ShowTimeInfo();
+//    m_nTime = ui->dateTimeEdit->dateTime().toTime_t() + 1;
+//    ShowTimeInfo();
 }
 
 void ModifyServerTimeWidget::SetTime(quint64 nTime)

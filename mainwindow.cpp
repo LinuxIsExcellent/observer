@@ -454,7 +454,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             test_2::send_field_link_info notify;
             notify.ParseFromString(strData);
 
-            OnRecvServerFieldLinkInfo(notify);
+//            OnRecvServerFieldLinkInfo(notify);
         }
     }
 }
