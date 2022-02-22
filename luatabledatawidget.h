@@ -74,9 +74,9 @@ public:
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 
-    const QVector<FIELDINFO>& GetFieldInfos(QVector<quint16> vNLevels);
+    QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
 
-    FIELDINFO& GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
+    FIELDINFO* GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);

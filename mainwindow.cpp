@@ -112,10 +112,18 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
-void MainWindow::OnOpenAddLinkFieldDialog(QString sField/* = ""*/, quint16 nIndex/* = 0*/)
+void MainWindow::OnOpenAddLinkFieldDialog(QWidget* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
 {
-    m_addFieldLinkDialog->show();
-    qDebug() << "nIndex = " << nIndex;
+    if (m_addFieldLinkDialog)
+    {
+        m_addFieldLinkDialog->OnShow(widget, rootWidget, nIndex);
+
+        test_2::client_field_link_info_quest quest;
+        std::string output;
+        quest.SerializeToString(&output);
+
+        OnSndServerMsg(0, test_2::client_msg::REQUSET_FIELD_LINK_INFO, output);
+    }
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
@@ -349,6 +357,7 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     Packet packet;
     packet << nDataLength << nSystem << nCmd << data.c_str();
 
+    qDebug() << "请求服务器消息:" << nSystem << "  " << nCmd;
     m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
 }
 
@@ -460,6 +469,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             test_2::send_field_link_info notify;
             notify.ParseFromString(strData);
 
+            qDebug() << "asdas";
             OnRecvServerFieldLinkInfo(notify);
         }
     }
@@ -467,7 +477,10 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
 void MainWindow::OnRecvServerFieldLinkInfo(const test_2::send_field_link_info& notify)
 {
-
+    if (m_addFieldLinkDialog)
+    {
+        m_addFieldLinkDialog->OnSetProtoFieldLinkInfo(notify);
+    }
 }
 
 void MainWindow::OnRecvServerSendCurrentTime(const test_2::send_server_current_time_nofity& proto)

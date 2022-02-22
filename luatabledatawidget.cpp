@@ -44,7 +44,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 
         m_tableCellMenu->addAction("增加关联", this, [=](){
-            m_mainWindow->OnOpenAddLinkFieldDialog("", nIndex);
+            m_mainWindow->OnOpenAddLinkFieldDialog(this, true, nIndex);
         });
 
         m_tableCellMenu->exec(pt);
@@ -54,8 +54,8 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 void LuaTableDataWidget::OnSaveAnnonations(QString str, quint32 nIndex)
 {
     QVector<quint16> vNLevels;
-    FIELDINFO& fieldInfo = GetFieldInfos(vNLevels, nIndex);
-    fieldInfo.sFieldAnnonation = str;
+    FIELDINFO* fieldInfo = GetFieldInfos(vNLevels, nIndex);
+    fieldInfo->sFieldAnnonation = str;
     m_bHeadIndexChange = true;
     SetDataModify(true);
 
@@ -150,26 +150,31 @@ void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
     ModifyFieldSquences(vNLevels, mFieldSortMap);
 }
 
-FIELDINFO& LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex)
+FIELDINFO* LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex)
 {
+    FIELDINFO* pInfo = nullptr;
     for (auto& data : m_vFieldSquence)
     {
         if (data.vNLevels == vNLevels)
         {
-            return data.vSFieldSquences[nIndex];
+            pInfo =  &data.vSFieldSquences[nIndex];
         }
     }
+    return pInfo;
 }
 
-const QVector<FIELDINFO>& LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels)
+QVector<FIELDINFO>* LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels)
 {
+    QVector<FIELDINFO>* vPInfo = nullptr;
     for (auto& data : m_vFieldSquence)
     {
         if (data.vNLevels == vNLevels)
         {
-            return data.vSFieldSquences;
+            vPInfo = &data.vSFieldSquences;
         }
     }
+
+    return vPInfo;
 }
 
 void LuaTableDataWidget::Flush()
@@ -179,7 +184,7 @@ void LuaTableDataWidget::Flush()
         m_standardItemModel->clear();
 
         QVector<quint16> vNLevels;
-        const QVector<FIELDINFO>& vSFieldSquences = GetFieldInfos(vNLevels);
+        QVector<FIELDINFO>* vSFieldSquences = GetFieldInfos(vNLevels);
 
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
@@ -187,9 +192,9 @@ void LuaTableDataWidget::Flush()
             QString strField = m_mFieldLists[i];
             QStandardItem* fieldKeyItem = new QStandardItem(strField);
 
-            if (i >= 0 && i < vSFieldSquences.size())
+            if (i >= 0 && vSFieldSquences && i < vSFieldSquences->size())
             {
-                fieldKeyItem->setToolTip(vSFieldSquences[i].sFieldAnnonation);
+                fieldKeyItem->setToolTip((*vSFieldSquences)[i].sFieldAnnonation);
             }
 
 //            fieldKeyItem->setToolTip(strField);
