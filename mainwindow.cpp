@@ -454,12 +454,17 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             test_2::send_field_link_info notify;
             notify.ParseFromString(strData);
 
-//            OnRecvServerFieldLinkInfo(notify);
+            OnRecvServerFieldLinkInfo(notify);
         }
     }
 }
 
-void MainWindow::OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto)
+void MainWindow::OnRecvServerFieldLinkInfo(const test_2::send_field_link_info& notify)
+{
+
+}
+
+void MainWindow::OnRecvServerSendCurrentTime(const test_2::send_server_current_time_nofity& proto)
 {
     quint64 nTime = proto.time();
 
@@ -467,7 +472,7 @@ void MainWindow::OnRecvServerSendCurrentTime(test_2::send_server_current_time_no
     On1STimerUpdate();
 }
 
-void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto)
+void MainWindow::OnRecvServerShellOptionPrint(const test_2::send_shell_option_print_notify& proto)
 {
     //执行结束
     if (proto.flag() == 0)
@@ -488,7 +493,7 @@ void MainWindow::OnRecvServerShellOptionPrint(test_2::send_shell_option_print_no
     m_dShellScriptOpPrintDlg->AppendMsg(QString::fromStdString(proto.line()));
 }
 
-void MainWindow::OnRecvServerShellOpsData(test_2::server_send_shell_config_notify& proto)
+void MainWindow::OnRecvServerShellOpsData(const test_2::server_send_shell_config_notify& proto)
 {
     QMenu *edit_menu = new QMenu("脚本(&S)",m_menu_bar);
     for (int i = 0; i < proto.shell_ops_size();++i)
@@ -505,7 +510,7 @@ void MainWindow::OnRecvServerShellOpsData(test_2::server_send_shell_config_notif
     m_menu_bar->addMenu(edit_menu);
 }
 
-void MainWindow::OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto)
+void MainWindow::OnRecvServerLuaListData(const test_2::send_lua_list_data_notify& proto)
 {
     qDebug() << QString::fromStdString(proto.table_name());
 
@@ -535,7 +540,7 @@ void MainWindow::OnRecvServerLuaListData(test_2::send_lua_list_data_notify& prot
     }
 }
 
-void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
+void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
 {
     QString table_name = QString::fromStdString(proto.table_name());
     auto iter = m_mTabwidgetMap.find(table_name);
@@ -564,7 +569,7 @@ void MainWindow::OnRecvServerLuaTableData(test_2::table_data& proto)
 }
 
 //https://blog.csdn.net/weixin_39485901/article/details/88413789
-void MainWindow::OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto)
+void MainWindow::OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto)
 {
     m_treeWidget->clear();
     m_treeWidget->setHeaderHidden(true);

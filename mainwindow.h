@@ -49,27 +49,29 @@ public:
     void OnNetMsgProcess(Packet& packet);
 
     void OnCloseTabWidget(QWidget* widget);
+
+    void OnOpenAddLinkFieldDialog(QString& tableName);
 public:
     //刷新左边的列表数据
-    void OnLeftTreeViewData(test_2::server_send_file_tree_notify& proto);
+    void OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto);
 
     //收到服务器发送过来的二维表数据，刷新tableWidget
-    void OnRecvServerLuaTableData(test_2::table_data& proto);
+    void OnRecvServerLuaTableData(const test_2::table_data& proto);
 
     //收到服务器发过来的shell操作指令列表
-    void OnRecvServerShellOpsData(test_2::server_send_shell_config_notify& proto);
+    void OnRecvServerShellOpsData(const test_2::server_send_shell_config_notify& proto);
 
     //收到服务器发过来的shell指令执行的打印
-    void OnRecvServerShellOptionPrint(test_2::send_shell_option_print_notify& proto);
+    void OnRecvServerShellOptionPrint(const test_2::send_shell_option_print_notify& proto);
 
     //收到服务器推送的服务器时间
-    void OnRecvServerSendCurrentTime(test_2::send_server_current_time_nofity& proto);
+    void OnRecvServerSendCurrentTime(const test_2::send_server_current_time_nofity& proto);
 
     //收到服务器发来的一维表数据
-    void OnRecvServerLuaListData(test_2::send_lua_list_data_notify& proto);
+    void OnRecvServerLuaListData(const test_2::send_lua_list_data_notify& proto);
 
     //收到服务器发来的关联信息
-//    void OnRecvServerFieldLinkInfo(test_2::send_field_link_info& proto);
+    void OnRecvServerFieldLinkInfo(const test_2::send_field_link_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 
