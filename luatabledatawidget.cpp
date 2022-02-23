@@ -51,6 +51,12 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
     });
 }
 
+bool LuaTableDataWidget::SetFieldLink(quint16 nIndex, QString sFieldLink)
+{
+    qDebug() << "nIndex = " << nIndex;
+    qDebug() << "sFieldLink = " << sFieldLink;
+}
+
 void LuaTableDataWidget::OnSaveAnnonations(QString str, quint32 nIndex)
 {
     QVector<quint16> vNLevels;

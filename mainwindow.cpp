@@ -112,7 +112,7 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
-void MainWindow::OnOpenAddLinkFieldDialog(QWidget* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
+void MainWindow::OnOpenAddLinkFieldDialog(TabWidgetCell* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
 {
     if (m_addFieldLinkDialog)
     {

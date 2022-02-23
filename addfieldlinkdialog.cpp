@@ -10,6 +10,7 @@ AddFieldLinkDialog::AddFieldLinkDialog(QWidget *parent) :
 
     setWindowTitle("设置关联");
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+    setModal(true);
 
     QIcon icon;
     icon.addFile(QStringLiteral("observer.ico"), QSize(), QIcon::Normal, QIcon::Off);
@@ -20,6 +21,7 @@ AddFieldLinkDialog::AddFieldLinkDialog(QWidget *parent) :
     ui->pushButton->setDisabled(true);
 
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnPushButtonClicked()));
 }
 
 AddFieldLinkDialog::~AddFieldLinkDialog()
@@ -27,12 +29,20 @@ AddFieldLinkDialog::~AddFieldLinkDialog()
     delete ui;
 }
 
-void AddFieldLinkDialog::OnShow(QWidget* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
+void AddFieldLinkDialog::OnShow(TabWidgetCell* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
 {
     m_activeWidget = widget;
     m_bRootWidget = rootWidget;
     m_nIndex = nIndex;
     show();
+}
+
+void AddFieldLinkDialog::OnPushButtonClicked()
+{
+    if (m_bRootWidget)
+    {
+        m_activeWidget->SetFieldLink(m_nIndex, ui->msgLabel->text());
+    }
 }
 
 void AddFieldLinkDialog::OnClickTreeWidgetItem(QTreeWidgetItem* item, int nIndex)

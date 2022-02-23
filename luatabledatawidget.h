@@ -74,6 +74,8 @@ public:
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 
+    virtual bool SetFieldLink(quint16 nIndex, QString sFieldLink);
+
     QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
 
     FIELDINFO* GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);

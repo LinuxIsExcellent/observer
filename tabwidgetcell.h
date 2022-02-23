@@ -20,7 +20,7 @@
 //绿色的是增加的行
 
 //调整过位置的列的列头就是黄色
-
+class MainWindow;
 
 namespace Ui {
 class TabWidgetCell;
@@ -71,6 +71,8 @@ public:
     {
         return m_bTableDataChange;
     }
+
+    virtual bool SetFieldLink(quint16 nIndex, QString sFieldLink){};
 
     //设置数据有改变
     void SetDataModify(bool modify);

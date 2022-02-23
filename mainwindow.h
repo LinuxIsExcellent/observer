@@ -28,6 +28,7 @@ class ShowMsgDialog;
 class TabWidgetCell;
 class LuaTableDataWidget;
 class LuaListDataWidget;
+class AddFieldLinkDialog;;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -50,7 +51,7 @@ public:
 
     void OnCloseTabWidget(QWidget* widget);
 
-    void OnOpenAddLinkFieldDialog(QWidget* widget, bool rootWidget = true, quint16 nIndex = 0);
+    void OnOpenAddLinkFieldDialog(TabWidgetCell* widget, bool rootWidget = true, quint16 nIndex = 0);
 public:
     //刷新左边的列表数据
     void OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto);
