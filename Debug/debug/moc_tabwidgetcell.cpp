@@ -40,12 +40,12 @@ QT_MOC_LITERAL(5, 52, 14), // "QStandardItem*"
 QT_MOC_LITERAL(6, 67, 4), // "item"
 QT_MOC_LITERAL(7, 72, 17), // "OnSaveAnnonations"
 QT_MOC_LITERAL(8, 90, 3), // "str"
-QT_MOC_LITERAL(9, 94, 6) // "nIndex"
+QT_MOC_LITERAL(9, 94, 6) // "sField"
 
     },
     "TabWidgetCell\0Flush\0\0AddAnnotation\0"
     "OnItemDataChange\0QStandardItem*\0item\0"
-    "OnSaveAnnonations\0str\0nIndex"
+    "OnSaveAnnonations\0str\0sField"
 };
 #undef QT_MOC_LITERAL
 
@@ -72,7 +72,7 @@ static const uint qt_meta_data_TabWidgetCell[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    6,
-    QMetaType::Void, QMetaType::QString, QMetaType::UInt,    8,    9,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString,    8,    9,
 
        0        // eod
 };
@@ -86,7 +86,7 @@ void TabWidgetCell::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 0: _t->Flush(); break;
         case 1: _t->AddAnnotation(); break;
         case 2: _t->OnItemDataChange((*reinterpret_cast< QStandardItem*(*)>(_a[1]))); break;
-        case 3: _t->OnSaveAnnonations((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< quint32(*)>(_a[2]))); break;
+        case 3: _t->OnSaveAnnonations((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
         default: ;
         }
     }
