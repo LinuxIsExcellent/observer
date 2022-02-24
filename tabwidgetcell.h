@@ -72,7 +72,7 @@ public:
         return m_bTableDataChange;
     }
 
-    virtual bool SetFieldLink(quint16 nIndex, QString sFieldLink){};
+    virtual bool SetFieldLink(QString sField, QString sFieldLink){};
 
     //设置数据有改变
     void SetDataModify(bool modify);
@@ -92,7 +92,7 @@ private slots:
 
     void OnItemDataChange(QStandardItem *item);
 
-    virtual void OnSaveAnnonations(QString str, quint32 nIndex){}
+    virtual void OnSaveAnnonations(QString str, QString sField){}
 public:
     Ui::TabWidgetCell *ui;
 

@@ -30,11 +30,11 @@ QString AnnonationEditWidget::GetText()
     return ui->textEdit ? ui->textEdit->toPlainText() : "";
 }
 
-void AnnonationEditWidget::OnShow(quint32 x, quint32 y, quint32 nIndex, QString str/* = ""*/)
+void AnnonationEditWidget::OnShow(quint32 x, quint32 y, QString sField, QString str/* = ""*/)
 {
     show();
 
-    m_nIndex = nIndex;
+    m_sField = sField;
     setGeometry(x, y, 200, 230);
     ui->textEdit->clear();
 
@@ -50,7 +50,7 @@ void AnnonationEditWidget::OnQuit()
 {
     if (m_bModify)
     {
-        emit SaveAnnonationsSignal(ui->textEdit->toPlainText(), m_nIndex);
+        emit SaveAnnonationsSignal(ui->textEdit->toPlainText(), m_sField);
     }
     this->hide();
 }

@@ -29,11 +29,11 @@ AddFieldLinkDialog::~AddFieldLinkDialog()
     delete ui;
 }
 
-void AddFieldLinkDialog::OnShow(TabWidgetCell* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
+void AddFieldLinkDialog::OnShow(TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
 {
     m_activeWidget = widget;
     m_bRootWidget = rootWidget;
-    m_nIndex = nIndex;
+    m_sField = sField;
     show();
 }
 
@@ -41,7 +41,7 @@ void AddFieldLinkDialog::OnPushButtonClicked()
 {
     if (m_bRootWidget)
     {
-        m_activeWidget->SetFieldLink(m_nIndex, ui->msgLabel->text());
+        m_activeWidget->SetFieldLink(m_sField, ui->msgLabel->text());
     }
 }
 

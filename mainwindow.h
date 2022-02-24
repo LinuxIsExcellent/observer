@@ -51,7 +51,7 @@ public:
 
     void OnCloseTabWidget(QWidget* widget);
 
-    void OnOpenAddLinkFieldDialog(TabWidgetCell* widget, bool rootWidget = true, quint16 nIndex = 0);
+    void OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField, bool rootWidget = true);
 public:
     //刷新左边的列表数据
     void OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto);

@@ -112,11 +112,11 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
-void MainWindow::OnOpenAddLinkFieldDialog(TabWidgetCell* widget, bool rootWidget/* = true*/, quint16 nIndex/* = 0*/)
+void MainWindow::OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
 {
     if (m_addFieldLinkDialog)
     {
-        m_addFieldLinkDialog->OnShow(widget, rootWidget, nIndex);
+        m_addFieldLinkDialog->OnShow(widget, sField, rootWidget);
 
         test_2::client_field_link_info_quest quest;
         std::string output;

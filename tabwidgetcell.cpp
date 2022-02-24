@@ -19,7 +19,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_annonationWidget->raise();
     m_annonationWidget->hide();
 
-    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, quint32)), this, SLOT(OnSaveAnnonations(QString, quint32)));
+    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, QString)), this, SLOT(OnSaveAnnonations(QString, QString)));
 
     hlayout_top = new QHBoxLayout(m_topWidget);
 

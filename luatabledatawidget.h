@@ -74,7 +74,7 @@ public:
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 
-    virtual bool SetFieldLink(quint16 nIndex, QString sFieldLink);
+    virtual bool SetFieldLink(QString sField, QString sFieldLink);
 
     QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
 
@@ -87,7 +87,7 @@ private slots:
 
     virtual void Flush();
 
-    virtual void OnSaveAnnonations(QString str, quint32 nIndex);
+    virtual void OnSaveAnnonations(QString str, QString sField);
 private:
 
     TABLEDATA   m_tableData;    //表的数据

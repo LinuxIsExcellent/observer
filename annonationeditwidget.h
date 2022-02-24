@@ -24,17 +24,17 @@ public:
 
     void OnQuit();
 
-    void OnShow(quint32 x, quint32 y, quint32 nIndex, QString str = "");
+    void OnShow(quint32 x, quint32 y, QString sField, QString str = "");
 
 signals:
     //保存注释
-    void SaveAnnonationsSignal(QString str, quint32 nIndex);
+    void SaveAnnonationsSignal(QString str, QString sField);
 protected:
 
 private:
     Ui::AnnonationEditWidget *ui;
 
-    quint32     m_nIndex;
+    QString     m_sField;
 
     bool        m_bModify;
 };

@@ -34,38 +34,82 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             return;
         }
 
+        QString sField = m_standardItemModel->horizontalHeaderItem(nIndex)->text();
         m_tableCellMenu->clear();
         m_tableCellMenu->addAction("编辑批注", this, [=](){
 //            m_annonationWidget->OnShow(pt.x(), pt.y());
 
             QString sToolTips = m_standardItemModel->horizontalHeaderItem(nIndex)->toolTip();
-            m_annonationWidget->OnShow(pos.x(), pos.y(), nIndex, sToolTips);
+            m_annonationWidget->OnShow(pos.x(), pos.y(), sField, sToolTips);
         });
 
 
         m_tableCellMenu->addAction("增加关联", this, [=](){
-            m_mainWindow->OnOpenAddLinkFieldDialog(this, true, nIndex);
+            m_mainWindow->OnOpenAddLinkFieldDialog(this, sField, true);
         });
 
         m_tableCellMenu->exec(pt);
     });
 }
 
-bool LuaTableDataWidget::SetFieldLink(quint16 nIndex, QString sFieldLink)
+bool LuaTableDataWidget::SetFieldLink(QString sField, QString sFieldLink)
 {
-    qDebug() << "nIndex = " << nIndex;
+    qDebug() << "sField = " << sField;
     qDebug() << "sFieldLink = " << sFieldLink;
+
+    //把备注设置到容器里面
+    QVector<quint16> vNLevels;
+    for (auto& data : m_vFieldSquence)
+    {
+        // 这里只判断最外层
+        if (data.vNLevels.size() == 0)
+        {
+            for (auto & field : data.vSFieldSquences)
+            {
+                if (field.sFieldName == sField)
+                {
+                    field.sFieldLink = sFieldLink;
+                    break;
+                }
+            }
+        }
+    }
+
+    m_bHeadIndexChange = true;
+    SetDataModify(true);
 }
 
-void LuaTableDataWidget::OnSaveAnnonations(QString str, quint32 nIndex)
+void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
 {
+    //把备注设置到容器里面
     QVector<quint16> vNLevels;
-    FIELDINFO* fieldInfo = GetFieldInfos(vNLevels, nIndex);
-    fieldInfo->sFieldAnnonation = str;
+    for (auto& data : m_vFieldSquence)
+    {
+        // 这里只判断最外层
+        if (data.vNLevels.size() == 0)
+        {
+            for (auto & field : data.vSFieldSquences)
+            {
+                if (field.sFieldName == sField)
+                {
+                    field.sFieldAnnonation = str;
+                    break;
+                }
+            }
+        }
+    }
+
     m_bHeadIndexChange = true;
     SetDataModify(true);
 
-    m_standardItemModel->horizontalHeaderItem(nIndex)->setToolTip(str);
+    //修改表头的备注
+    for (int i = 0; i < m_standardItemModel->columnCount(); i++)
+    {
+        if (m_standardItemModel->horizontalHeaderItem(i)->text() == sField)
+        {
+            m_standardItemModel->horizontalHeaderItem(i)->setToolTip(str);
+        }
+    }
 }
 
 void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
