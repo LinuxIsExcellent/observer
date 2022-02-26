@@ -73,6 +73,9 @@ public:
 
     //收到服务器发来的关联信息
     void OnRecvServerFieldLinkInfo(const test_2::send_field_link_info& proto);
+
+    //收到服务器发过来的监听的进程的状态
+    void OnRecvServerProcessStatusInfo(const test_2::send_process_listening_status_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -135,5 +138,7 @@ private:
 
     ModifyServerTimeWidget* m_timeWidget; //修改服务器时间widget
     AddFieldLinkDialog*     m_addFieldLinkDialog; //增加关联的界面
+
+    QVector<QLabel*>        m_vProcessStatusLabList;   //进程状态展示标签
 };
 #endif // MAINWINDOW_H

@@ -469,9 +469,62 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
             test_2::send_field_link_info notify;
             notify.ParseFromString(strData);
 
-            qDebug() << "asdas";
             OnRecvServerFieldLinkInfo(notify);
         }
+        else if (nCmd == test_2::server_msg::SEND_PROCESS_STATUS_INFO)
+        {
+            test_2::send_process_listening_status_info notify;
+            notify.ParseFromString(strData);
+
+
+            OnRecvServerProcessStatusInfo(notify);
+        }
+    }
+}
+
+void MainWindow::OnRecvServerProcessStatusInfo(const test_2::send_process_listening_status_info& proto)
+{
+    for (int i = 0;i < proto.infos_size();++i)
+    {
+        test_2::process_statue_info info = proto.infos(i);
+
+        std::string output;
+        info.SerializeToString(&output);
+        qDebug() << "asdas = " << QString::fromStdString(output);
+
+        qDebug() << info.statue();
+        qDebug() << QString::fromStdString(info.process_name());
+
+        QString sStatus = "QString::fromStdString(info.process_name());";
+        qDebug() << "sStatus = " << QString::fromStdString(info.process_name());
+        qDebug() << "sStatus111 = " << info.statue();
+
+//        QString sStyleSheet = "color:red;";
+//        if (info.statue() == 0)
+//        {
+//            sStatus = sStatus + " (关闭)";
+//        }
+//        else
+//        {
+//            sStyleSheet = "color:green;";
+//            sStatus = sStatus + " (运行)";
+//        }
+
+//        if (i > m_vProcessStatusLabList.size() - 1)
+//        {
+//            QLabel* Label =new QLabel(this);
+//            Label->setFrameStyle(QFrame::Box|QFrame::Sunken);
+//            Label->setText(sStatus);
+//            Label->setStyleSheet(sStyleSheet);
+//            ui->statusbar->insertWidget(0, Label);
+
+//            m_vProcessStatusLabList.push_back(Label);
+//        }
+//        else
+//        {
+//            m_vProcessStatusLabList[i]->setText(sStatus);
+//            m_vProcessStatusLabList[i]->setStyleSheet(sStyleSheet);
+//        }
     }
 }
 

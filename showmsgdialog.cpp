@@ -8,7 +8,9 @@ ShowMsgDialog::ShowMsgDialog(QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog/* | Qt::WindowStaysOnTopHint*/);
-    ui->textEdit->setDisabled(true);
+    ui->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+//    ui->textEdit->setDisabled(true);
+    ui->textEdit->setReadOnly(true);
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnclickCloseBtn()));
 }
