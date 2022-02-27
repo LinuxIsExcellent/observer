@@ -28,6 +28,7 @@ SOURCES += \
     msg.pb.cc \
     parseconfig.cpp \
     showmsgdialog.cpp \
+    tableviewcell.cpp \
     tabwidgetcell.cpp \
     luatabledatawidget.cpp \
     mainwindow.cpp
@@ -44,6 +45,7 @@ HEADERS += \
     msg.pb.h \
     parseconfig.h \
     showmsgdialog.h \
+    tableviewcell.h \
     tabwidgetcell.h \
     luatabledatawidget.h \
     mainwindow.h
@@ -54,6 +56,7 @@ FORMS += \
     logindialog.ui \
     modifyservertimewidget.ui \
     showmsgdialog.ui \
+    tableviewcell.ui \
     tabwidgetcell.ui \
     mainwindow.ui
 

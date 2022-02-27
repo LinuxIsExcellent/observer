@@ -12,6 +12,7 @@
 #include <QMenu>
 #include "mainwindow.h"
 #include "annonationeditwidget.h"
+#include "tableviewcell.h"
 
 #include <google/protobuf/text_format.h>
 

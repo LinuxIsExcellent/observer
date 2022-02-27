@@ -488,43 +488,34 @@ void MainWindow::OnRecvServerProcessStatusInfo(const test_2::send_process_listen
     {
         test_2::process_statue_info info = proto.infos(i);
 
-        std::string output;
-        info.SerializeToString(&output);
-        qDebug() << "asdas = " << QString::fromStdString(output);
+        QString sStatus = QString::fromStdString(info.process_name());
+        QString sStyleSheet = "color:red;";
 
-        qDebug() << info.statue();
-        qDebug() << QString::fromStdString(info.process_name());
+        if (info.statue() == 0)
+        {
+            sStatus = sStatus + " (关闭)";
+        }
+        else
+        {
+            sStyleSheet = "color:green;";
+            sStatus = sStatus + " (运行)";
+        }
 
-        QString sStatus = "QString::fromStdString(info.process_name());";
-        qDebug() << "sStatus = " << QString::fromStdString(info.process_name());
-        qDebug() << "sStatus111 = " << info.statue();
+        if (i > m_vProcessStatusLabList.size() - 1)
+        {
+            QLabel* Label =new QLabel(this);
+            Label->setFrameStyle(QFrame::Box|QFrame::Sunken);
+            Label->setText(sStatus);
+            Label->setStyleSheet(sStyleSheet);
+            ui->statusbar->insertWidget(0, Label);
 
-//        QString sStyleSheet = "color:red;";
-//        if (info.statue() == 0)
-//        {
-//            sStatus = sStatus + " (关闭)";
-//        }
-//        else
-//        {
-//            sStyleSheet = "color:green;";
-//            sStatus = sStatus + " (运行)";
-//        }
-
-//        if (i > m_vProcessStatusLabList.size() - 1)
-//        {
-//            QLabel* Label =new QLabel(this);
-//            Label->setFrameStyle(QFrame::Box|QFrame::Sunken);
-//            Label->setText(sStatus);
-//            Label->setStyleSheet(sStyleSheet);
-//            ui->statusbar->insertWidget(0, Label);
-
-//            m_vProcessStatusLabList.push_back(Label);
-//        }
-//        else
-//        {
-//            m_vProcessStatusLabList[i]->setText(sStatus);
-//            m_vProcessStatusLabList[i]->setStyleSheet(sStyleSheet);
-//        }
+            m_vProcessStatusLabList.push_back(Label);
+        }
+        else
+        {
+            m_vProcessStatusLabList[i]->setText(sStatus);
+            m_vProcessStatusLabList[i]->setStyleSheet(sStyleSheet);
+        }
     }
 }
 
