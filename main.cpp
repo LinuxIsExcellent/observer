@@ -1,3 +1,4 @@
+#include "globalapplication.h"
 #include "mainwindow.h"
 #include "logindialog.h"
 #include "parseconfig.h"
@@ -28,8 +29,8 @@ static lua_State *L = NULL;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    QApplication::setQuitOnLastWindowClosed(false);
+    GlobalApplication a(argc, argv);
+    GlobalApplication::setQuitOnLastWindowClosed(false);
 
     MainWindow w;
 

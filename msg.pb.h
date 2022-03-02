@@ -1343,7 +1343,7 @@ class pair_value final :
     kKeyFieldNumber = 1,
     kValueFieldNumber = 2,
   };
-  // string key = 1;
+  // bytes key = 1;
   void clear_key();
   const std::string& key() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1357,7 +1357,7 @@ class pair_value final :
   std::string* _internal_mutable_key();
   public:
 
-  // string value = 2;
+  // bytes value = 2;
   void clear_value();
   const std::string& value() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1510,7 +1510,7 @@ class field_type_pair final :
     kKeyFieldNumber = 1,
     kLuaTypeFieldNumber = 2,
   };
-  // string key = 1;
+  // bytes key = 1;
   void clear_key();
   const std::string& key() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1690,7 +1690,7 @@ class row_data final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::pair_value >&
       pair() const;
 
-  // string key = 1;
+  // bytes key = 1;
   void clear_key();
   const std::string& key() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1844,7 +1844,7 @@ class field_info final :
     kFieldDescFieldNumber = 2,
     kFieldLinkFieldNumber = 3,
   };
-  // string field_name = 1;
+  // bytes field_name = 1;
   void clear_field_name();
   const std::string& field_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1858,7 +1858,7 @@ class field_info final :
   std::string* _internal_mutable_field_name();
   public:
 
-  // string field_desc = 2;
+  // bytes field_desc = 2;
   void clear_field_desc();
   const std::string& field_desc() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1872,7 +1872,7 @@ class field_info final :
   std::string* _internal_mutable_field_desc();
   public:
 
-  // string field_link = 3;
+  // bytes field_link = 3;
   void clear_field_link();
   const std::string& field_link() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2211,7 +2211,7 @@ class table_data final :
     kRowCountFieldNumber = 2,
     kColumnCountFieldNumber = 3,
   };
-  // repeated string filed_names = 4;
+  // repeated bytes filed_names = 4;
   int filed_names_size() const;
   private:
   int _internal_filed_names_size() const;
@@ -2222,12 +2222,12 @@ class table_data final :
   void set_filed_names(int index, const std::string& value);
   void set_filed_names(int index, std::string&& value);
   void set_filed_names(int index, const char* value);
-  void set_filed_names(int index, const char* value, size_t size);
+  void set_filed_names(int index, const void* value, size_t size);
   std::string* add_filed_names();
   void add_filed_names(const std::string& value);
   void add_filed_names(std::string&& value);
   void add_filed_names(const char* value);
-  void add_filed_names(const char* value, size_t size);
+  void add_filed_names(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& filed_names() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_filed_names();
   private:
@@ -2289,7 +2289,7 @@ class table_data final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
       filed_sequences() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2483,7 +2483,7 @@ class table_info final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
       filed_sequences() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2654,7 +2654,7 @@ class client_save_table_data_request final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data >&
       row_lists() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2807,7 +2807,7 @@ class send_shell_option_print_notify final :
     kLineFieldNumber = 1,
     kFlagFieldNumber = 2,
   };
-  // string line = 1;
+  // bytes line = 1;
   void clear_line();
   const std::string& line() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2987,7 +2987,7 @@ class client_save_table_info_request final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
       field_squences() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3431,7 +3431,7 @@ class client_lua_list_data_quest final :
   enum : int {
     kFileNameFieldNumber = 1,
   };
-  // string file_name = 1;
+  // bytes file_name = 1;
   void clear_file_name();
   const std::string& file_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3584,7 +3584,7 @@ class field_type_key_value final :
     kValueFieldNumber = 2,
     kTypeFieldNumber = 3,
   };
-  // string key = 1;
+  // bytes key = 1;
   void clear_key();
   const std::string& key() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3598,7 +3598,7 @@ class field_type_key_value final :
   std::string* _internal_mutable_key();
   public:
 
-  // string value = 2;
+  // bytes value = 2;
   void clear_value();
   const std::string& value() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3779,7 +3779,7 @@ class send_lua_list_data_notify final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_key_value >&
       filed_types() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -3950,7 +3950,7 @@ class save_lua_list_data_request final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_key_value >&
       filed_types() const;
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4221,7 +4221,7 @@ class table_field_list final :
     kFieldsFieldNumber = 2,
     kTableNameFieldNumber = 1,
   };
-  // repeated string fields = 2;
+  // repeated bytes fields = 2;
   int fields_size() const;
   private:
   int _internal_fields_size() const;
@@ -4232,12 +4232,12 @@ class table_field_list final :
   void set_fields(int index, const std::string& value);
   void set_fields(int index, std::string&& value);
   void set_fields(int index, const char* value);
-  void set_fields(int index, const char* value, size_t size);
+  void set_fields(int index, const void* value, size_t size);
   std::string* add_fields();
   void add_fields(const std::string& value);
   void add_fields(std::string&& value);
   void add_fields(const char* value);
-  void add_fields(const char* value, size_t size);
+  void add_fields(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& fields() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_fields();
   private:
@@ -4245,7 +4245,7 @@ class table_field_list final :
   std::string* _internal_add_fields();
   public:
 
-  // string table_name = 1;
+  // bytes table_name = 1;
   void clear_table_name();
   const std::string& table_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -4573,7 +4573,7 @@ class process_statue_info final :
     kProcessNameFieldNumber = 2,
     kStatueFieldNumber = 3,
   };
-  // string process_name = 2;
+  // bytes process_name = 2;
   void clear_process_name();
   const std::string& process_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -5271,7 +5271,7 @@ inline void server_send_current_time_notify::set_allocated_time_zone(std::string
 
 // pair_value
 
-// string key = 1;
+// bytes key = 1;
 inline void pair_value::clear_key() {
   key_.ClearToEmpty();
 }
@@ -5283,7 +5283,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void pair_value::set_key(ArgT0&& arg0, ArgT... args) {
  
- key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ key_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.pair_value.key)
 }
 inline std::string* pair_value::mutable_key() {
@@ -5322,7 +5322,7 @@ inline void pair_value::set_allocated_key(std::string* key) {
   // @@protoc_insertion_point(field_set_allocated:test_2.pair_value.key)
 }
 
-// string value = 2;
+// bytes value = 2;
 inline void pair_value::clear_value() {
   value_.ClearToEmpty();
 }
@@ -5334,7 +5334,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void pair_value::set_value(ArgT0&& arg0, ArgT... args) {
  
- value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ value_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.pair_value.value)
 }
 inline std::string* pair_value::mutable_value() {
@@ -5377,7 +5377,7 @@ inline void pair_value::set_allocated_value(std::string* value) {
 
 // field_type_pair
 
-// string key = 1;
+// bytes key = 1;
 inline void field_type_pair::clear_key() {
   key_.ClearToEmpty();
 }
@@ -5389,7 +5389,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_type_pair::set_key(ArgT0&& arg0, ArgT... args) {
  
- key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ key_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_type_pair.key)
 }
 inline std::string* field_type_pair::mutable_key() {
@@ -5452,7 +5452,7 @@ inline void field_type_pair::set_lua_type(int32_t value) {
 
 // row_data
 
-// string key = 1;
+// bytes key = 1;
 inline void row_data::clear_key() {
   key_.ClearToEmpty();
 }
@@ -5464,7 +5464,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void row_data::set_key(ArgT0&& arg0, ArgT... args) {
  
- key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ key_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.row_data.key)
 }
 inline std::string* row_data::mutable_key() {
@@ -5547,7 +5547,7 @@ row_data::pair() const {
 
 // field_info
 
-// string field_name = 1;
+// bytes field_name = 1;
 inline void field_info::clear_field_name() {
   field_name_.ClearToEmpty();
 }
@@ -5559,7 +5559,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_info::set_field_name(ArgT0&& arg0, ArgT... args) {
  
- field_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ field_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_info.field_name)
 }
 inline std::string* field_info::mutable_field_name() {
@@ -5598,7 +5598,7 @@ inline void field_info::set_allocated_field_name(std::string* field_name) {
   // @@protoc_insertion_point(field_set_allocated:test_2.field_info.field_name)
 }
 
-// string field_desc = 2;
+// bytes field_desc = 2;
 inline void field_info::clear_field_desc() {
   field_desc_.ClearToEmpty();
 }
@@ -5610,7 +5610,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_info::set_field_desc(ArgT0&& arg0, ArgT... args) {
  
- field_desc_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ field_desc_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_info.field_desc)
 }
 inline std::string* field_info::mutable_field_desc() {
@@ -5649,7 +5649,7 @@ inline void field_info::set_allocated_field_desc(std::string* field_desc) {
   // @@protoc_insertion_point(field_set_allocated:test_2.field_info.field_desc)
 }
 
-// string field_link = 3;
+// bytes field_link = 3;
 inline void field_info::clear_field_link() {
   field_link_.ClearToEmpty();
 }
@@ -5661,7 +5661,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_info::set_field_link(ArgT0&& arg0, ArgT... args) {
  
- field_link_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ field_link_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_info.field_link)
 }
 inline std::string* field_info::mutable_field_link() {
@@ -5795,7 +5795,7 @@ field_squence::infos() const {
 
 // table_data
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void table_data::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -5807,7 +5807,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void table_data::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.table_data.table_name)
 }
 inline std::string* table_data::mutable_table_name() {
@@ -5886,7 +5886,7 @@ inline void table_data::set_column_count(int32_t value) {
   // @@protoc_insertion_point(field_set:test_2.table_data.column_count)
 }
 
-// repeated string filed_names = 4;
+// repeated bytes filed_names = 4;
 inline int table_data::_internal_filed_names_size() const {
   return filed_names_.size();
 }
@@ -5925,7 +5925,7 @@ inline void table_data::set_filed_names(int index, const char* value) {
   filed_names_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.table_data.filed_names)
 }
-inline void table_data::set_filed_names(int index, const char* value, size_t size) {
+inline void table_data::set_filed_names(int index, const void* value, size_t size) {
   filed_names_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.table_data.filed_names)
@@ -5946,7 +5946,7 @@ inline void table_data::add_filed_names(const char* value) {
   filed_names_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.table_data.filed_names)
 }
-inline void table_data::add_filed_names(const char* value, size_t size) {
+inline void table_data::add_filed_names(const void* value, size_t size) {
   filed_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.table_data.filed_names)
 }
@@ -6085,7 +6085,7 @@ table_data::filed_sequences() const {
 
 // table_info
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void table_info::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6097,7 +6097,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void table_info::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.table_info.table_name)
 }
 inline std::string* table_info::mutable_table_name() {
@@ -6180,7 +6180,7 @@ table_info::filed_sequences() const {
 
 // client_save_table_data_request
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void client_save_table_data_request::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6192,7 +6192,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void client_save_table_data_request::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.client_save_table_data_request.table_name)
 }
 inline std::string* client_save_table_data_request::mutable_table_name() {
@@ -6275,7 +6275,7 @@ client_save_table_data_request::row_lists() const {
 
 // send_shell_option_print_notify
 
-// string line = 1;
+// bytes line = 1;
 inline void send_shell_option_print_notify::clear_line() {
   line_.ClearToEmpty();
 }
@@ -6287,7 +6287,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void send_shell_option_print_notify::set_line(ArgT0&& arg0, ArgT... args) {
  
- line_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ line_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.send_shell_option_print_notify.line)
 }
 inline std::string* send_shell_option_print_notify::mutable_line() {
@@ -6350,7 +6350,7 @@ inline void send_shell_option_print_notify::set_flag(int32_t value) {
 
 // client_save_table_info_request
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void client_save_table_info_request::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6362,7 +6362,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void client_save_table_info_request::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.client_save_table_info_request.table_name)
 }
 inline std::string* client_save_table_info_request::mutable_table_name() {
@@ -6493,7 +6493,7 @@ inline void client_modify_server_time_quest::set_time(int64_t value) {
 
 // client_lua_list_data_quest
 
-// string file_name = 1;
+// bytes file_name = 1;
 inline void client_lua_list_data_quest::clear_file_name() {
   file_name_.ClearToEmpty();
 }
@@ -6505,7 +6505,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void client_lua_list_data_quest::set_file_name(ArgT0&& arg0, ArgT... args) {
  
- file_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ file_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.client_lua_list_data_quest.file_name)
 }
 inline std::string* client_lua_list_data_quest::mutable_file_name() {
@@ -6548,7 +6548,7 @@ inline void client_lua_list_data_quest::set_allocated_file_name(std::string* fil
 
 // field_type_key_value
 
-// string key = 1;
+// bytes key = 1;
 inline void field_type_key_value::clear_key() {
   key_.ClearToEmpty();
 }
@@ -6560,7 +6560,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_type_key_value::set_key(ArgT0&& arg0, ArgT... args) {
  
- key_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ key_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_type_key_value.key)
 }
 inline std::string* field_type_key_value::mutable_key() {
@@ -6599,7 +6599,7 @@ inline void field_type_key_value::set_allocated_key(std::string* key) {
   // @@protoc_insertion_point(field_set_allocated:test_2.field_type_key_value.key)
 }
 
-// string value = 2;
+// bytes value = 2;
 inline void field_type_key_value::clear_value() {
   value_.ClearToEmpty();
 }
@@ -6611,7 +6611,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_type_key_value::set_value(ArgT0&& arg0, ArgT... args) {
  
- value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ value_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_type_key_value.value)
 }
 inline std::string* field_type_key_value::mutable_value() {
@@ -6674,7 +6674,7 @@ inline void field_type_key_value::set_type(int32_t value) {
 
 // send_lua_list_data_notify
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void send_lua_list_data_notify::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6686,7 +6686,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void send_lua_list_data_notify::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.send_lua_list_data_notify.table_name)
 }
 inline std::string* send_lua_list_data_notify::mutable_table_name() {
@@ -6769,7 +6769,7 @@ send_lua_list_data_notify::filed_types() const {
 
 // save_lua_list_data_request
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void save_lua_list_data_request::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6781,7 +6781,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void save_lua_list_data_request::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.save_lua_list_data_request.table_name)
 }
 inline std::string* save_lua_list_data_request::mutable_table_name() {
@@ -6868,7 +6868,7 @@ save_lua_list_data_request::filed_types() const {
 
 // table_field_list
 
-// string table_name = 1;
+// bytes table_name = 1;
 inline void table_field_list::clear_table_name() {
   table_name_.ClearToEmpty();
 }
@@ -6880,7 +6880,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void table_field_list::set_table_name(ArgT0&& arg0, ArgT... args) {
  
- table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.table_field_list.table_name)
 }
 inline std::string* table_field_list::mutable_table_name() {
@@ -6919,7 +6919,7 @@ inline void table_field_list::set_allocated_table_name(std::string* table_name) 
   // @@protoc_insertion_point(field_set_allocated:test_2.table_field_list.table_name)
 }
 
-// repeated string fields = 2;
+// repeated bytes fields = 2;
 inline int table_field_list::_internal_fields_size() const {
   return fields_.size();
 }
@@ -6958,7 +6958,7 @@ inline void table_field_list::set_fields(int index, const char* value) {
   fields_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.table_field_list.fields)
 }
-inline void table_field_list::set_fields(int index, const char* value, size_t size) {
+inline void table_field_list::set_fields(int index, const void* value, size_t size) {
   fields_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.table_field_list.fields)
@@ -6979,7 +6979,7 @@ inline void table_field_list::add_fields(const char* value) {
   fields_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.table_field_list.fields)
 }
-inline void table_field_list::add_fields(const char* value, size_t size) {
+inline void table_field_list::add_fields(const void* value, size_t size) {
   fields_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.table_field_list.fields)
 }
@@ -7082,7 +7082,7 @@ send_field_link_info::list() const {
 
 // process_statue_info
 
-// string process_name = 2;
+// bytes process_name = 2;
 inline void process_statue_info::clear_process_name() {
   process_name_.ClearToEmpty();
 }
@@ -7094,7 +7094,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void process_statue_info::set_process_name(ArgT0&& arg0, ArgT... args) {
  
- process_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ process_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.process_statue_info.process_name)
 }
 inline std::string* process_statue_info::mutable_process_name() {

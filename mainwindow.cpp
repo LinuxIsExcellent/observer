@@ -9,6 +9,7 @@
 #include "log.h"
 #include "luatabledatawidget.h"
 #include "lualistdatawidget.h"
+#include "qloadingwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -39,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->statusbar->setSizeGripEnabled(false);
 
     connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
+
+    m_loadingDialog = new QLoadingWidget(this);
+    m_loadingDialog->hide();
 }
 
 MainWindow::~MainWindow()
@@ -128,6 +132,10 @@ void MainWindow::OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField,
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
+    if (event->type() == QEvent::MouseButtonDblClick)
+    {
+        qDebug() << "click";
+    }
     if (qobject_cast<QLabel*>(watched) == m_timeLabel && event->type() == QEvent::MouseButtonDblClick)
     {
         m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
@@ -317,6 +325,9 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
             std::string output;
             quest.SerializeToString(&output);
 
+            setCursor(Qt::WaitCursor);
+            m_loadingDialog->show();
+
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
         }
         else if (item->parent()->text(0) == tr("全局一维表"))
@@ -386,6 +397,7 @@ void MainWindow::OnServerMsgRecv()
         QByteArray header = m_RecvBuffer.left(4);
         quint32 nLength = *(quint32*)header.data();
 
+        qDebug() << "nLength = " << nLength;
         if (nBufferSize - 4 >= nLength)
         {
             char* packetStr = m_RecvBuffer.data();
@@ -410,6 +422,7 @@ void MainWindow::OnServerMsgRecv()
             bProcessLoop = false;
         }
     }
+    qDebug() << "m_RecvBuffer = " << m_RecvBuffer.size();
 }
 
 void MainWindow::OnNetMsgProcess(Packet& packet)

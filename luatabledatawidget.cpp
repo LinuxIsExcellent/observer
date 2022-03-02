@@ -307,18 +307,18 @@ void LuaTableDataWidget::Flush()
 
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
-                qDebug() << "width = " << dataItem->sizeHint().width();
-                qDebug() <<  "height = " << dataItem->sizeHint().height();
+////                qDebug() << "width = " << dataItem->sizeHint().width();
+////                qDebug() <<  "height = " << dataItem->sizeHint().height();
 
-                QPushButton* cmb = new QPushButton();
-//                cmb->setMinimumSize(20, 20);
-                cmb->setMaximumSize(10, 10);
-                QSizePolicy sizePolicy = cmb->sizePolicy();
-                sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
-                cmb->setSizePolicy(sizePolicy);
+//                QPushButton* cmb = new QPushButton();
+////                cmb->setMinimumSize(20, 20);
+//                cmb->setMaximumSize(10, 10);
+//                QSizePolicy sizePolicy = cmb->sizePolicy();
+//                sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
+//                cmb->setSizePolicy(sizePolicy);
 
-                m_tableView->setIndexWidget(m_standardItemModel->index(i + 1, visualColumn), cmb);
-                m_tableView->indexWidget(m_standardItemModel->index(i + 1, visualColumn));
+//                m_tableView->setIndexWidget(m_standardItemModel->index(i + 1, visualColumn), cmb);
+//                m_tableView->indexWidget(m_standardItemModel->index(i + 1, visualColumn));
             }
         }
     }

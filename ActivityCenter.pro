@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     addfieldlinkdialog.cpp \
     annonationeditwidget.cpp \
+    globalapplication.cpp \
     globalconfig.cpp \
     log.cpp \
     logindialog.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
     modifyservertimewidget.cpp \
     msg.pb.cc \
     parseconfig.cpp \
+    qloadingwidget.cpp \
     showmsgdialog.cpp \
     tableviewcell.cpp \
     tabwidgetcell.cpp \
@@ -37,6 +39,7 @@ HEADERS += \
     Packet.h \
     addfieldlinkdialog.h \
     annonationeditwidget.h \
+    globalapplication.h \
     globalconfig.h \
     log.h \
     logindialog.h \
@@ -44,6 +47,7 @@ HEADERS += \
     modifyservertimewidget.h \
     msg.pb.h \
     parseconfig.h \
+    qloadingwidget.h \
     showmsgdialog.h \
     tableviewcell.h \
     tabwidgetcell.h \
@@ -55,6 +59,7 @@ FORMS += \
     annonationeditwidget.ui \
     logindialog.ui \
     modifyservertimewidget.ui \
+    qloadingwidget.ui \
     showmsgdialog.ui \
     tableviewcell.ui \
     tabwidgetcell.ui \

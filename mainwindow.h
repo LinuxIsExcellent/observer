@@ -19,6 +19,7 @@
 #include "msg.pb.h"
 #include "modifyservertimewidget.h"
 #include "addfieldlinkdialog.h"
+#include "qloadingwidget.h"
 #include <google/protobuf/text_format.h>
 
 #define RECV_BUFFER_SIZE 20 * 1024 * 1024
@@ -138,6 +139,7 @@ private:
 
     ModifyServerTimeWidget* m_timeWidget; //修改服务器时间widget
     AddFieldLinkDialog*     m_addFieldLinkDialog; //增加关联的界面
+    QLoadingWidget*     m_loadingDialog; //加载界面
 
     QVector<QLabel*>        m_vProcessStatusLabList;   //进程状态展示标签
 };
