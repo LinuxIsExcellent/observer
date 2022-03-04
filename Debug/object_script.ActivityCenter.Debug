@@ -1,6 +1,7 @@
 INPUT(
 ./debug\addfieldlinkdialog.o
 ./debug\annonationeditwidget.o
+./debug\globalapplication.o
 ./debug\globalconfig.o
 ./debug\log.o
 ./debug\logindialog.o
@@ -9,7 +10,9 @@ INPUT(
 ./debug\modifyservertimewidget.o
 ./debug\msg.pb.o
 ./debug\parseconfig.o
+./debug\qloadingwidget.o
 ./debug\showmsgdialog.o
+./debug\tableviewcell.o
 ./debug\tabwidgetcell.o
 ./debug\luatabledatawidget.o
 ./debug\mainwindow.o
@@ -18,7 +21,9 @@ INPUT(
 ./debug\moc_logindialog.o
 ./debug\moc_lualistdatawidget.o
 ./debug\moc_modifyservertimewidget.o
+./debug\moc_qloadingwidget.o
 ./debug\moc_showmsgdialog.o
+./debug\moc_tableviewcell.o
 ./debug\moc_tabwidgetcell.o
 ./debug\moc_luatabledatawidget.o
 ./debug\moc_mainwindow.o

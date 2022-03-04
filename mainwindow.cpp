@@ -325,8 +325,8 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
             std::string output;
             quest.SerializeToString(&output);
 
-            setCursor(Qt::WaitCursor);
-            m_loadingDialog->show();
+//            setCursor(Qt::WaitCursor);
+//            m_loadingDialog->show();
 
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
         }
@@ -378,10 +378,16 @@ void MainWindow::OnServerMsgRecv()
     QByteArray data = m_ServerSockect->readAll();
     if (data.count() <= 0) return;
 
+
+    qDebug() << "还有多少字节可以读取：" << m_ServerSockect->bytesAvailable();
     quint32 nBufferSize = m_RecvBuffer.size();
+    qDebug() << "nBufferSize = " << nBufferSize;
     if (nBufferSize <= RECV_BUFFER_SIZE)
     {
+        qDebug() << "new datasize : " << data.size();
         m_RecvBuffer.append(data);
+
+        qDebug() << "after buffersize : " << m_RecvBuffer.size();
     }
     else
     {
@@ -397,7 +403,7 @@ void MainWindow::OnServerMsgRecv()
         QByteArray header = m_RecvBuffer.left(4);
         quint32 nLength = *(quint32*)header.data();
 
-        qDebug() << "nLength = " << nLength;
+        qDebug() << "nLength = " << nLength << ", nBufferSize = " << nBufferSize;
         if (nBufferSize - 4 >= nLength)
         {
             char* packetStr = m_RecvBuffer.data();
@@ -408,12 +414,13 @@ void MainWindow::OnServerMsgRecv()
             if (nBufferSize - 4 > nLength)
             {
                 QByteArray rightData = m_RecvBuffer.right(nBufferSize - nLength - 4);
-                m_RecvBuffer.clear();
                 m_RecvBuffer = rightData;
+//                m_RecvBuffer.clear();
             }
             else
             {
                 m_RecvBuffer.clear();
+//                qDebug() << "clear after = " << m_RecvBuffer.size();
                 bProcessLoop = false;
             }
         }
@@ -422,7 +429,6 @@ void MainWindow::OnServerMsgRecv()
             bProcessLoop = false;
         }
     }
-    qDebug() << "m_RecvBuffer = " << m_RecvBuffer.size();
 }
 
 void MainWindow::OnNetMsgProcess(Packet& packet)
@@ -624,6 +630,7 @@ void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
     if (iter != m_mTabwidgetMap.end())
     {
         m_tabWidget->setCurrentWidget(iter.value());
+        qDebug() << "重设数据";
         qobject_cast<LuaTableDataWidget*>(iter.value())->SetProtoData(proto);
     }
     else

@@ -406,6 +406,8 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 
             m_tableData.dataList.push_back(rowData);
         }
+
+        qDebug() << "数据重设成功";
     }
 
     Flush();
