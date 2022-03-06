@@ -12,7 +12,7 @@ INPUT(
 ./debug\parseconfig.o
 ./debug\qloadingwidget.o
 ./debug\showmsgdialog.o
-./debug\tableviewcell.o
+./debug\stringtotableview.o
 ./debug\tabwidgetcell.o
 ./debug\luatabledatawidget.o
 ./debug\mainwindow.o
@@ -23,7 +23,7 @@ INPUT(
 ./debug\moc_modifyservertimewidget.o
 ./debug\moc_qloadingwidget.o
 ./debug\moc_showmsgdialog.o
-./debug\moc_tableviewcell.o
+./debug\moc_stringtotableview.o
 ./debug\moc_tabwidgetcell.o
 ./debug\moc_luatabledatawidget.o
 ./debug\moc_mainwindow.o

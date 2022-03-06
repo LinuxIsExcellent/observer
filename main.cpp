@@ -24,21 +24,12 @@ ParseConfig* ParseConfig::m_instance = NULL;
 GlobalConfig* GlobalConfig::m_instance = NULL;
 static const QString qLConfigPath = "config/globalConfig.lua";
 
-//全局唯一的虚拟机
-static lua_State *L = NULL;
-
 int main(int argc, char *argv[])
 {
     GlobalApplication a(argc, argv);
     GlobalApplication::setQuitOnLastWindowClosed(false);
 
     MainWindow w;
-
-    L = luaL_newstate();
-    if (L ==NULL)
-    {
-        return 0;
-    }
 
     std::string s1 = std::string("string1");
     std::string s2 = std::string("string2");
@@ -68,7 +59,7 @@ int main(int argc, char *argv[])
 
 //    logSysInit("log");
 
-    GlobalConfig::getInstance()->LoadConfig(L, qLConfigPath);
+    GlobalConfig::getInstance()->LoadConfig(qLConfigPath);
 
     LoginDialog loginDialog(&w);
 

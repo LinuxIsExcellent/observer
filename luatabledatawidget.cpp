@@ -1,5 +1,6 @@
 #include "luatabledatawidget.h"
 #include "annonationeditwidget.h"
+#include "stringtotableview.h"
 #include <QComboBox>
 #include <regex>
 
@@ -28,7 +29,6 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
         //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
         quint32 nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
-        qDebug() << "index = " << nIndex;
         if (nIndex < 0){
             //m_tableView->clearSelection();
             return;
@@ -47,6 +47,39 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         m_tableCellMenu->addAction("增加关联", this, [=](){
             m_mainWindow->OnOpenAddLinkFieldDialog(this, sField, true);
         });
+
+        m_tableCellMenu->exec(pt);
+    });
+
+    //增加数据单元格的菜单
+    connect(m_tableView, &QAbstractItemView::customContextMenuRequested, m_tableView,[=](const QPoint& pos){
+        int nHeight = m_tableView->horizontalHeader()->height();
+        int nWidth = m_tableView->verticalHeader()->width();
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos + QPoint(nWidth, nHeight);
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        QModelIndex index = m_tableView->indexAt(pos);
+        if (!index.isValid()){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        QString sField = m_standardItemModel->horizontalHeaderItem(index.column())->text();
+        if (m_mFieldTypes.find(sField) != m_mFieldTypes.end() && m_mFieldTypes.find(sField).value() == LUA_TTABLE)
+        {
+            m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
+                index.data().toString();
+                index.column();
+                index.row();
+
+                StringToTableView* dialog = new StringToTableView(this);
+                dialog->SetParam(index.column(), index.row(), index.data().toString());
+                dialog->show();
+            });
+        }
 
         m_tableCellMenu->exec(pt);
     });
@@ -307,18 +340,6 @@ void LuaTableDataWidget::Flush()
 
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
-////                qDebug() << "width = " << dataItem->sizeHint().width();
-////                qDebug() <<  "height = " << dataItem->sizeHint().height();
-
-//                QPushButton* cmb = new QPushButton();
-////                cmb->setMinimumSize(20, 20);
-//                cmb->setMaximumSize(10, 10);
-//                QSizePolicy sizePolicy = cmb->sizePolicy();
-//                sizePolicy.setHorizontalPolicy(QSizePolicy::Fixed);
-//                cmb->setSizePolicy(sizePolicy);
-
-//                m_tableView->setIndexWidget(m_standardItemModel->index(i + 1, visualColumn), cmb);
-//                m_tableView->indexWidget(m_standardItemModel->index(i + 1, visualColumn));
             }
         }
     }

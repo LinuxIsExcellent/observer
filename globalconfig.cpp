@@ -7,12 +7,13 @@ GlobalConfig::GlobalConfig()
 
 }
 
-bool GlobalConfig::LoadConfig(lua_State* L, QString fileName)
+bool GlobalConfig::LoadConfig(QString fileName)
 {
     QDir dir;
     QString currentPath = dir.currentPath();
     const char* luaPathStr = QString(currentPath + "/" + fileName).toStdString().c_str();
 
+    lua_State *L = luaL_newstate();
     if (!L) return false;
 
     qDebug () << "加载服务连接配置 : " << fileName;

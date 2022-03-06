@@ -12,7 +12,6 @@
 #include <QMenu>
 #include "mainwindow.h"
 #include "annonationeditwidget.h"
-#include "tableviewcell.h"
 
 #include <google/protobuf/text_format.h>
 
@@ -94,6 +93,7 @@ private slots:
     void OnItemDataChange(QStandardItem *item);
 
     virtual void OnSaveAnnonations(QString str, QString sField){}
+
 public:
     Ui::TabWidgetCell *ui;
 

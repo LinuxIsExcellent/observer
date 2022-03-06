@@ -30,7 +30,7 @@ SOURCES += \
     parseconfig.cpp \
     qloadingwidget.cpp \
     showmsgdialog.cpp \
-    tableviewcell.cpp \
+    stringtotableview.cpp \
     tabwidgetcell.cpp \
     luatabledatawidget.cpp \
     mainwindow.cpp
@@ -49,7 +49,7 @@ HEADERS += \
     parseconfig.h \
     qloadingwidget.h \
     showmsgdialog.h \
-    tableviewcell.h \
+    stringtotableview.h \
     tabwidgetcell.h \
     luatabledatawidget.h \
     mainwindow.h
@@ -61,7 +61,7 @@ FORMS += \
     modifyservertimewidget.ui \
     qloadingwidget.ui \
     showmsgdialog.ui \
-    tableviewcell.ui \
+    stringtotableview.ui \
     tabwidgetcell.ui \
     mainwindow.ui
 

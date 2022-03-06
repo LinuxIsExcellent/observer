@@ -70,7 +70,7 @@ public:
 //        return out;
 //    }
 
-    bool LoadConfig(lua_State* L, QString fileName);
+    bool LoadConfig(QString fileName);
 
     void ParseLuaTable(lua_State* L);
 

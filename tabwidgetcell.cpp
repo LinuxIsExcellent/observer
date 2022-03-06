@@ -68,27 +68,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
-    //增加数据单元格的菜单
-    connect(m_tableView, &QAbstractItemView::customContextMenuRequested, m_tableView,[=](const QPoint& pos){
-        int nHeight = m_tableView->horizontalHeader()->height();
-        int nWidth = m_tableView->verticalHeader()->width();
-        //mapToGlobal获取m_tableView全局坐标
-        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
-        //pos鼠标点击时在表格中的相对位置
-        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos + QPoint(nWidth, nHeight);
-        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
-        QModelIndex index = m_tableView->indexAt(pos);
-        if (!index.isValid()){
-            //m_tableView->clearSelection();
-            return;
-        }
-
-        m_tableCellMenu->clear();
-        m_tableCellMenu->addAction(index.data().toString(), this, SLOT(slot_function1()));
-
-        m_tableCellMenu->exec(pt);
-    });
-
     //增加行表头的菜单
     connect(m_tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->verticalHeader(),[=](const QPoint& pos){
         //mapToGlobal获取m_tableView全局坐标
