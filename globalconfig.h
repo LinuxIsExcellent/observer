@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QTextCodec>
 #include <QDebug>
+#include <regex>
 
 extern "C"
 {
@@ -83,6 +84,8 @@ public:
     {
         return m_programs.find(sProgram);
     }
+
+    std::string doubleToString(double price);
 private:
     static GlobalConfig* m_instance;
 

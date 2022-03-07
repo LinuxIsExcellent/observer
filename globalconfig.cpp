@@ -173,3 +173,19 @@ void GlobalConfig::ParseLuaTable(lua_State *L)
 
     fflush(stdout);
 }
+
+std::string GlobalConfig::doubleToString(double price) {
+    auto res = std::to_string(price);
+    const std::string format("$1");
+    try {
+        std::regex r("(\\d*)\\.0{6}|");
+        std::regex r2("(\\d*\\.{1}0*[^0]+)0*");
+        res = std::regex_replace(res, r2, format);
+        res = std::regex_replace(res, r, format);
+    }
+    catch (const std::exception & e) {
+        return res;
+    }
+
+    return res;
+}

@@ -1,20 +1,150 @@
 #include "stringtotableview.h"
+#include "globalconfig.h"
 #include "ui_stringtotableview.h"
+#include <QMessageBox>
 
-StringToTableView::StringToTableView(QWidget *parent) :
+StringToTableView::StringToTableView(QWidget *parent, int nLevel) :
     QDialog(parent),
-    ui(new Ui::StringToTableView)
+    ui(new Ui::StringToTableView),
+    m_nLevel(nLevel)
 {
     ui->setupUi(this);
 
     setWindowTitle("表");
-    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+//    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+//    setWindowFlag(Qt::WindowTitleHint, true);
     setModal(true);
+
+    m_standardItemModel = new QStandardItemModel(ui->tableView);
+    ui->tableView->setModel(m_standardItemModel);
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableView->horizontalHeader()->setHidden(true);
+
+    connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnCancelButtonClicked()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(OnConfirmButtonClicked()));
+
+    //初始化菜单栏
+    m_tableCellMenu = new QMenu(this);
+
+    //增加数据单元格的菜单
+    connect(ui->tableView, &QAbstractItemView::customContextMenuRequested, ui->tableView,[=](const QPoint& pos){
+        int nHeight = ui->tableView->horizontalHeader()->height();
+        int nWidth = ui->tableView->verticalHeader()->width();
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = ui->tableView->parentWidget()->mapToGlobal(ui->tableView->pos()) + pos + QPoint(nWidth, nHeight);
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        QModelIndex index = ui->tableView->indexAt(pos);
+        if (!index.isValid()){
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        if (index.column() == 1)
+        {
+            auto rowData = m_vRowDatas[index.row()];
+            if (rowData.nType == LUA_TTABLE)
+            {
+                m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
+                    StringToTableView* dialog = new StringToTableView(this, m_nLevel + 1);
+                    dialog->SetParam(index.column(), index.row(), index.data().toString());
+                    dialog->show();
+                });
+            }
+        }
+
+
+        m_tableCellMenu->exec(pt);
+    });
+
+    if (m_nLevel > 0)
+    {
+        move(20 + parent->pos().x(), 20 + parent->pos().y());
+    }
 }
 
 StringToTableView::~StringToTableView()
 {
     delete ui;
+}
+
+void StringToTableView::OnItemDataChange(QStandardItem * item)
+{
+    m_bDataChange = true;
+}
+
+void StringToTableView::OnConfirmButtonClicked()
+{
+    if (m_bDataChange)
+    {
+        OnSaveData();
+    }
+
+    close();
+}
+
+void StringToTableView::OnCancelButtonClicked()
+{
+    if (m_bDataChange)
+    {
+        QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("保存修改？"),QString::fromLocal8Bit("表被修改，是否保存？"));
+        QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
+        QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
+        QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
+        cancelButton->hide();
+
+        box.exec();
+
+        //请求保存再关闭界面
+        if( box.clickedButton() == saveButton )
+        {
+            //请求保存修改 TODO
+            OnSaveData();
+            close();
+        }
+        //直接关闭界面
+        else if ( box.clickedButton() == quitButton )
+        {
+            close();
+        }
+        //退出message对话框（直接关闭messageBox对话框）
+        else if ( box.clickedButton() == cancelButton )
+        {
+            return;
+        }
+    }
+    else
+    {
+        close();
+    }
+}
+
+void StringToTableView::OnSaveData()
+{
+    qDebug() << "m_nCol = " << m_nCol;
+    qDebug() << "m_nRow = " << m_nRow;
+}
+
+void StringToTableView::Flush()
+{
+    if (m_vRowDatas.size() <= 0) return;
+
+    int row = 0;
+    for (auto data : m_vRowDatas)
+    {
+        QStandardItem* keyItem = new QStandardItem(data.sKey);
+        m_standardItemModel->setItem(row, 0, keyItem);
+
+        QStandardItem* dataItem = new QStandardItem(data.sField);
+        m_standardItemModel->setItem(row, 1, dataItem);
+
+        row++;
+    }
+
+    ui->tableView->resizeColumnsToContents();
+    m_bDataChange = false;
 }
 
 std::string StringToTableView::ParseLuaTableToString(lua_State *L)
@@ -76,9 +206,7 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L)
         else if (lua_type(L, -1) == LUA_TNUMBER)
         {
             double num = lua_tonumber(L, -1);
-            std::string str_num = doubleToString(num);
-            sValueTable = sValueTable + str_num;
-            // sValueTable = sValueTable + std::to_string(num);
+            sValueTable = sValueTable + GlobalConfig::getInstance()->doubleToString(num);
         }
 
         sValueTable = sValueTable + ", ";
@@ -98,9 +226,12 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L)
 }
 
 void StringToTableView::SetParam(int nCol, int nRow, QString str)
-{
+{    
     lua_State *L = luaL_newstate();
     if (L == NULL) return;
+
+    m_nRow = nRow;
+    m_nCol = nCol;
 
     str = "temp_table = " + str;
     int ret = luaL_dostring(L, str.toStdString().c_str());
@@ -121,22 +252,59 @@ void StringToTableView::SetParam(int nCol, int nRow, QString str)
     //置空栈顶
     lua_pushnil(L);
 
+    int row = 0;
     while(lua_next(L, -2))
     {
+        RowInfo info;
+
+        //字段部分
+        QString sKey = "";
         if (lua_type(L, -2) == LUA_TNUMBER)
         {
-            int nKey = lua_tonumber(L, -2);
-
-            qDebug() << "nKey = " << nKey;
+            double num = lua_tonumber(L, -2);
+            sKey = QString::fromStdString(GlobalConfig::getInstance()->doubleToString(num));;
         }
-        else if (lua_type(L, -2) == LUA_TSTRING)
+        else
         {
-            QString sKey = lua_tostring(L, -2);
-            qDebug() << "sKey = " << sKey;
+            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
         }
 
-//        qDebug() << "lua_type = " << lua_type(L, -1);
+        info.sKey = sKey;
 
+        //数据部分
+        QString sField = "";
+        int nType = lua_type(L, -1);
+
+        if (nType == LUA_TTABLE)
+        {
+            sField = QString::fromStdString(ParseLuaTableToString(L));
+        }
+        else if (nType == LUA_TSTRING)
+        {
+            sField = '\"' + QString::fromStdString(lua_tostring(L, -1)) + '\"';
+        }
+        else if (nType == LUA_TBOOLEAN)
+        {
+            sField = QString(lua_toboolean(L, -1));
+        }
+        else if (nType == LUA_TNIL)
+        {
+            sField = QString::number(lua_tointeger(L, -1));
+        }
+        else if (nType == LUA_TNUMBER)
+        {
+            double num = lua_tonumber(L, -1);
+            sField = QString::fromStdString(GlobalConfig::getInstance()->doubleToString(num));
+        }
+
+        info.sField = sField;
+        info.nType = nType;
+
+        m_vRowDatas.push_back(info);
+
+        row++;
         lua_pop(L, 1);
     }
+
+    Flush();
 }
