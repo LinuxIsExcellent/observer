@@ -1,6 +1,7 @@
 #include "tabwidgetcell.h"
 #include "ui_tabwidgetcell.h"
 #include <QTableWidget>
+#include <QMimeData>
 
 TabWidgetCell::TabWidgetCell(QWidget *parent) :
     QWidget(parent),
@@ -65,6 +66,13 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_tableView->setModel(m_standardItemModel);
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 
+    //实现交换两行的效果
+    m_tableView->viewport()->installEventFilter(this);
+    m_tableView->setDragDropMode(QAbstractItemView::DragDrop);
+    m_tableView->setDragEnabled(true);
+    m_tableView->setAcceptDrops(true);
+//    m_tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
@@ -122,15 +130,15 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
     {
         m_bTableDataChange = true;
         int nRow = item->index().row();
-//        if (nRow <= m_vBRowDataChange.count())
-//        {
-//            m_vBRowDataChange[nRow] = MODIFY;
-//        }
-//        else
-//        {
-//            qDebug() << "修改的行的index超过了m_vBRowDataChange里面应有的行数";
-//        }
-        SetDataModify(true);
+        int nCol = item->index().column();
+
+        //拖拽一个单元格，但是不修改其它数据的时候，itemChanged信号会传一个row = 0, col = 0的数据过来
+        // 因为第1行的row是固定的表头，所以不可能会变化。
+        //可以用row = 0, col = 0来判定是否只是稍微拖拽一下，并没有改变数据
+        if (nRow > 0 && nCol > 0)
+        {
+            SetDataModify(true);
+        }
     }
 }
 
@@ -148,4 +156,53 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
 void TabWidgetCell::resizeEvent(QResizeEvent *event)
 {
     ui->bottom_widget->setGeometry(0, 0, width(), height());
+}
+
+bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
+{
+    if (obj == m_tableView->viewport())
+    {
+        if (eve->type() == QEvent::Drop)
+        {
+            const QMimeData* mime = ((QDropEvent*)eve)->mimeData();
+            QByteArray encodedata =  mime->data("application/x-qabstractitemmodeldatalist");
+            if (encodedata.isEmpty())
+            {
+                return false;
+            }
+
+            QDataStream stream(&encodedata, QIODevice::ReadOnly);
+            while(!stream.atEnd())
+            {
+                int row, col;
+
+                QMap<int, QVariant> roleDataMap;
+                stream >> row >> col >> roleDataMap;
+
+                QModelIndex index = m_tableView->indexAt(((QDropEvent*)eve)->pos());
+                int targetRow = index.row();
+
+                if (targetRow >= 0 && targetRow != row)
+                {
+
+                    //只能交换同一列的数据，不能跨列拖拽
+                    //交换单元格的数据
+                    QModelIndex sourceIndex = m_standardItemModel->index(row, col);
+                    QModelIndex targetIndex = m_standardItemModel->index(targetRow, col);
+                    QVariant targetData = targetIndex.data();
+
+                    m_standardItemModel->setData(sourceIndex, targetData);
+                    m_standardItemModel->setData(targetIndex, roleDataMap.find(0).value());
+
+                    m_bTableDataChange = true;
+                }
+            }
+        }
+        else
+        {
+            return QWidget::eventFilter(obj, eve);
+        }
+    }
+
+    return QWidget::eventFilter(obj, eve);
 }

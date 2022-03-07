@@ -25,6 +25,7 @@ public:
 
     ~StringToTableView();
 
+    std::string ParseLuaTableToString(lua_State *L);
 private:
     Ui::StringToTableView *ui;
 };

@@ -79,6 +79,8 @@ public:
     QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
 
     FIELDINFO* GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
+
+    void InsertSquenceInfo(QVector<quint16> vNLevels, QVector<FIELDINFO> vFieldInfos);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);

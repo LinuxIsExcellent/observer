@@ -71,10 +71,6 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         if (m_mFieldTypes.find(sField) != m_mFieldTypes.end() && m_mFieldTypes.find(sField).value() == LUA_TTABLE)
         {
             m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                index.data().toString();
-                index.column();
-                index.row();
-
                 StringToTableView* dialog = new StringToTableView(this);
                 dialog->SetParam(index.column(), index.row(), index.data().toString());
                 dialog->show();
@@ -112,10 +108,21 @@ bool LuaTableDataWidget::SetFieldLink(QString sField, QString sFieldLink)
     SetDataModify(true);
 }
 
+void LuaTableDataWidget::InsertSquenceInfo(QVector<quint16> vNLevels, QVector<FIELDINFO> vFieldInfos)
+{
+    FIELDSQUENCE fieldSquence;
+    fieldSquence.vNLevels = vNLevels;
+    fieldSquence.vSFieldSquences = vFieldInfos;
+
+    m_vFieldSquence.push_back(fieldSquence);
+}
+
 void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
 {
     //把备注设置到容器里面
     QVector<quint16> vNLevels;
+
+    bool isHas = false;
     for (auto& data : m_vFieldSquence)
     {
         // 这里只判断最外层
@@ -123,6 +130,7 @@ void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
         {
             for (auto & field : data.vSFieldSquences)
             {
+                isHas = true;
                 if (field.sFieldName == sField)
                 {
                     field.sFieldAnnonation = str;
@@ -130,6 +138,31 @@ void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
                 }
             }
         }
+    }
+
+    if (!isHas)
+    {
+        QMap<QString, quint16> mFieldSortMap;
+        QVector<FIELDINFO> vFieldInfos;
+        vFieldInfos.resize(m_tableView->model()->columnCount());
+
+        for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
+        {
+            int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
+            m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+            mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
+
+            FIELDINFO fieldInfo;
+            fieldInfo.sFieldName = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+            if (fieldInfo.sFieldName == sField)
+            {
+                fieldInfo.sFieldAnnonation = str;
+            }
+
+            vFieldInfos[nVisualIndex] = fieldInfo;
+        }
+
+        InsertSquenceInfo(vNLevels, vFieldInfos);
     }
 
     m_bHeadIndexChange = true;
@@ -201,14 +234,21 @@ void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QS
         }
     }
 
-//    if (!isHas)
-//    {
-//        FIELDSQUENCE fieldSquence;
-//        fieldSquence.vNLevels = vNLevels;
-//        fieldSquence.vSFieldSquences = vSFieldSquences;
+    if (!isHas)
+    {
+        QVector<FIELDINFO> vFieldInfos;
+        vFieldInfos.resize(mFieldSortMap.size());
 
-//        m_vFieldSquence.push_back(fieldSquence);
-//    }
+        for (QMap<QString, quint16>::iterator iter = mFieldSortMap.begin(); iter != mFieldSortMap.end(); ++iter)
+        {
+            FIELDINFO info;
+            info.sFieldName = iter.key();
+
+            vFieldInfos[iter.value()] = info;
+        }
+
+        InsertSquenceInfo(vNLevels, vFieldInfos);
+    }
 }
 
 void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
@@ -448,6 +488,7 @@ void LuaTableDataWidget::OnRequestSaveData()
         test_2::client_save_table_info_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
 
+        qDebug() << "squence size = " << m_vFieldSquence.size();
         for (auto data : m_vFieldSquence)
         {
             test_2::field_squence* field_squence = quest.add_field_squences();
@@ -456,6 +497,7 @@ void LuaTableDataWidget::OnRequestSaveData()
                 for (auto nLevel : data.vNLevels)
                 {
                     field_squence->add_levels(nLevel);
+                    qDebug() << "nLevel = " << nLevel;
                 }
 
                 for (auto sData : data.vSFieldSquences)
@@ -466,6 +508,10 @@ void LuaTableDataWidget::OnRequestSaveData()
                         fieldInfo->set_field_name(sData.sFieldName.toStdString());
                         fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
                         fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+
+                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
+                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
+                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
                     }
                 }
             }
