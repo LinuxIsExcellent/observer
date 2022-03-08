@@ -23,6 +23,11 @@ public:
     LuaListDataWidget(QWidget *parent = nullptr);
     virtual ~LuaListDataWidget(){};
 
+    virtual inline bool IsTableDataChange()
+    {
+        return m_bTableDataChange;
+    }
+
     void SetProtoData(const test_2::send_lua_list_data_notify& proto);
 
     virtual void OnRequestSaveData();

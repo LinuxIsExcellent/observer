@@ -25,12 +25,14 @@ SOURCES += \
     logindialog.cpp \
     lualistdatawidget.cpp \
     main.cpp \
+    modifcommand.cpp \
     modifyservertimewidget.cpp \
     msg.pb.cc \
     parseconfig.cpp \
     qloadingwidget.cpp \
     showmsgdialog.cpp \
     stringtotableview.cpp \
+    tabledelegate.cpp \
     tabwidgetcell.cpp \
     luatabledatawidget.cpp \
     mainwindow.cpp
@@ -44,12 +46,14 @@ HEADERS += \
     log.h \
     logindialog.h \
     lualistdatawidget.h \
+    modifcommand.h \
     modifyservertimewidget.h \
     msg.pb.h \
     parseconfig.h \
     qloadingwidget.h \
     showmsgdialog.h \
     stringtotableview.h \
+    tabledelegate.h \
     tabwidgetcell.h \
     luatabledatawidget.h \
     mainwindow.h

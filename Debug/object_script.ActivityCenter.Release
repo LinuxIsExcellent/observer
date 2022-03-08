@@ -7,12 +7,14 @@ INPUT(
 ./release\logindialog.o
 ./release\lualistdatawidget.o
 ./release\main.o
+./release\modifcommand.o
 ./release\modifyservertimewidget.o
 ./release\msg.pb.o
 ./release\parseconfig.o
 ./release\qloadingwidget.o
 ./release\showmsgdialog.o
 ./release\stringtotableview.o
+./release\tabledelegate.o
 ./release\tabwidgetcell.o
 ./release\luatabledatawidget.o
 ./release\mainwindow.o
@@ -24,6 +26,7 @@ INPUT(
 ./release\moc_qloadingwidget.o
 ./release\moc_showmsgdialog.o
 ./release\moc_stringtotableview.o
+./release\moc_tabledelegate.o
 ./release\moc_tabwidgetcell.o
 ./release\moc_luatabledatawidget.o
 ./release\moc_mainwindow.o

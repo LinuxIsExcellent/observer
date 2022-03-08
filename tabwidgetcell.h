@@ -10,6 +10,9 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QUndoStack>
+#include <QUndoView>
+#include <QAction>
 #include "mainwindow.h"
 #include "annonationeditwidget.h"
 
@@ -20,6 +23,10 @@
 //绿色的是增加的行
 
 //调整过位置的列的列头就是黄色
+class QUndoStack;
+class QUndoView;
+class QTableView;
+class QStandardItemModel;
 class MainWindow;
 
 namespace Ui {
@@ -75,10 +82,24 @@ public:
     virtual bool SetFieldLink(QString sField, QString sFieldLink){};
 
     //设置数据有改变
-    void SetDataModify(bool modify);
+    void ChangeDataModify();
 
     //mainwindow传过来的键盘事件
     virtual void GlobalKeyPressEevent(QKeyEvent *ev){}
+
+    //交换tableView的两行数据
+    void SwitchRowData(int nSource, int nTarget);
+
+    void clearUndoStack()
+    {
+        undoStack->clear();
+    }
+
+    //撤销
+    void undo();
+
+    //返回撤销
+    void redo();
 public slots:
     //刷新界面
     virtual void Flush() {};
@@ -120,6 +141,12 @@ public:
     AnnonationEditWidget* m_annonationWidget;   //批注界面
 
     QString m_sName;      //表的名字
+
+    //实现撤销功能
+    QAction *undoAction;
+    QAction *redoAction;
+    QUndoStack *undoStack;
+    QUndoView *undoView;
 };
 
 #endif // TABWIDGETCELL_H

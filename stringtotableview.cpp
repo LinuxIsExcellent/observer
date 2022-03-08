@@ -18,7 +18,9 @@ StringToTableView::StringToTableView(QWidget *parent, int nLevel) :
     m_standardItemModel = new QStandardItemModel(ui->tableView);
     ui->tableView->setModel(m_standardItemModel);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableView->horizontalHeader()->setHidden(true);
+
+    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem("字段名"));
+    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem("字段值"));
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnCancelButtonClicked()));

@@ -248,13 +248,32 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::keyPressEvent(QKeyEvent *ev)
 {
-    if (ev->key() == Qt::Key_S  &&  ev->modifiers() == Qt::ControlModifier)
+    if (ev->modifiers() == Qt::ControlModifier)
     {
        TabWidgetCell* tabCell = (TabWidgetCell*)m_tabWidget->currentWidget();
-       if(tabCell)
+       if (ev->key() == Qt::Key_S)
        {
-           tabCell->OnRequestSaveData();
-           return;
+           if(tabCell)
+           {
+               tabCell->OnRequestSaveData();
+               return;
+           }
+       }
+       else if (ev->key() == Qt::Key_Z)
+       {
+           if(tabCell)
+           {
+               tabCell->undo();
+               return;
+           }
+       }
+       else if (ev->key() == Qt::Key_Y)
+       {
+           if(tabCell)
+           {
+               tabCell->undo();
+               return;
+           }
        }
     }
     else if (ev->key() == Qt::Key_Escape)

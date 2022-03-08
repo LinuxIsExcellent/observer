@@ -3,6 +3,9 @@
 #include <QTableWidget>
 #include <QMimeData>
 
+#include "tabledelegate.h"
+#include "modifcommand.h"
+
 TabWidgetCell::TabWidgetCell(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TabWidgetCell)
@@ -101,6 +104,43 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
         m_tableCellMenu->exec(pt);
     });
+
+    //*********************实现表格的撤销功能****************************//
+    undoStack = new QUndoStack(this);
+
+    /* 创建Action */
+    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+    undoAction->setShortcuts(QKeySequence::Undo);
+    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+    redoAction->setShortcuts(QKeySequence::Redo);
+
+    /* 给表格设置委托 */
+    TableDelegate *delegate = new TableDelegate(this);
+
+    m_tableView->setItemDelegate(delegate);
+    connect(delegate, &TableDelegate::beginEdit, this, [ = ]()
+    {
+        QModelIndex index = m_tableView->currentIndex();
+        m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
+    });
+    connect(delegate, &TableDelegate::closeEditor, this, [ = ]()
+    {
+        QModelIndex index = m_tableView->currentIndex();
+        QVariant data = index.data(Qt::DisplayRole);
+        QVariant oldData = index.data(Qt::UserRole);
+        if (data != oldData)
+        {
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+        }
+    });
+
+    /* 创建UndoView */
+    undoView = new QUndoView(undoStack);
+    undoView->setWindowTitle(tr("Command List"));
+    undoView->show();
+    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+
+    //*********************实现表格的撤销功能****************************//
 }
 
 TabWidgetCell::~TabWidgetCell()
@@ -108,12 +148,12 @@ TabWidgetCell::~TabWidgetCell()
     delete ui;
 }
 
-void TabWidgetCell::SetDataModify(bool modify)
+void TabWidgetCell::ChangeDataModify()
 {
     if (m_tabWidget)
     {
         int nIndex = m_tabWidget->indexOf(this);
-        if (modify)
+        if (IsTableDataChange())
         {
             m_tabWidget->setTabText(nIndex, m_sName + "*");
         }
@@ -128,7 +168,6 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
 {
     if (item)
     {
-        m_bTableDataChange = true;
         int nRow = item->index().row();
         int nCol = item->index().column();
 
@@ -137,8 +176,10 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
         //可以用row = 0, col = 0来判定是否只是稍微拖拽一下，并没有改变数据
         if (nRow > 0 && nCol > 0)
         {
-            SetDataModify(true);
+            m_bTableDataChange = true;
         }
+
+        ChangeDataModify();
     }
 }
 
@@ -148,6 +189,18 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
     {
        OnRequestSaveData();
        return;
+    }
+
+    if (ev->key() == Qt::Key_Z  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        undo();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_Y  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        redo();
+        return;
     }
 
     QWidget::keyPressEvent(ev);
@@ -184,19 +237,25 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
 
                 if (targetRow >= 0 && targetRow != row)
                 {
-
                     //只能交换同一列的数据，不能跨列拖拽
                     //交换单元格的数据
                     QModelIndex sourceIndex = m_standardItemModel->index(row, col);
                     QModelIndex targetIndex = m_standardItemModel->index(targetRow, col);
                     QVariant targetData = targetIndex.data();
+                    QVariant suorceData = sourceIndex.data();
 
                     m_standardItemModel->setData(sourceIndex, targetData);
                     m_standardItemModel->setData(targetIndex, roleDataMap.find(0).value());
 
+                    //需要成块状，一下子全部改变
+                    undoStack->push(new ModifCommand(m_standardItemModel, sourceIndex, suorceData, targetData));
+                    undoStack->push(new ModifCommand(m_standardItemModel, targetIndex, targetData, suorceData));
+
                     m_bTableDataChange = true;
                 }
             }
+
+            return true;
         }
         else
         {
@@ -205,4 +264,34 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
     }
 
     return QWidget::eventFilter(obj, eve);
+}
+
+void TabWidgetCell::SwitchRowData(int nSource, int nTarget)
+{
+
+}
+
+//撤销
+void TabWidgetCell::undo()
+{
+    qDebug() << "undo = " << undoStack->canRedo();
+    if (undoStack->canUndo())
+    {
+        undoAction->trigger();
+    }
+    else
+    {
+        m_bTableDataChange = false;
+        ChangeDataModify();
+    }
+}
+
+//返回撤销
+void TabWidgetCell::redo()
+{
+    qDebug() << "redo = " << undoStack->canRedo();
+    if (undoStack->canRedo())
+    {
+        redoAction->trigger();
+    }
 }

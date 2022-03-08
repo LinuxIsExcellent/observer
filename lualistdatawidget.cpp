@@ -5,6 +5,8 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 }
 
+
+
 void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& proto)
 {
     m_mDataList.clear();
@@ -42,7 +44,8 @@ void LuaListDataWidget::Flush()
         }
 
         m_bTableDataChange = false;
-        SetDataModify(false);
+
+        ChangeDataModify();
     }
 }
 
@@ -76,5 +79,8 @@ void LuaListDataWidget::OnRequestSaveData()
         quest.SerializeToString(&output);
 
         m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUSET_SAVE_LUA_LIST_DATA, output);
+
+        //保存之后清空undo栈
+        clearUndoStack();
     }
 }

@@ -105,7 +105,7 @@ bool LuaTableDataWidget::SetFieldLink(QString sField, QString sFieldLink)
     }
 
     m_bHeadIndexChange = true;
-    SetDataModify(true);
+    ChangeDataModify();
 }
 
 void LuaTableDataWidget::InsertSquenceInfo(QVector<quint16> vNLevels, QVector<FIELDINFO> vFieldInfos)
@@ -166,7 +166,7 @@ void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
     }
 
     m_bHeadIndexChange = true;
-    SetDataModify(true);
+    ChangeDataModify();
 
     //修改表头的备注
     for (int i = 0; i < m_standardItemModel->columnCount(); i++)
@@ -254,7 +254,7 @@ void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QS
 void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
 {
     m_bHeadIndexChange = true;
-    SetDataModify(true);
+    ChangeDataModify();
 
     QVector<QString> sFields;
 
@@ -475,7 +475,7 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 
     m_bTableDataChange = false;
     m_bHeadIndexChange = false;
-    SetDataModify(false);
+    ChangeDataModify();
 }
 
 void LuaTableDataWidget::OnRequestSaveData()
@@ -488,7 +488,6 @@ void LuaTableDataWidget::OnRequestSaveData()
         test_2::client_save_table_info_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
 
-        qDebug() << "squence size = " << m_vFieldSquence.size();
         for (auto data : m_vFieldSquence)
         {
             test_2::field_squence* field_squence = quest.add_field_squences();
@@ -508,10 +507,6 @@ void LuaTableDataWidget::OnRequestSaveData()
                         fieldInfo->set_field_name(sData.sFieldName.toStdString());
                         fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
                         fieldInfo->set_field_link(sData.sFieldLink.toStdString());
-
-                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
-                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
-                        qDebug() << "sData.sFieldName.toStdString() = " << sData.sFieldName;
                     }
                 }
             }
@@ -563,4 +558,7 @@ void LuaTableDataWidget::OnRequestSaveData()
 
         m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUSET_SAVE_TABLE_DATA, output);
     }
+
+    //保存之后清空undo栈
+    clearUndoStack();
 }
