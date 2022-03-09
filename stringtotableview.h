@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QMenu>
+#include <QUndoStack>
+#include <QUndoView>
+#include <QAction>
 
 extern "C"
 {
@@ -16,6 +19,7 @@ extern "C"
 typedef struct RowInfo
 {
     QString sKey;      //字段名
+    int     nKeyType;      //字段的类型
     QString sField;      //字段值
     int     nType;      //值的类型
 }ROWINFO;
@@ -29,10 +33,11 @@ class StringToTableView : public QDialog
     Q_OBJECT
 
 public:
-    explicit StringToTableView(QWidget *parent = nullptr, int nLevel = 0);
-    void SetParam(int nCol, int nRow, QString str);
+    explicit StringToTableView(QStandardItemModel *model, QModelIndex index, QWidget *parent = nullptr, int nLevel = 0);
 
     ~StringToTableView();
+
+    void SetParam();
 
     void Flush();
 
@@ -57,8 +62,15 @@ private:
 
     int         m_nLevel;       //多少级
 
-    int         m_nRow;     //行
-    int         m_nCol;     //列
+    QStandardItemModel *model;  //对应的tableView的model
+    QModelIndex index;      //tableView的modelindex
+    QString m_sData;        //原本的dataStr
+
+    //实现撤销功能
+    QAction *undoAction;
+    QAction *redoAction;
+    QUndoStack *undoStack;
+    QUndoView *undoView;
 };
 
 #endif // STRINGTOTABLEVIEW_H

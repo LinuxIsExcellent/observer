@@ -87,9 +87,6 @@ public:
     //mainwindow传过来的键盘事件
     virtual void GlobalKeyPressEevent(QKeyEvent *ev){}
 
-    //交换tableView的两行数据
-    void SwitchRowData(int nSource, int nTarget);
-
     void clearUndoStack()
     {
         undoStack->clear();
@@ -100,6 +97,12 @@ public:
 
     //返回撤销
     void redo();
+
+    //复制单元格的内容
+    void copy();
+
+    //粘贴全局剪切板的内容
+    void paste();
 public slots:
     //刷新界面
     virtual void Flush() {};

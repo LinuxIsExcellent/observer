@@ -5287,6 +5287,8 @@ debug/tabwidgetcell.o: ../tabwidgetcell.cpp ../tabwidgetcell.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtablewidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMimeData \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qmimedata.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QClipboard \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qclipboard.h \
 		../tabledelegate.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QStyledItemDelegate \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleditemdelegate.h \

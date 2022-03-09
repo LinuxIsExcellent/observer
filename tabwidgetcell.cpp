@@ -2,6 +2,7 @@
 #include "ui_tabwidgetcell.h"
 #include <QTableWidget>
 #include <QMimeData>
+#include <QClipboard>
 
 #include "tabledelegate.h"
 #include "modifcommand.h"
@@ -203,6 +204,27 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
         return;
     }
 
+    if (ev->key() == Qt::Key_C  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+        qDebug() << "selectList = " << selectList;
+
+        copy();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_V  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+        qDebug() << "selectList = " << selectList;
+
+        QClipboard* clipboard = QApplication::clipboard();
+        qDebug() << "clipboard->text() = " << clipboard->text();
+
+        paste();
+        return;
+    }
+
     QWidget::keyPressEvent(ev);
 }
 
@@ -225,6 +247,7 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
             }
 
             QDataStream stream(&encodedata, QIODevice::ReadOnly);
+            ModifCommandList commandList;
             while(!stream.atEnd())
             {
                 int row, col;
@@ -247,12 +270,26 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
                     m_standardItemModel->setData(sourceIndex, targetData);
                     m_standardItemModel->setData(targetIndex, roleDataMap.find(0).value());
 
-                    //需要成块状，一下子全部改变
-                    undoStack->push(new ModifCommand(m_standardItemModel, sourceIndex, suorceData, targetData));
-                    undoStack->push(new ModifCommand(m_standardItemModel, targetIndex, targetData, suorceData));
+                    ModifInfo sourceInfo;
+                    sourceInfo.index = sourceIndex;
+                    sourceInfo.oldData = suorceData;
+                    sourceInfo.data = targetData;
+
+                    ModifInfo targetInfo;
+                    targetInfo.index = targetIndex;
+                    targetInfo.oldData = targetData;
+                    targetInfo.data = suorceData;
+
+                    commandList.push_front(sourceInfo);
+                    commandList.push_front(targetInfo);
 
                     m_bTableDataChange = true;
                 }
+            }
+
+            if (commandList.size() > 0)
+            {
+                undoStack->push(new ModifCommand(m_standardItemModel, commandList));
             }
 
             return true;
@@ -266,11 +303,6 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
     return QWidget::eventFilter(obj, eve);
 }
 
-void TabWidgetCell::SwitchRowData(int nSource, int nTarget)
-{
-
-}
-
 //撤销
 void TabWidgetCell::undo()
 {
@@ -279,7 +311,8 @@ void TabWidgetCell::undo()
     {
         undoAction->trigger();
     }
-    else
+
+    if (!undoStack->canUndo())
     {
         m_bTableDataChange = false;
         ChangeDataModify();
@@ -294,4 +327,14 @@ void TabWidgetCell::redo()
     {
         redoAction->trigger();
     }
+}
+
+//界面优化 TODO
+void TabWidgetCell::copy()
+{
+}
+
+//界面优化 TODO
+void TabWidgetCell::paste()
+{
 }

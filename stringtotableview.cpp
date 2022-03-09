@@ -2,13 +2,23 @@
 #include "globalconfig.h"
 #include "ui_stringtotableview.h"
 #include <QMessageBox>
+#include <QMimeData>
+#include <QClipboard>
 
-StringToTableView::StringToTableView(QWidget *parent, int nLevel) :
+#include "tabledelegate.h"
+#include "modifcommand.h"
+
+StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QWidget *parent, int nLevel) :
     QDialog(parent),
     ui(new Ui::StringToTableView),
     m_nLevel(nLevel)
 {
     ui->setupUi(this);
+
+    this->model = model;
+    this->index = index;
+
+    m_sData = index.data().toString();
 
     setWindowTitle("表");
 //    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
@@ -50,8 +60,7 @@ StringToTableView::StringToTableView(QWidget *parent, int nLevel) :
             if (rowData.nType == LUA_TTABLE)
             {
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(this, m_nLevel + 1);
-                    dialog->SetParam(index.column(), index.row(), index.data().toString());
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, this, m_nLevel + 1);
                     dialog->show();
                 });
             }
@@ -65,6 +74,45 @@ StringToTableView::StringToTableView(QWidget *parent, int nLevel) :
     {
         move(20 + parent->pos().x(), 20 + parent->pos().y());
     }
+
+    //*********************实现表格的撤销功能****************************//
+    undoStack = new QUndoStack(this);
+
+    /* 创建Action */
+    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+    undoAction->setShortcuts(QKeySequence::Undo);
+    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+    redoAction->setShortcuts(QKeySequence::Redo);
+
+    /* 给表格设置委托 */
+    TableDelegate *delegate = new TableDelegate(this);
+
+    ui->tableView->setItemDelegate(delegate);
+    connect(delegate, &TableDelegate::beginEdit, this, [ = ]()
+    {
+        QModelIndex index = ui->tableView->currentIndex();
+        m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
+    });
+    connect(delegate, &TableDelegate::closeEditor, this, [ = ]()
+    {
+        QModelIndex index = ui->tableView->currentIndex();
+        QVariant data = index.data(Qt::DisplayRole);
+        QVariant oldData = index.data(Qt::UserRole);
+        if (data != oldData)
+        {
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+        }
+    });
+
+    /* 创建UndoView */
+    undoView = new QUndoView(undoStack);
+    undoView->setWindowTitle(tr("Command List"));
+    undoView->show();
+    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+
+    //*********************实现表格的撤销功能****************************//
+
+    SetParam();
 }
 
 StringToTableView::~StringToTableView()
@@ -79,11 +127,10 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
 
 void StringToTableView::OnConfirmButtonClicked()
 {
-    if (m_bDataChange)
+    if(m_bDataChange)
     {
         OnSaveData();
     }
-
     close();
 }
 
@@ -125,8 +172,35 @@ void StringToTableView::OnCancelButtonClicked()
 
 void StringToTableView::OnSaveData()
 {
-    qDebug() << "m_nCol = " << m_nCol;
-    qDebug() << "m_nRow = " << m_nRow;
+    QString sResult = "{";
+    for (int i = 0; i < m_vRowDatas.size(); ++i) {
+        auto data = m_vRowDatas[i];
+
+        if (data.nKeyType == LUA_TNUMBER)
+        {
+            sResult = sResult + "[" + data.sKey + "] = ";
+        }
+
+        if (data.nType == LUA_TSTRING)
+        {
+            sResult = sResult + '"' + data.sField + '"';
+        }
+        else
+        {
+            sResult = sResult + data.sField;
+        }
+
+        if (i < m_vRowDatas.size() - 1)
+        {
+            sResult = sResult + ", ";
+        }
+    }
+
+    sResult = sResult + "}";
+
+    qDebug() << "sResult = " << sResult;
+    qDebug() << "m_sData = " << m_sData;
+    model->setData(index, sResult);
 }
 
 void StringToTableView::Flush()
@@ -227,16 +301,13 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L)
     return sValueTable;
 }
 
-void StringToTableView::SetParam(int nCol, int nRow, QString str)
+void StringToTableView::SetParam()
 {    
     lua_State *L = luaL_newstate();
     if (L == NULL) return;
 
-    m_nRow = nRow;
-    m_nCol = nCol;
-
-    str = "temp_table = " + str;
-    int ret = luaL_dostring(L, str.toStdString().c_str());
+    m_sData = "temp_table = " + m_sData;
+    int ret = luaL_dostring(L, m_sData.toStdString().c_str());
     if (ret)
     {
         qCritical() << lua_tostring(L,-1);
@@ -263,14 +334,15 @@ void StringToTableView::SetParam(int nCol, int nRow, QString str)
         QString sKey = "";
         if (lua_type(L, -2) == LUA_TNUMBER)
         {
-            double num = lua_tonumber(L, -2);
-            sKey = QString::fromStdString(GlobalConfig::getInstance()->doubleToString(num));;
+            sKey = QString::number(lua_tonumber(L, -2));
         }
         else
         {
             sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
         }
 
+
+        info.nKeyType = lua_type(L, -2);
         info.sKey = sKey;
 
         //数据部分
@@ -295,8 +367,7 @@ void StringToTableView::SetParam(int nCol, int nRow, QString str)
         }
         else if (nType == LUA_TNUMBER)
         {
-            double num = lua_tonumber(L, -1);
-            sField = QString::fromStdString(GlobalConfig::getInstance()->doubleToString(num));
+            sField = QString::number(lua_tonumber(L, -1));
         }
 
         info.sField = sField;
