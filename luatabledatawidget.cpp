@@ -71,7 +71,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         if (m_mFieldTypes.find(sField) != m_mFieldTypes.end() && m_mFieldTypes.find(sField).value() == LUA_TTABLE)
         {
             m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, m_tableView);
+                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, this);
                 dialog->show();
             });
         }

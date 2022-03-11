@@ -43,8 +43,26 @@ public:
 
     void OnSaveData();
 
-    std::string ParseLuaTableToString(lua_State *L);
+    void clearUndoStack()
+    {
+        undoStack->clear();
+    }
+
+    //改变一个modelIndex的数据
+    void ChangeModelIndexData(QModelIndex index, QString sData);
+
+    //撤销
+    void undo();
+
+    //返回撤销
+    void redo();
+
+protected:
+    virtual void keyPressEvent(QKeyEvent *ev);
+
 private slots:
+    std::string ParseLuaTableToString(lua_State *L);
+
     void OnCancelButtonClicked();
     void OnConfirmButtonClicked();
 

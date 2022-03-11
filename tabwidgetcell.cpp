@@ -46,6 +46,10 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     vlayout_all->setStretchFactor(m_topWidget, 10);
     vlayout_all->setStretchFactor(m_bottomButtonList, 1);
 
+    m_bottomButtonList->setViewMode(QListView::ListMode);
+    m_bottomButtonList->setFlow(QListView::LeftToRight);
+    m_bottomButtonList->setLayoutDirection(Qt::RightToLeft);
+
     //底层的widget
     ui->bottom_widget->setLayout(vlayout_all);
 //    setLayout(vlayout_all);
@@ -60,6 +64,24 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
         connect(resizeContentBtn, SIGNAL(clicked()), m_tableView, SLOT(resizeColumnsToContents()));
     }
+
+    m_saveDataButton = new QPushButton(this);
+    m_saveDataButton->setDisabled(true);
+
+    QListWidgetItem *item1 = new QListWidgetItem(m_bottomButtonList);
+    if (item1)
+    {
+        m_saveDataButton->setText(tr("保存数据"));
+        m_bottomButtonList->addItem(item1);
+        m_bottomButtonList->setItemWidget(item1, m_saveDataButton);
+
+        connect(m_saveDataButton, SIGNAL(clicked()), this, SLOT(OnSaveButtonClicked()));
+    }
+
+    m_bottomButtonList->setStyleSheet(R"(
+                QListWidget { outline: none; border:1px solid gray; color: black; }
+                QListWidget::Item { width: 75px; height: 50px; }
+                                )");
 
     m_tableView->setAlternatingRowColors(true);
     m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -136,10 +158,10 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     });
 
     /* 创建UndoView */
-    undoView = new QUndoView(undoStack);
-    undoView->setWindowTitle(tr("Command List"));
-    undoView->show();
-    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+//    undoView = new QUndoView(undoStack);
+//    undoView->setWindowTitle(tr("Command List"));
+//    undoView->show();
+//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 }
@@ -157,12 +179,19 @@ void TabWidgetCell::ChangeDataModify()
         if (IsTableDataChange())
         {
             m_tabWidget->setTabText(nIndex, m_sName + "*");
+            m_saveDataButton->setDisabled(false);
         }
         else
         {
             m_tabWidget->setTabText(nIndex, m_sName);
+            m_saveDataButton->setDisabled(true);
         }
     }
+}
+
+void TabWidgetCell::OnSaveButtonClicked()
+{
+    OnRequestSaveData();
 }
 
 void TabWidgetCell::OnItemDataChange(QStandardItem *item)
@@ -337,4 +366,19 @@ void TabWidgetCell::copy()
 //界面优化 TODO
 void TabWidgetCell::paste()
 {
+}
+
+void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)
+{
+    if (m_standardItemModel)
+    {
+        QVariant oldData = index.data();
+        QVariant data = QVariant(sData);
+
+        if (data != oldData)
+        {
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            m_standardItemModel->setData(index, data);
+        }
+    }
 }

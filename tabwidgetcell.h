@@ -84,6 +84,9 @@ public:
     //设置数据有改变
     void ChangeDataModify();
 
+    //改变一个modelIndex的数据
+    void ChangeModelIndexData(QModelIndex index, QString sData);
+
     //mainwindow传过来的键盘事件
     virtual void GlobalKeyPressEevent(QKeyEvent *ev){}
 
@@ -120,6 +123,7 @@ private slots:
 
     virtual void OnSaveAnnonations(QString str, QString sField){}
 
+    void OnSaveButtonClicked();
 public:
     Ui::TabWidgetCell *ui;
 
@@ -140,6 +144,8 @@ public:
 
     QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
     bool    m_bTableDataChange; //表的数据是否被更改
+
+    QPushButton* m_saveDataButton;  //保存数据的按钮
 
     AnnonationEditWidget* m_annonationWidget;   //批注界面
 

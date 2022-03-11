@@ -4,7 +4,9 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QClipboard>
+#include <QKeyEvent>
 
+#include "tabwidgetcell.h"
 #include "tabledelegate.h"
 #include "modifcommand.h"
 
@@ -23,7 +25,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     setWindowTitle("表");
 //    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 //    setWindowFlag(Qt::WindowTitleHint, true);
-    setModal(true);
+//    setModal(true);
 
     m_standardItemModel = new QStandardItemModel(ui->tableView);
     ui->tableView->setModel(m_standardItemModel);
@@ -105,10 +107,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     });
 
     /* 创建UndoView */
-    undoView = new QUndoView(undoStack);
-    undoView->setWindowTitle(tr("Command List"));
-    undoView->show();
-    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+//    undoView = new QUndoView(undoStack);
+//    undoView->setWindowTitle(tr("Command List"));
+//    undoView->show();
+//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 
@@ -180,6 +182,10 @@ void StringToTableView::OnSaveData()
         {
             sResult = sResult + "[" + data.sKey + "] = ";
         }
+        else if (data.nKeyType == LUA_TSTRING)
+        {
+            sResult = sResult + data.sKey + " = ";
+        }
 
         if (data.nType == LUA_TSTRING)
         {
@@ -200,7 +206,23 @@ void StringToTableView::OnSaveData()
 
     qDebug() << "sResult = " << sResult;
     qDebug() << "m_sData = " << m_sData;
-    model->setData(index, sResult);
+
+    if (m_nLevel == 0)
+    {
+        TabWidgetCell* tabWidget = dynamic_cast<TabWidgetCell* >(parent());
+        if (tabWidget)
+        {
+            tabWidget->ChangeModelIndexData(index, sResult);
+        }
+    }
+    else
+    {
+        StringToTableView* view = static_cast<StringToTableView*>(parent());
+        if (view)
+        {
+            view->ChangeModelIndexData(index, sResult);
+        }
+    }
 }
 
 void StringToTableView::Flush()
@@ -380,4 +402,58 @@ void StringToTableView::SetParam()
     }
 
     Flush();
+}
+
+
+void StringToTableView::keyPressEvent(QKeyEvent *ev)
+{
+    if (ev->key() == Qt::Key_Z  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        undo();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_Y  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        redo();
+        return;
+    }
+}
+
+//撤销
+void StringToTableView::undo()
+{
+    if (undoStack->canUndo())
+    {
+        undoAction->trigger();
+    }
+
+    if (!undoStack->canUndo())
+    {
+        m_bDataChange = false;
+    }
+}
+
+//返回撤销
+void StringToTableView::redo()
+{
+    if (undoStack->canRedo())
+    {
+        redoAction->trigger();
+    }
+}
+
+void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
+{
+    if (m_standardItemModel)
+    {
+        QVariant oldData = index.data();
+        QVariant data = QVariant(sData);
+
+        if (data != oldData)
+        {
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            m_standardItemModel->setData(index, data);
+        }
+    }
 }
