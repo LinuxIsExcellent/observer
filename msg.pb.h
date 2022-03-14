@@ -506,7 +506,7 @@ class server_send_file_tree_notify final :
     kLuaTableFileNamesFieldNumber = 2,
     kGroupNamesFieldNumber = 3,
   };
-  // repeated string lua_file_names = 1;
+  // repeated bytes lua_file_names = 1;
   int lua_file_names_size() const;
   private:
   int _internal_lua_file_names_size() const;
@@ -517,12 +517,12 @@ class server_send_file_tree_notify final :
   void set_lua_file_names(int index, const std::string& value);
   void set_lua_file_names(int index, std::string&& value);
   void set_lua_file_names(int index, const char* value);
-  void set_lua_file_names(int index, const char* value, size_t size);
+  void set_lua_file_names(int index, const void* value, size_t size);
   std::string* add_lua_file_names();
   void add_lua_file_names(const std::string& value);
   void add_lua_file_names(std::string&& value);
   void add_lua_file_names(const char* value);
-  void add_lua_file_names(const char* value, size_t size);
+  void add_lua_file_names(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& lua_file_names() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_lua_file_names();
   private:
@@ -530,7 +530,7 @@ class server_send_file_tree_notify final :
   std::string* _internal_add_lua_file_names();
   public:
 
-  // repeated string lua_table_file_names = 2;
+  // repeated bytes lua_table_file_names = 2;
   int lua_table_file_names_size() const;
   private:
   int _internal_lua_table_file_names_size() const;
@@ -541,12 +541,12 @@ class server_send_file_tree_notify final :
   void set_lua_table_file_names(int index, const std::string& value);
   void set_lua_table_file_names(int index, std::string&& value);
   void set_lua_table_file_names(int index, const char* value);
-  void set_lua_table_file_names(int index, const char* value, size_t size);
+  void set_lua_table_file_names(int index, const void* value, size_t size);
   std::string* add_lua_table_file_names();
   void add_lua_table_file_names(const std::string& value);
   void add_lua_table_file_names(std::string&& value);
   void add_lua_table_file_names(const char* value);
-  void add_lua_table_file_names(const char* value, size_t size);
+  void add_lua_table_file_names(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& lua_table_file_names() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_lua_table_file_names();
   private:
@@ -554,7 +554,7 @@ class server_send_file_tree_notify final :
   std::string* _internal_add_lua_table_file_names();
   public:
 
-  // repeated string group_names = 3;
+  // repeated bytes group_names = 3;
   int group_names_size() const;
   private:
   int _internal_group_names_size() const;
@@ -565,12 +565,12 @@ class server_send_file_tree_notify final :
   void set_group_names(int index, const std::string& value);
   void set_group_names(int index, std::string&& value);
   void set_group_names(int index, const char* value);
-  void set_group_names(int index, const char* value, size_t size);
+  void set_group_names(int index, const void* value, size_t size);
   std::string* add_group_names();
   void add_group_names(const std::string& value);
   void add_group_names(std::string&& value);
   void add_group_names(const char* value);
-  void add_group_names(const char* value, size_t size);
+  void add_group_names(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& group_names() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_group_names();
   private:
@@ -717,7 +717,7 @@ class server_send_shell_config_notify final :
   enum : int {
     kShellOpsFieldNumber = 1,
   };
-  // repeated string shell_ops = 1;
+  // repeated bytes shell_ops = 1;
   int shell_ops_size() const;
   private:
   int _internal_shell_ops_size() const;
@@ -728,12 +728,12 @@ class server_send_shell_config_notify final :
   void set_shell_ops(int index, const std::string& value);
   void set_shell_ops(int index, std::string&& value);
   void set_shell_ops(int index, const char* value);
-  void set_shell_ops(int index, const char* value, size_t size);
+  void set_shell_ops(int index, const void* value, size_t size);
   std::string* add_shell_ops();
   void add_shell_ops(const std::string& value);
   void add_shell_ops(std::string&& value);
   void add_shell_ops(const char* value);
-  void add_shell_ops(const char* value, size_t size);
+  void add_shell_ops(const void* value, size_t size);
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& shell_ops() const;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_shell_ops();
   private:
@@ -878,7 +878,7 @@ class client_lua_table_data_quest final :
   enum : int {
     kFileNameFieldNumber = 1,
   };
-  // string file_name = 1;
+  // bytes file_name = 1;
   void clear_file_name();
   const std::string& file_name() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1029,7 +1029,7 @@ class client_shell_option_quest final :
   enum : int {
     kOptionFieldNumber = 1,
   };
-  // string option = 1;
+  // bytes option = 1;
   void clear_option();
   const std::string& option() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -1181,7 +1181,7 @@ class server_send_current_time_notify final :
     kTimeZoneFieldNumber = 2,
     kTimeStampFieldNumber = 1,
   };
-  // string time_zone = 2;
+  // bytes time_zone = 2;
   void clear_time_zone();
   const std::string& time_zone() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2023,31 +2023,9 @@ class field_squence final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLevelsFieldNumber = 1,
     kInfosFieldNumber = 2,
+    kIndexFieldNumber = 1,
   };
-  // repeated int32 levels = 1;
-  int levels_size() const;
-  private:
-  int _internal_levels_size() const;
-  public:
-  void clear_levels();
-  private:
-  int32_t _internal_levels(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-      _internal_levels() const;
-  void _internal_add_levels(int32_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-      _internal_mutable_levels();
-  public:
-  int32_t levels(int index) const;
-  void set_levels(int index, int32_t value);
-  void add_levels(int32_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-      levels() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-      mutable_levels();
-
   // repeated .test_2.field_info infos = 2;
   int infos_size() const;
   private:
@@ -2066,6 +2044,20 @@ class field_squence final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_info >&
       infos() const;
 
+  // string index = 1;
+  void clear_index();
+  const std::string& index() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_index(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_index();
+  PROTOBUF_NODISCARD std::string* release_index();
+  void set_allocated_index(std::string* index);
+  private:
+  const std::string& _internal_index() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_index(const std::string& value);
+  std::string* _internal_mutable_index();
+  public:
+
   // @@protoc_insertion_point(class_scope:test_2.field_squence)
  private:
   class _Internal;
@@ -2073,9 +2065,8 @@ class field_squence final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > levels_;
-  mutable std::atomic<int> _levels_cached_byte_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_info > infos_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr index_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -4778,7 +4769,7 @@ class send_process_listening_status_info final :
 
 // server_send_file_tree_notify
 
-// repeated string lua_file_names = 1;
+// repeated bytes lua_file_names = 1;
 inline int server_send_file_tree_notify::_internal_lua_file_names_size() const {
   return lua_file_names_.size();
 }
@@ -4817,7 +4808,7 @@ inline void server_send_file_tree_notify::set_lua_file_names(int index, const ch
   lua_file_names_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.server_send_file_tree_notify.lua_file_names)
 }
-inline void server_send_file_tree_notify::set_lua_file_names(int index, const char* value, size_t size) {
+inline void server_send_file_tree_notify::set_lua_file_names(int index, const void* value, size_t size) {
   lua_file_names_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.server_send_file_tree_notify.lua_file_names)
@@ -4838,7 +4829,7 @@ inline void server_send_file_tree_notify::add_lua_file_names(const char* value) 
   lua_file_names_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.server_send_file_tree_notify.lua_file_names)
 }
-inline void server_send_file_tree_notify::add_lua_file_names(const char* value, size_t size) {
+inline void server_send_file_tree_notify::add_lua_file_names(const void* value, size_t size) {
   lua_file_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.server_send_file_tree_notify.lua_file_names)
 }
@@ -4853,7 +4844,7 @@ server_send_file_tree_notify::mutable_lua_file_names() {
   return &lua_file_names_;
 }
 
-// repeated string lua_table_file_names = 2;
+// repeated bytes lua_table_file_names = 2;
 inline int server_send_file_tree_notify::_internal_lua_table_file_names_size() const {
   return lua_table_file_names_.size();
 }
@@ -4892,7 +4883,7 @@ inline void server_send_file_tree_notify::set_lua_table_file_names(int index, co
   lua_table_file_names_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.server_send_file_tree_notify.lua_table_file_names)
 }
-inline void server_send_file_tree_notify::set_lua_table_file_names(int index, const char* value, size_t size) {
+inline void server_send_file_tree_notify::set_lua_table_file_names(int index, const void* value, size_t size) {
   lua_table_file_names_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.server_send_file_tree_notify.lua_table_file_names)
@@ -4913,7 +4904,7 @@ inline void server_send_file_tree_notify::add_lua_table_file_names(const char* v
   lua_table_file_names_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.server_send_file_tree_notify.lua_table_file_names)
 }
-inline void server_send_file_tree_notify::add_lua_table_file_names(const char* value, size_t size) {
+inline void server_send_file_tree_notify::add_lua_table_file_names(const void* value, size_t size) {
   lua_table_file_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.server_send_file_tree_notify.lua_table_file_names)
 }
@@ -4928,7 +4919,7 @@ server_send_file_tree_notify::mutable_lua_table_file_names() {
   return &lua_table_file_names_;
 }
 
-// repeated string group_names = 3;
+// repeated bytes group_names = 3;
 inline int server_send_file_tree_notify::_internal_group_names_size() const {
   return group_names_.size();
 }
@@ -4967,7 +4958,7 @@ inline void server_send_file_tree_notify::set_group_names(int index, const char*
   group_names_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.server_send_file_tree_notify.group_names)
 }
-inline void server_send_file_tree_notify::set_group_names(int index, const char* value, size_t size) {
+inline void server_send_file_tree_notify::set_group_names(int index, const void* value, size_t size) {
   group_names_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.server_send_file_tree_notify.group_names)
@@ -4988,7 +4979,7 @@ inline void server_send_file_tree_notify::add_group_names(const char* value) {
   group_names_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.server_send_file_tree_notify.group_names)
 }
-inline void server_send_file_tree_notify::add_group_names(const char* value, size_t size) {
+inline void server_send_file_tree_notify::add_group_names(const void* value, size_t size) {
   group_names_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.server_send_file_tree_notify.group_names)
 }
@@ -5007,7 +4998,7 @@ server_send_file_tree_notify::mutable_group_names() {
 
 // server_send_shell_config_notify
 
-// repeated string shell_ops = 1;
+// repeated bytes shell_ops = 1;
 inline int server_send_shell_config_notify::_internal_shell_ops_size() const {
   return shell_ops_.size();
 }
@@ -5046,7 +5037,7 @@ inline void server_send_shell_config_notify::set_shell_ops(int index, const char
   shell_ops_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:test_2.server_send_shell_config_notify.shell_ops)
 }
-inline void server_send_shell_config_notify::set_shell_ops(int index, const char* value, size_t size) {
+inline void server_send_shell_config_notify::set_shell_ops(int index, const void* value, size_t size) {
   shell_ops_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:test_2.server_send_shell_config_notify.shell_ops)
@@ -5067,7 +5058,7 @@ inline void server_send_shell_config_notify::add_shell_ops(const char* value) {
   shell_ops_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:test_2.server_send_shell_config_notify.shell_ops)
 }
-inline void server_send_shell_config_notify::add_shell_ops(const char* value, size_t size) {
+inline void server_send_shell_config_notify::add_shell_ops(const void* value, size_t size) {
   shell_ops_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:test_2.server_send_shell_config_notify.shell_ops)
 }
@@ -5086,7 +5077,7 @@ server_send_shell_config_notify::mutable_shell_ops() {
 
 // client_lua_table_data_quest
 
-// string file_name = 1;
+// bytes file_name = 1;
 inline void client_lua_table_data_quest::clear_file_name() {
   file_name_.ClearToEmpty();
 }
@@ -5098,7 +5089,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void client_lua_table_data_quest::set_file_name(ArgT0&& arg0, ArgT... args) {
  
- file_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ file_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.client_lua_table_data_quest.file_name)
 }
 inline std::string* client_lua_table_data_quest::mutable_file_name() {
@@ -5141,7 +5132,7 @@ inline void client_lua_table_data_quest::set_allocated_file_name(std::string* fi
 
 // client_shell_option_quest
 
-// string option = 1;
+// bytes option = 1;
 inline void client_shell_option_quest::clear_option() {
   option_.ClearToEmpty();
 }
@@ -5153,7 +5144,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void client_shell_option_quest::set_option(ArgT0&& arg0, ArgT... args) {
  
- option_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ option_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.client_shell_option_quest.option)
 }
 inline std::string* client_shell_option_quest::mutable_option() {
@@ -5216,7 +5207,7 @@ inline void server_send_current_time_notify::set_time_stamp(int64_t value) {
   // @@protoc_insertion_point(field_set:test_2.server_send_current_time_notify.time_stamp)
 }
 
-// string time_zone = 2;
+// bytes time_zone = 2;
 inline void server_send_current_time_notify::clear_time_zone() {
   time_zone_.ClearToEmpty();
 }
@@ -5228,7 +5219,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void server_send_current_time_notify::set_time_zone(ArgT0&& arg0, ArgT... args) {
  
- time_zone_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ time_zone_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.server_send_current_time_notify.time_zone)
 }
 inline std::string* server_send_current_time_notify::mutable_time_zone() {
@@ -5704,51 +5695,55 @@ inline void field_info::set_allocated_field_link(std::string* field_link) {
 
 // field_squence
 
-// repeated int32 levels = 1;
-inline int field_squence::_internal_levels_size() const {
-  return levels_.size();
+// string index = 1;
+inline void field_squence::clear_index() {
+  index_.ClearToEmpty();
 }
-inline int field_squence::levels_size() const {
-  return _internal_levels_size();
+inline const std::string& field_squence::index() const {
+  // @@protoc_insertion_point(field_get:test_2.field_squence.index)
+  return _internal_index();
 }
-inline void field_squence::clear_levels() {
-  levels_.Clear();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void field_squence::set_index(ArgT0&& arg0, ArgT... args) {
+ 
+ index_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.field_squence.index)
 }
-inline int32_t field_squence::_internal_levels(int index) const {
-  return levels_.Get(index);
+inline std::string* field_squence::mutable_index() {
+  std::string* _s = _internal_mutable_index();
+  // @@protoc_insertion_point(field_mutable:test_2.field_squence.index)
+  return _s;
 }
-inline int32_t field_squence::levels(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.field_squence.levels)
-  return _internal_levels(index);
+inline const std::string& field_squence::_internal_index() const {
+  return index_.Get();
 }
-inline void field_squence::set_levels(int index, int32_t value) {
-  levels_.Set(index, value);
-  // @@protoc_insertion_point(field_set:test_2.field_squence.levels)
+inline void field_squence::_internal_set_index(const std::string& value) {
+  
+  index_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline void field_squence::_internal_add_levels(int32_t value) {
-  levels_.Add(value);
+inline std::string* field_squence::_internal_mutable_index() {
+  
+  return index_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline void field_squence::add_levels(int32_t value) {
-  _internal_add_levels(value);
-  // @@protoc_insertion_point(field_add:test_2.field_squence.levels)
+inline std::string* field_squence::release_index() {
+  // @@protoc_insertion_point(field_release:test_2.field_squence.index)
+  return index_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-field_squence::_internal_levels() const {
-  return levels_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
-field_squence::levels() const {
-  // @@protoc_insertion_point(field_list:test_2.field_squence.levels)
-  return _internal_levels();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-field_squence::_internal_mutable_levels() {
-  return &levels_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
-field_squence::mutable_levels() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.field_squence.levels)
-  return _internal_mutable_levels();
+inline void field_squence::set_allocated_index(std::string* index) {
+  if (index != nullptr) {
+    
+  } else {
+    
+  }
+  index_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), index,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (index_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    index_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.field_squence.index)
 }
 
 // repeated .test_2.field_info infos = 2;

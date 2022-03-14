@@ -54,14 +54,14 @@
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>cancel</string>
+         <string>取消</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_2">
         <property name="text">
-         <string>confirm</string>
+         <string>确认</string>
         </property>
        </widget>
       </item>

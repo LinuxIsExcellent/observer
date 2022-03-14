@@ -50,7 +50,7 @@ void AnnonationEditWidget::OnQuit()
 {
     if (m_bModify)
     {
-        emit SaveAnnonationsSignal(ui->textEdit->toPlainText(), m_sField);
+        emit SaveAnnonationsSignal("field_sequence", ui->textEdit->toPlainText(), m_sField);
     }
     this->hide();
 }

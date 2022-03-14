@@ -60,6 +60,7 @@ public:
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
+    bool eventFilter(QObject *obj, QEvent *eve);
 private slots:
     std::string ParseLuaTableToString(lua_State *L);
 

@@ -13,6 +13,7 @@
 #include <QUndoStack>
 #include <QUndoView>
 #include <QAction>
+#include <QItemSelectionModel>
 #include "mainwindow.h"
 #include "annonationeditwidget.h"
 
@@ -79,7 +80,7 @@ public:
         return m_bTableDataChange;
     }
 
-    virtual bool SetFieldLink(QString sField, QString sFieldLink){};
+    virtual void SetFieldLink(QString sField, QString sFieldLink){};
 
     //设置数据有改变
     void ChangeDataModify();
@@ -121,7 +122,9 @@ private slots:
 
     void OnItemDataChange(QStandardItem *item);
 
-    virtual void OnSaveAnnonations(QString str, QString sField){}
+//    void onCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
+
+    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
 
     void OnSaveButtonClicked();
 public:

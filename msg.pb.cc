@@ -146,9 +146,8 @@ struct field_infoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT field_infoDefaultTypeInternal _field_info_default_instance_;
 constexpr field_squence::field_squence(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : levels_()
-  , _levels_cached_byte_size_(0)
-  , infos_(){}
+  : infos_()
+  , index_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
 struct field_squenceDefaultTypeInternal {
   constexpr field_squenceDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -455,7 +454,7 @@ const uint32_t TableStruct_msg_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::test_2::field_squence, levels_),
+  PROTOBUF_FIELD_OFFSET(::test_2::field_squence, index_),
   PROTOBUF_FIELD_OFFSET(::test_2::field_squence, infos_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::test_2::table_data, _internal_metadata_),
@@ -649,73 +648,73 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\tmsg.proto\022\006test_2\"\026\n\024client_login_requ"
   "est\"i\n\034server_send_file_tree_notify\022\026\n\016l"
-  "ua_file_names\030\001 \003(\t\022\034\n\024lua_table_file_na"
-  "mes\030\002 \003(\t\022\023\n\013group_names\030\003 \003(\t\"4\n\037server"
+  "ua_file_names\030\001 \003(\014\022\034\n\024lua_table_file_na"
+  "mes\030\002 \003(\014\022\023\n\013group_names\030\003 \003(\014\"4\n\037server"
   "_send_shell_config_notify\022\021\n\tshell_ops\030\001"
-  " \003(\t\"0\n\033client_lua_table_data_quest\022\021\n\tf"
-  "ile_name\030\001 \001(\t\"+\n\031client_shell_option_qu"
-  "est\022\016\n\006option\030\001 \001(\t\"H\n\037server_send_curre"
+  " \003(\014\"0\n\033client_lua_table_data_quest\022\021\n\tf"
+  "ile_name\030\001 \001(\014\"+\n\031client_shell_option_qu"
+  "est\022\016\n\006option\030\001 \001(\014\"H\n\037server_send_curre"
   "nt_time_notify\022\022\n\ntime_stamp\030\001 \001(\003\022\021\n\tti"
-  "me_zone\030\002 \001(\t\"(\n\npair_value\022\013\n\003key\030\001 \001(\014"
+  "me_zone\030\002 \001(\014\"(\n\npair_value\022\013\n\003key\030\001 \001(\014"
   "\022\r\n\005value\030\002 \001(\014\"0\n\017field_type_pair\022\013\n\003ke"
   "y\030\001 \001(\014\022\020\n\010lua_type\030\002 \001(\005\"9\n\010row_data\022\013\n"
   "\003key\030\001 \001(\014\022 \n\004pair\030\002 \003(\0132\022.test_2.pair_v"
   "alue\"H\n\nfield_info\022\022\n\nfield_name\030\001 \001(\014\022\022"
-  "\n\nfield_desc\030\002 \001(\014\022\022\n\nfield_link\030\003 \001(\014\"B"
-  "\n\rfield_squence\022\016\n\006levels\030\001 \003(\005\022!\n\005infos"
-  "\030\002 \003(\0132\022.test_2.field_info\"\341\001\n\ntable_dat"
-  "a\022\022\n\ntable_name\030\001 \001(\014\022\021\n\trow_count\030\002 \001(\005"
-  "\022\024\n\014column_count\030\003 \001(\005\022\023\n\013filed_names\030\004 "
-  "\003(\014\022,\n\013filed_types\030\005 \003(\0132\027.test_2.field_"
-  "type_pair\022#\n\trow_lists\030\006 \003(\0132\020.test_2.ro"
-  "w_data\022.\n\017filed_sequences\030\007 \003(\0132\025.test_2"
-  ".field_squence\"P\n\ntable_info\022\022\n\ntable_na"
-  "me\030\001 \001(\014\022.\n\017filed_sequences\030\002 \003(\0132\025.test"
-  "_2.field_squence\"Y\n\036client_save_table_da"
-  "ta_request\022\022\n\ntable_name\030\001 \001(\014\022#\n\trow_li"
-  "sts\030\002 \003(\0132\020.test_2.row_data\"<\n\036send_shel"
-  "l_option_print_notify\022\014\n\004line\030\001 \001(\014\022\014\n\004f"
-  "lag\030\002 \001(\005\"c\n\036client_save_table_info_requ"
-  "est\022\022\n\ntable_name\030\001 \001(\014\022-\n\016field_squence"
-  "s\030\002 \003(\0132\025.test_2.field_squence\"/\n\037send_s"
-  "erver_current_time_nofity\022\014\n\004time\030\001 \001(\003\""
-  "/\n\037client_modify_server_time_quest\022\014\n\004ti"
-  "me\030\001 \001(\003\"/\n\032client_lua_list_data_quest\022\021"
-  "\n\tfile_name\030\001 \001(\014\"@\n\024field_type_key_valu"
-  "e\022\013\n\003key\030\001 \001(\014\022\r\n\005value\030\002 \001(\014\022\014\n\004type\030\003 "
-  "\001(\005\"b\n\031send_lua_list_data_notify\022\022\n\ntabl"
-  "e_name\030\001 \001(\014\0221\n\013filed_types\030\002 \003(\0132\034.test"
-  "_2.field_type_key_value\"c\n\032save_lua_list"
-  "_data_request\022\022\n\ntable_name\030\001 \001(\014\0221\n\013fil"
-  "ed_types\030\002 \003(\0132\034.test_2.field_type_key_v"
-  "alue\"\036\n\034client_field_link_info_quest\"6\n\020"
-  "table_field_list\022\022\n\ntable_name\030\001 \001(\014\022\016\n\006"
-  "fields\030\002 \003(\014\"g\n\024send_field_link_info\022\'\n\005"
-  "table\030\001 \003(\0132\030.test_2.table_field_list\022&\n"
-  "\004list\030\002 \003(\0132\030.test_2.table_field_list\";\n"
-  "\023process_statue_info\022\024\n\014process_name\030\002 \001"
-  "(\014\022\016\n\006statue\030\003 \001(\005\"P\n\"send_process_liste"
-  "ning_status_info\022*\n\005infos\030\001 \003(\0132\033.test_2"
-  ".process_statue_info*\210\002\n\nclient_msg\022\021\n\rR"
-  "EQUEST_LOGIN\020\000\022\032\n\026REQUSET_LUA_TABLE_DATA"
-  "\020\001\022\033\n\027REQUSET_SAVE_TABLE_DATA\020\002\022\031\n\025REQUS"
-  "ET_SHELL_OPTIONS\020\003\022\033\n\027REQUEST_SAVE_TABLE"
-  "_INFO\020\004\022\036\n\032REQUEST_MODIFY_SERVER_TIME\020\005\022"
-  "\031\n\025REQUSET_LUA_LIST_DATA\020\006\022\036\n\032REQUSET_SA"
-  "VE_LUA_LIST_DATA\020\007\022\033\n\027REQUSET_FIELD_LINK"
-  "_INFO\020\010*\330\001\n\nserver_msg\022\027\n\023SEND_FILE_TREE"
-  "_INFO\020\000\022\024\n\020SEND_SERVER_TIME\020\001\022\027\n\023SEND_LU"
-  "A_TABLE_DATA\020\002\022\025\n\021SEND_SHELL_CONFIG\020\003\022\033\n"
-  "\027SEND_OPTION_SHELL_PRINT\020\004\022\026\n\022SEND_LUA_L"
-  "IST_DATA\020\005\022\030\n\024SEND_FIELD_LINK_DATA\020\006\022\034\n\030"
-  "SEND_PROCESS_STATUS_INFO\020\007*W\n\tDATA_TYPE\022"
-  "\014\n\010L_NUMBER\020\000\022\014\n\010L_STRING\020\001\022\n\n\006L_BOOL\020\002\022"
-  "\022\n\016L_TABLE_STRING\020\003\022\016\n\nL_FUNCTION\020\004b\006pro"
-  "to3"
+  "\n\nfield_desc\030\002 \001(\014\022\022\n\nfield_link\030\003 \001(\014\"A"
+  "\n\rfield_squence\022\r\n\005index\030\001 \001(\t\022!\n\005infos\030"
+  "\002 \003(\0132\022.test_2.field_info\"\341\001\n\ntable_data"
+  "\022\022\n\ntable_name\030\001 \001(\014\022\021\n\trow_count\030\002 \001(\005\022"
+  "\024\n\014column_count\030\003 \001(\005\022\023\n\013filed_names\030\004 \003"
+  "(\014\022,\n\013filed_types\030\005 \003(\0132\027.test_2.field_t"
+  "ype_pair\022#\n\trow_lists\030\006 \003(\0132\020.test_2.row"
+  "_data\022.\n\017filed_sequences\030\007 \003(\0132\025.test_2."
+  "field_squence\"P\n\ntable_info\022\022\n\ntable_nam"
+  "e\030\001 \001(\014\022.\n\017filed_sequences\030\002 \003(\0132\025.test_"
+  "2.field_squence\"Y\n\036client_save_table_dat"
+  "a_request\022\022\n\ntable_name\030\001 \001(\014\022#\n\trow_lis"
+  "ts\030\002 \003(\0132\020.test_2.row_data\"<\n\036send_shell"
+  "_option_print_notify\022\014\n\004line\030\001 \001(\014\022\014\n\004fl"
+  "ag\030\002 \001(\005\"c\n\036client_save_table_info_reque"
+  "st\022\022\n\ntable_name\030\001 \001(\014\022-\n\016field_squences"
+  "\030\002 \003(\0132\025.test_2.field_squence\"/\n\037send_se"
+  "rver_current_time_nofity\022\014\n\004time\030\001 \001(\003\"/"
+  "\n\037client_modify_server_time_quest\022\014\n\004tim"
+  "e\030\001 \001(\003\"/\n\032client_lua_list_data_quest\022\021\n"
+  "\tfile_name\030\001 \001(\014\"@\n\024field_type_key_value"
+  "\022\013\n\003key\030\001 \001(\014\022\r\n\005value\030\002 \001(\014\022\014\n\004type\030\003 \001"
+  "(\005\"b\n\031send_lua_list_data_notify\022\022\n\ntable"
+  "_name\030\001 \001(\014\0221\n\013filed_types\030\002 \003(\0132\034.test_"
+  "2.field_type_key_value\"c\n\032save_lua_list_"
+  "data_request\022\022\n\ntable_name\030\001 \001(\014\0221\n\013file"
+  "d_types\030\002 \003(\0132\034.test_2.field_type_key_va"
+  "lue\"\036\n\034client_field_link_info_quest\"6\n\020t"
+  "able_field_list\022\022\n\ntable_name\030\001 \001(\014\022\016\n\006f"
+  "ields\030\002 \003(\014\"g\n\024send_field_link_info\022\'\n\005t"
+  "able\030\001 \003(\0132\030.test_2.table_field_list\022&\n\004"
+  "list\030\002 \003(\0132\030.test_2.table_field_list\";\n\023"
+  "process_statue_info\022\024\n\014process_name\030\002 \001("
+  "\014\022\016\n\006statue\030\003 \001(\005\"P\n\"send_process_listen"
+  "ing_status_info\022*\n\005infos\030\001 \003(\0132\033.test_2."
+  "process_statue_info*\210\002\n\nclient_msg\022\021\n\rRE"
+  "QUEST_LOGIN\020\000\022\032\n\026REQUSET_LUA_TABLE_DATA\020"
+  "\001\022\033\n\027REQUSET_SAVE_TABLE_DATA\020\002\022\031\n\025REQUSE"
+  "T_SHELL_OPTIONS\020\003\022\033\n\027REQUEST_SAVE_TABLE_"
+  "INFO\020\004\022\036\n\032REQUEST_MODIFY_SERVER_TIME\020\005\022\031"
+  "\n\025REQUSET_LUA_LIST_DATA\020\006\022\036\n\032REQUSET_SAV"
+  "E_LUA_LIST_DATA\020\007\022\033\n\027REQUSET_FIELD_LINK_"
+  "INFO\020\010*\330\001\n\nserver_msg\022\027\n\023SEND_FILE_TREE_"
+  "INFO\020\000\022\024\n\020SEND_SERVER_TIME\020\001\022\027\n\023SEND_LUA"
+  "_TABLE_DATA\020\002\022\025\n\021SEND_SHELL_CONFIG\020\003\022\033\n\027"
+  "SEND_OPTION_SHELL_PRINT\020\004\022\026\n\022SEND_LUA_LI"
+  "ST_DATA\020\005\022\030\n\024SEND_FIELD_LINK_DATA\020\006\022\034\n\030S"
+  "END_PROCESS_STATUS_INFO\020\007*W\n\tDATA_TYPE\022\014"
+  "\n\010L_NUMBER\020\000\022\014\n\010L_STRING\020\001\022\n\n\006L_BOOL\020\002\022\022"
+  "\n\016L_TABLE_STRING\020\003\022\016\n\nL_FUNCTION\020\004b\006prot"
+  "o3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_msg_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_msg_2eproto = {
-  false, false, 2563, descriptor_table_protodef_msg_2eproto, "msg.proto", 
+  false, false, 2562, descriptor_table_protodef_msg_2eproto, "msg.proto", 
   &descriptor_table_msg_2eproto_once, nullptr, 0, 27,
   schemas, file_default_instances, TableStruct_msg_2eproto::offsets,
   file_level_metadata_msg_2eproto, file_level_enum_descriptors_msg_2eproto, file_level_service_descriptors_msg_2eproto,
@@ -894,7 +893,7 @@ const char* server_send_file_tree_notify::_InternalParse(const char* ptr, ::PROT
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated string lua_file_names = 1;
+      // repeated bytes lua_file_names = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -902,14 +901,13 @@ const char* server_send_file_tree_notify::_InternalParse(const char* ptr, ::PROT
             ptr += 1;
             auto str = _internal_add_lua_file_names();
             ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.server_send_file_tree_notify.lua_file_names"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated string lua_table_file_names = 2;
+      // repeated bytes lua_table_file_names = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           ptr -= 1;
@@ -917,14 +915,13 @@ const char* server_send_file_tree_notify::_InternalParse(const char* ptr, ::PROT
             ptr += 1;
             auto str = _internal_add_lua_table_file_names();
             ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.server_send_file_tree_notify.lua_table_file_names"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated string group_names = 3;
+      // repeated bytes group_names = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr -= 1;
@@ -932,7 +929,6 @@ const char* server_send_file_tree_notify::_InternalParse(const char* ptr, ::PROT
             ptr += 1;
             auto str = _internal_add_group_names();
             ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.server_send_file_tree_notify.group_names"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
@@ -968,34 +964,22 @@ uint8_t* server_send_file_tree_notify::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated string lua_file_names = 1;
+  // repeated bytes lua_file_names = 1;
   for (int i = 0, n = this->_internal_lua_file_names_size(); i < n; i++) {
     const auto& s = this->_internal_lua_file_names(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.server_send_file_tree_notify.lua_file_names");
-    target = stream->WriteString(1, s, target);
+    target = stream->WriteBytes(1, s, target);
   }
 
-  // repeated string lua_table_file_names = 2;
+  // repeated bytes lua_table_file_names = 2;
   for (int i = 0, n = this->_internal_lua_table_file_names_size(); i < n; i++) {
     const auto& s = this->_internal_lua_table_file_names(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.server_send_file_tree_notify.lua_table_file_names");
-    target = stream->WriteString(2, s, target);
+    target = stream->WriteBytes(2, s, target);
   }
 
-  // repeated string group_names = 3;
+  // repeated bytes group_names = 3;
   for (int i = 0, n = this->_internal_group_names_size(); i < n; i++) {
     const auto& s = this->_internal_group_names(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.server_send_file_tree_notify.group_names");
-    target = stream->WriteString(3, s, target);
+    target = stream->WriteBytes(3, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1014,27 +998,27 @@ size_t server_send_file_tree_notify::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string lua_file_names = 1;
+  // repeated bytes lua_file_names = 1;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(lua_file_names_.size());
   for (int i = 0, n = lua_file_names_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
       lua_file_names_.Get(i));
   }
 
-  // repeated string lua_table_file_names = 2;
+  // repeated bytes lua_table_file_names = 2;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(lua_table_file_names_.size());
   for (int i = 0, n = lua_table_file_names_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
       lua_table_file_names_.Get(i));
   }
 
-  // repeated string group_names = 3;
+  // repeated bytes group_names = 3;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(group_names_.size());
   for (int i = 0, n = group_names_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
       group_names_.Get(i));
   }
 
@@ -1154,7 +1138,7 @@ const char* server_send_shell_config_notify::_InternalParse(const char* ptr, ::P
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated string shell_ops = 1;
+      // repeated bytes shell_ops = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
@@ -1162,7 +1146,6 @@ const char* server_send_shell_config_notify::_InternalParse(const char* ptr, ::P
             ptr += 1;
             auto str = _internal_add_shell_ops();
             ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.server_send_shell_config_notify.shell_ops"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -1198,14 +1181,10 @@ uint8_t* server_send_shell_config_notify::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated string shell_ops = 1;
+  // repeated bytes shell_ops = 1;
   for (int i = 0, n = this->_internal_shell_ops_size(); i < n; i++) {
     const auto& s = this->_internal_shell_ops(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.server_send_shell_config_notify.shell_ops");
-    target = stream->WriteString(1, s, target);
+    target = stream->WriteBytes(1, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1224,11 +1203,11 @@ size_t server_send_shell_config_notify::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string shell_ops = 1;
+  // repeated bytes shell_ops = 1;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(shell_ops_.size());
   for (int i = 0, n = shell_ops_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
       shell_ops_.Get(i));
   }
 
@@ -1355,12 +1334,11 @@ const char* client_lua_table_data_quest::_InternalParse(const char* ptr, ::PROTO
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string file_name = 1;
+      // bytes file_name = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_file_name();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.client_lua_table_data_quest.file_name"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1394,13 +1372,9 @@ uint8_t* client_lua_table_data_quest::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string file_name = 1;
+  // bytes file_name = 1;
   if (!this->_internal_file_name().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_file_name().data(), static_cast<int>(this->_internal_file_name().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.client_lua_table_data_quest.file_name");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         1, this->_internal_file_name(), target);
   }
 
@@ -1420,10 +1394,10 @@ size_t client_lua_table_data_quest::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string file_name = 1;
+  // bytes file_name = 1;
   if (!this->_internal_file_name().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_file_name());
   }
 
@@ -1558,12 +1532,11 @@ const char* client_shell_option_quest::_InternalParse(const char* ptr, ::PROTOBU
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string option = 1;
+      // bytes option = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_option();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.client_shell_option_quest.option"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1597,13 +1570,9 @@ uint8_t* client_shell_option_quest::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string option = 1;
+  // bytes option = 1;
   if (!this->_internal_option().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_option().data(), static_cast<int>(this->_internal_option().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.client_shell_option_quest.option");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         1, this->_internal_option(), target);
   }
 
@@ -1623,10 +1592,10 @@ size_t client_shell_option_quest::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string option = 1;
+  // bytes option = 1;
   if (!this->_internal_option().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_option());
   }
 
@@ -1772,12 +1741,11 @@ const char* server_send_current_time_notify::_InternalParse(const char* ptr, ::P
         } else
           goto handle_unusual;
         continue;
-      // string time_zone = 2;
+      // bytes time_zone = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_time_zone();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.server_send_current_time_notify.time_zone"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1817,13 +1785,9 @@ uint8_t* server_send_current_time_notify::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->_internal_time_stamp(), target);
   }
 
-  // string time_zone = 2;
+  // bytes time_zone = 2;
   if (!this->_internal_time_zone().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_time_zone().data(), static_cast<int>(this->_internal_time_zone().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.server_send_current_time_notify.time_zone");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         2, this->_internal_time_zone(), target);
   }
 
@@ -1843,10 +1807,10 @@ size_t server_send_current_time_notify::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string time_zone = 2;
+  // bytes time_zone = 2;
   if (!this->_internal_time_zone().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_time_zone());
   }
 
@@ -2908,7 +2872,6 @@ class field_squence::_Internal {
 field_squence::field_squence(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  levels_(arena),
   infos_(arena) {
   SharedCtor();
   if (!is_message_owned) {
@@ -2918,13 +2881,24 @@ field_squence::field_squence(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 }
 field_squence::field_squence(const field_squence& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      levels_(from.levels_),
       infos_(from.infos_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  index_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    index_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_index().empty()) {
+    index_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_index(), 
+      GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:test_2.field_squence)
 }
 
 inline void field_squence::SharedCtor() {
+index_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  index_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 field_squence::~field_squence() {
@@ -2936,6 +2910,7 @@ field_squence::~field_squence() {
 
 inline void field_squence::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  index_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void field_squence::ArenaDtor(void* object) {
@@ -2954,8 +2929,8 @@ void field_squence::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  levels_.Clear();
   infos_.Clear();
+  index_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2965,13 +2940,12 @@ const char* field_squence::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated int32 levels = 1;
+      // string index = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_levels(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 8) {
-          _internal_add_levels(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          auto str = _internal_mutable_index();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.field_squence.index"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3018,13 +2992,14 @@ uint8_t* field_squence::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated int32 levels = 1;
-  {
-    int byte_size = _levels_cached_byte_size_.load(std::memory_order_relaxed);
-    if (byte_size > 0) {
-      target = stream->WriteInt32Packed(
-          1, _internal_levels(), byte_size, target);
-    }
+  // string index = 1;
+  if (!this->_internal_index().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_index().data(), static_cast<int>(this->_internal_index().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "test_2.field_squence.index");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_index(), target);
   }
 
   // repeated .test_2.field_info infos = 2;
@@ -3051,26 +3026,18 @@ size_t field_squence::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated int32 levels = 1;
-  {
-    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      Int32Size(this->levels_);
-    if (data_size > 0) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-            static_cast<int32_t>(data_size));
-    }
-    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
-    _levels_cached_byte_size_.store(cached_size,
-                                    std::memory_order_relaxed);
-    total_size += data_size;
-  }
-
   // repeated .test_2.field_info infos = 2;
   total_size += 1UL * this->_internal_infos_size();
   for (const auto& msg : this->infos_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string index = 1;
+  if (!this->_internal_index().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_index());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -3095,8 +3062,10 @@ void field_squence::MergeFrom(const field_squence& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  levels_.MergeFrom(from.levels_);
   infos_.MergeFrom(from.infos_);
+  if (!from._internal_index().empty()) {
+    _internal_set_index(from._internal_index());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -3113,9 +3082,15 @@ bool field_squence::IsInitialized() const {
 
 void field_squence::InternalSwap(field_squence* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  levels_.InternalSwap(&other->levels_);
   infos_.InternalSwap(&other->infos_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &index_, lhs_arena,
+      &other->index_, rhs_arena
+  );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata field_squence::GetMetadata() const {

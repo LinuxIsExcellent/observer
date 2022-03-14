@@ -70,8 +70,8 @@ public:
     {
         LoginDialog->setWindowTitle(QApplication::translate("LoginDialog", "Dialog", Q_NULLPTR));
         label->setText(QApplication::translate("LoginDialog", "\351\200\211\346\213\251\351\241\271\347\233\256", Q_NULLPTR));
-        connect_btn->setText(QApplication::translate("LoginDialog", "login", Q_NULLPTR));
-        quit_btn->setText(QApplication::translate("LoginDialog", "quit", Q_NULLPTR));
+        connect_btn->setText(QApplication::translate("LoginDialog", "登录", Q_NULLPTR));
+        quit_btn->setText(QApplication::translate("LoginDialog", "退出", Q_NULLPTR));
         close_button->setText(QApplication::translate("LoginDialog", "X", Q_NULLPTR));
     } // retranslateUi
 

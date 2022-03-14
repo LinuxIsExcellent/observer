@@ -80,25 +80,19 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
     });
 }
 
-bool LuaTableDataWidget::SetFieldLink(QString sField, QString sFieldLink)
+void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
 {
     qDebug() << "sField = " << sField;
     qDebug() << "sFieldLink = " << sFieldLink;
 
-    //把备注设置到容器里面
-    QVector<quint16> vNLevels;
-    for (auto& data : m_vFieldSquence)
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
-        // 这里只判断最外层
-        if (data.vNLevels.size() == 0)
+        for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
         {
-            for (auto & field : data.vSFieldSquences)
+            if (field.sFieldName == sField)
             {
-                if (field.sFieldName == sField)
-                {
-                    field.sFieldLink = sFieldLink;
-                    break;
-                }
+                field.sFieldLink = sFieldLink;
+                break;
             }
         }
     }
@@ -107,34 +101,28 @@ bool LuaTableDataWidget::SetFieldLink(QString sField, QString sFieldLink)
     ChangeDataModify();
 }
 
-void LuaTableDataWidget::InsertSquenceInfo(QVector<quint16> vNLevels, QVector<FIELDINFO> vFieldInfos)
+void LuaTableDataWidget::InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vFieldInfos)
 {
     FIELDSQUENCE fieldSquence;
-    fieldSquence.vNLevels = vNLevels;
+    fieldSquence.sIndex = sIndex;
     fieldSquence.vSFieldSquences = vFieldInfos;
 
-    m_vFieldSquence.push_back(fieldSquence);
+    m_mFieldSquence.insert(sIndex, fieldSquence);
 }
 
-void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
+void LuaTableDataWidget::OnSaveAnnonations(QString sIndex, QString str, QString sField)
 {
     //把备注设置到容器里面
-    QVector<quint16> vNLevels;
-
     bool isHas = false;
-    for (auto& data : m_vFieldSquence)
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
-        // 这里只判断最外层
-        if (data.vNLevels.size() == 0)
+        for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
         {
-            for (auto & field : data.vSFieldSquences)
+            isHas = true;
+            if (field.sFieldName == sField)
             {
-                isHas = true;
-                if (field.sFieldName == sField)
-                {
-                    field.sFieldAnnonation = str;
-                    break;
-                }
+                field.sFieldAnnonation = str;
+                break;
             }
         }
     }
@@ -161,7 +149,7 @@ void LuaTableDataWidget::OnSaveAnnonations(QString str, QString sField)
             vFieldInfos[nVisualIndex] = fieldInfo;
         }
 
-        InsertSquenceInfo(vNLevels, vFieldInfos);
+        InsertSquenceInfo(sIndex, vFieldInfos);
     }
 
     m_bHeadIndexChange = true;
@@ -392,21 +380,15 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
         m_tableData.nRow = proto.row_count();
         m_tableData.nColumn = proto.column_count();
 
-        m_vFieldSquence.clear();
+        m_mFieldSquence.clear();
         //TODO 二维深层次展开的时候需要用上
         for (int i = 0; i < proto.filed_sequences_size();++i)
         {
             test_2::field_squence fieldSquence = proto.filed_sequences(i);
 
+            QString sIndex = QString::fromStdString(fieldSquence.index());
+
             FIELDSQUENCE squence;
-            for (int j = 0; j < fieldSquence.levels_size();++j)
-            {
-                int nLevel = fieldSquence.levels(j);
-
-                squence.vNLevels.push_back(nLevel);
-            }
-
-
             for (int j = 0; j < fieldSquence.infos_size();++j)
             {
                 FIELDINFO fieldInfo;
@@ -418,7 +400,7 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
                 squence.vSFieldSquences.push_back(fieldInfo);
             }
 
-            m_vFieldSquence.push_back(squence);
+            m_mFieldSquence.insert(sIndex, squence);
         }
 
 //        qDebug() << "深度队列： " << m_vFieldSquence;

@@ -38,6 +38,12 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnCancelButtonClicked()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(OnConfirmButtonClicked()));
 
+    //实现交换两行的效果
+    ui->tableView->viewport()->installEventFilter(this);
+    ui->tableView->setDragDropMode(QAbstractItemView::DragDrop);
+    ui->tableView->setDragEnabled(true);
+    ui->tableView->setAcceptDrops(true);
+
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
@@ -93,7 +99,9 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     connect(delegate, &TableDelegate::beginEdit, this, [ = ]()
     {
         QModelIndex index = ui->tableView->currentIndex();
+        disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
         m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
+        connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     });
     connect(delegate, &TableDelegate::closeEditor, this, [ = ]()
     {
@@ -456,4 +464,74 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
             m_standardItemModel->setData(index, data);
         }
     }
+}
+
+bool StringToTableView::eventFilter(QObject *obj, QEvent *eve)
+{
+    if (obj == ui->tableView->viewport())
+    {
+        if (eve->type() == QEvent::Drop)
+        {
+            const QMimeData* mime = ((QDropEvent*)eve)->mimeData();
+            QByteArray encodedata =  mime->data("application/x-qabstractitemmodeldatalist");
+            if (encodedata.isEmpty())
+            {
+                return false;
+            }
+
+            QDataStream stream(&encodedata, QIODevice::ReadOnly);
+            ModifCommandList commandList;
+            while(!stream.atEnd())
+            {
+                int row, col;
+
+                QMap<int, QVariant> roleDataMap;
+                stream >> row >> col >> roleDataMap;
+
+                QModelIndex index = ui->tableView->indexAt(((QDropEvent*)eve)->pos());
+                int targetRow = index.row();
+
+                if (targetRow >= 0 && targetRow != row)
+                {
+                    //只能交换同一列的数据，不能跨列拖拽
+                    //交换单元格的数据
+                    QModelIndex sourceIndex = m_standardItemModel->index(row, col);
+                    QModelIndex targetIndex = m_standardItemModel->index(targetRow, col);
+                    QVariant targetData = targetIndex.data();
+                    QVariant suorceData = sourceIndex.data();
+
+                    m_standardItemModel->setData(sourceIndex, targetData);
+                    m_standardItemModel->setData(targetIndex, roleDataMap.find(0).value());
+
+                    ModifInfo sourceInfo;
+                    sourceInfo.index = sourceIndex;
+                    sourceInfo.oldData = suorceData;
+                    sourceInfo.data = targetData;
+
+                    ModifInfo targetInfo;
+                    targetInfo.index = targetIndex;
+                    targetInfo.oldData = targetData;
+                    targetInfo.data = suorceData;
+
+                    commandList.push_front(sourceInfo);
+                    commandList.push_front(targetInfo);
+
+                    m_bDataChange = true;
+                }
+            }
+
+            if (commandList.size() > 0)
+            {
+                undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+            }
+
+            return true;
+        }
+        else
+        {
+            return QWidget::eventFilter(obj, eve);
+        }
+    }
+
+    return QWidget::eventFilter(obj, eve);
 }

@@ -24,7 +24,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_annonationWidget->raise();
     m_annonationWidget->hide();
 
-    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, QString)), this, SLOT(OnSaveAnnonations(QString, QString)));
+    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, QString, QString)), this, SLOT(OnSaveAnnonations(QString, QString, QString)));
 
     hlayout_top = new QHBoxLayout(m_topWidget);
 
@@ -89,8 +89,9 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
 
     m_standardItemModel = new QStandardItemModel(m_tableView);
-    m_tableView->setModel(m_standardItemModel);
+
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
+    m_tableView->setModel(m_standardItemModel);
 
     //实现交换两行的效果
     m_tableView->viewport()->installEventFilter(this);
@@ -144,7 +145,9 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     connect(delegate, &TableDelegate::beginEdit, this, [ = ]()
     {
         QModelIndex index = m_tableView->currentIndex();
+        disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
         m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
+        connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     });
     connect(delegate, &TableDelegate::closeEditor, this, [ = ]()
     {
@@ -194,6 +197,12 @@ void TabWidgetCell::OnSaveButtonClicked()
     OnRequestSaveData();
 }
 
+//void TabWidgetCell::onCurrentChanged(const QModelIndex& current, const QModelIndex& previous)
+//{
+//    qDebug() << "current = " << current;
+//    qDebug() << "previous = " << previous;
+//}
+
 void TabWidgetCell::OnItemDataChange(QStandardItem *item)
 {
     if (item)
@@ -219,6 +228,16 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
     {
        OnRequestSaveData();
        return;
+    }
+
+    if (ev->key() == Qt::Key_W  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        if (m_mainWindow && m_tabWidget)
+        {
+            m_mainWindow->OnCloseTabWidgetSlot(m_tabWidget->currentIndex());
+        }
+
+        return;
     }
 
     if (ev->key() == Qt::Key_Z  &&  ev->modifiers() == Qt::ControlModifier)

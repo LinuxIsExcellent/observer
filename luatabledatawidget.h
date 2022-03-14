@@ -19,7 +19,7 @@ typedef struct fieldInfo
 //表的字段信息
 typedef struct fieldSquence
 {
-    QVector<quint16> vNLevels;         //深度队列
+    QString sIndex;         //索引
     QVector<FIELDINFO> vSFieldSquences;       //对应的字段顺序
 }FIELDSQUENCE;
 
@@ -74,13 +74,13 @@ public:
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 
-    virtual bool SetFieldLink(QString sField, QString sFieldLink);
+    virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);
 
     QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
 
     FIELDINFO* GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
 
-    void InsertSquenceInfo(QVector<quint16> vNLevels, QVector<FIELDINFO> vFieldInfos);
+    void InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vFieldInfos);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);
@@ -89,7 +89,7 @@ private slots:
 
     virtual void Flush();
 
-    virtual void OnSaveAnnonations(QString str, QString sField);
+    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField);
 private:
 
     TABLEDATA   m_tableData;    //表的数据
@@ -99,7 +99,7 @@ private:
     QMap<QString, int>  m_mFieldNames; //表的字段的顺序
     QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
 
-    QVector<FIELDSQUENCE>   m_vFieldSquence;   //二维表的表头顺序
+    QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //二维表的表头顺序
 
 //    QVector<RowState>   m_vBRowDataChange;  //行数据是否被改变(数据变化存储以二维表的行为粒度)
 };

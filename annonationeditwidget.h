@@ -28,7 +28,7 @@ public:
 
 signals:
     //保存注释
-    void SaveAnnonationsSignal(QString str, QString sField);
+    void SaveAnnonationsSignal(QString sIndex, QString str, QString sField);
 protected:
 
 private:

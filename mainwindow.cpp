@@ -259,6 +259,9 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
                return;
            }
        }
+       else if (ev->key() == Qt::Key_W) {
+            OnCloseTabWidgetSlot(m_tabWidget->currentIndex());
+       }
        else if (ev->key() == Qt::Key_Z)
        {
            if(tabCell)
