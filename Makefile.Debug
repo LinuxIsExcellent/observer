@@ -344,6 +344,7 @@ debug/moc_addfieldlinkdialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -810,6 +811,7 @@ debug/moc_logindialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDialog
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -1025,6 +1027,7 @@ debug/moc_lualistdatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVar
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -1543,6 +1546,7 @@ debug/moc_showmsgdialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDial
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -1957,6 +1961,7 @@ debug/moc_tabwidgetcell.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QWidg
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -2199,6 +2204,7 @@ debug/moc_luatabledatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVa
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		msg.pb.h \
 		protobuf-master/src/google/protobuf/port_def.inc \
 		protobuf-master/src/google/protobuf/port_undef.inc \
@@ -2266,7 +2272,6 @@ debug/moc_luatabledatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVa
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
@@ -2274,6 +2279,7 @@ debug/moc_luatabledatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVa
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -2568,6 +2574,7 @@ debug/moc_mainwindow.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWin
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -2796,6 +2803,7 @@ debug/addfieldlinkdialog.o: addfieldlinkdialog.cpp addfieldlinkdialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -3515,6 +3523,7 @@ debug/logindialog.o: logindialog.cpp logindialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -3763,6 +3772,7 @@ debug/lualistdatawidget.o: lualistdatawidget.cpp lualistdatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -4075,6 +4085,7 @@ debug/main.o: main.cpp globalapplication.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -4791,6 +4802,7 @@ debug/showmsgdialog.o: showmsgdialog.cpp showmsgdialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
@@ -4980,6 +4992,7 @@ debug/stringtotableview.o: stringtotableview.cpp stringtotableview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -5349,6 +5362,7 @@ debug/tabwidgetcell.o: tabwidgetcell.cpp tabwidgetcell.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -5613,6 +5627,7 @@ debug/luatabledatawidget.o: luatabledatawidget.cpp luatabledatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		msg.pb.h \
 		protobuf-master/src/google/protobuf/port_def.inc \
 		protobuf-master/src/google/protobuf/port_undef.inc \
@@ -5680,7 +5695,6 @@ debug/luatabledatawidget.o: luatabledatawidget.cpp luatabledatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
@@ -5688,6 +5702,7 @@ debug/luatabledatawidget.o: luatabledatawidget.cpp luatabledatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
@@ -5995,6 +6010,7 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \

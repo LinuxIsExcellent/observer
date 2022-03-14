@@ -5,6 +5,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHeaderView>
+#include <QDebug>
 
 #include "msg.pb.h"
 #include "tabwidgetcell.h"
@@ -66,7 +67,7 @@ public:
     }
 
     //调整表的字段顺序
-    void ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QString, quint16> mFieldSortMap);
+    void ModifyFieldSquences(QString sIndex, QMap<QString, quint16> mFieldSortMap);
 
     void SetProtoData(const test_2::table_data& proto);
 
@@ -76,9 +77,9 @@ public:
 
     virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);
 
-    QVector<FIELDINFO>* GetFieldInfos(QVector<quint16> vNLevels);
+    QVector<FIELDINFO>* GetFieldInfos(QString sIndex);
 
-    FIELDINFO* GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex);
+    FIELDINFO* GetFieldInfos(QString sIndex, quint16 nIndex);
 
     void InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vFieldInfos);
 private slots:

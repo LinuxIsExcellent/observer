@@ -201,24 +201,23 @@ void LuaTableDataWidget::sectionMovableBtnClicked()
 }
 
 //调整表的字段顺序
-void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QString, quint16> mFieldSortMap)
+void LuaTableDataWidget::ModifyFieldSquences(QString sIndex, QMap<QString, quint16> mFieldSortMap)
 {
     bool isHas = false;
-    for (auto& data : m_vFieldSquence)
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
-        if (data.vNLevels == vNLevels)
-        {
-            qSort(data.vSFieldSquences.begin(), data.vSFieldSquences.end(),
-                  [=](const FIELDINFO& a, const FIELDINFO& b)
-                      {
-                          quint16 aSort = mFieldSortMap.find(a.sFieldName).value();
-                          quint16 bSort = mFieldSortMap.find(b.sFieldName).value();
-                          return aSort < bSort;
-                      }
-                  );
-            isHas = true;
-            break;
-        }
+        FIELDSQUENCE& fieldSquence = m_mFieldSquence.find(sIndex).value();
+
+        qSort(fieldSquence.vSFieldSquences.begin(), fieldSquence.vSFieldSquences.end(),
+              [=](const FIELDINFO& a, const FIELDINFO& b)
+                  {
+                      quint16 aSort = mFieldSortMap.find(a.sFieldName).value();
+                      quint16 bSort = mFieldSortMap.find(b.sFieldName).value();
+                      return aSort < bSort;
+                  }
+              );
+
+        isHas = true;
     }
 
     if (!isHas)
@@ -234,7 +233,7 @@ void LuaTableDataWidget::ModifyFieldSquences(QVector<quint16>& vNLevels, QMap<QS
             vFieldInfos[iter.value()] = info;
         }
 
-        InsertSquenceInfo(vNLevels, vFieldInfos);
+        InsertSquenceInfo("field_sequence", vFieldInfos);
     }
 }
 
@@ -255,33 +254,26 @@ void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
         mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
     }
 
-    QVector<quint16> vNLevels;
-
-    ModifyFieldSquences(vNLevels, mFieldSortMap);
+    ModifyFieldSquences("field_sequence", mFieldSortMap);
 }
 
-FIELDINFO* LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels, quint16 nIndex)
+FIELDINFO* LuaTableDataWidget::GetFieldInfos(QString sIndex, quint16 nIndex)
 {
     FIELDINFO* pInfo = nullptr;
-    for (auto& data : m_vFieldSquence)
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
-        if (data.vNLevels == vNLevels)
-        {
-            pInfo =  &data.vSFieldSquences[nIndex];
-        }
+        pInfo = &m_mFieldSquence.find(sIndex).value().vSFieldSquences[nIndex];
     }
+
     return pInfo;
 }
 
-QVector<FIELDINFO>* LuaTableDataWidget::GetFieldInfos(QVector<quint16> vNLevels)
+QVector<FIELDINFO>* LuaTableDataWidget::GetFieldInfos(QString sIndex)
 {
     QVector<FIELDINFO>* vPInfo = nullptr;
-    for (auto& data : m_vFieldSquence)
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
-        if (data.vNLevels == vNLevels)
-        {
-            vPInfo = &data.vSFieldSquences;
-        }
+        vPInfo = &m_mFieldSquence.find(sIndex).value().vSFieldSquences;
     }
 
     return vPInfo;
@@ -294,7 +286,7 @@ void LuaTableDataWidget::Flush()
         m_standardItemModel->clear();
 
         QVector<quint16> vNLevels;
-        QVector<FIELDINFO>* vSFieldSquences = GetFieldInfos(vNLevels);
+        QVector<FIELDINFO>* vSFieldSquences = GetFieldInfos("field_sequence");
 
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
@@ -469,18 +461,13 @@ void LuaTableDataWidget::OnRequestSaveData()
         test_2::client_save_table_info_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
 
-        for (auto data : m_vFieldSquence)
+        for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
         {
             test_2::field_squence* field_squence = quest.add_field_squences();
             if (field_squence)
             {
-                for (auto nLevel : data.vNLevels)
-                {
-                    field_squence->add_levels(nLevel);
-                    qDebug() << "nLevel = " << nLevel;
-                }
-
-                for (auto sData : data.vSFieldSquences)
+                field_squence->set_index(iter.key().toStdString());
+                for (auto sData : iter.value().vSFieldSquences)
                 {
                     test_2::field_info* fieldInfo = field_squence->add_infos();
                     if (fieldInfo)
