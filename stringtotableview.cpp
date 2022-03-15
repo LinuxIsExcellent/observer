@@ -33,7 +33,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->tableView->setModel(m_standardItemModel);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    ui->tableView->verticalHeader()->hide();
+//    ui->tableView->verticalHeader()->hide();
     m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(""));
     m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(""));
 
@@ -47,8 +47,43 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->tableView->setDragEnabled(true);
     ui->tableView->setAcceptDrops(true);
 
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
+
+    connect(ui->tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, ui->tableView->verticalHeader(),[=](const QPoint& pos){
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = ui->tableView->parentWidget()->mapToGlobal(ui->tableView->pos()) + pos;
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        int nIndex = ui->tableView->verticalHeader()->logicalIndexAt(pos);
+        qDebug() << "index = " << nIndex;
+        if (nIndex < 0){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        m_tableCellMenu->clear();
+        m_tableCellMenu->addAction("插入行", this, [=](){
+            m_standardItemModel->insertRows(nIndex, 1);
+            m_bDataChange = true;
+        });
+
+        m_tableCellMenu->addAction("增加行", this, [=](){
+            m_standardItemModel->insertRows(nIndex + 1, 1);
+            m_bDataChange = true;
+        });
+
+        m_tableCellMenu->addAction("删除行", this, [=](){
+            m_standardItemModel->removeRows(nIndex, 1);
+            m_bDataChange = true;
+        });
+
+
+        m_tableCellMenu->exec(pt);
+    });
 
     //增加数据单元格的菜单
     connect(ui->tableView, &QAbstractItemView::customContextMenuRequested, ui->tableView,[=](const QPoint& pos){
@@ -127,10 +162,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     });
 
     /* 创建UndoView */
-//    undoView = new QUndoView(undoStack);
-//    undoView->setWindowTitle(tr("Command List"));
-//    undoView->show();
-//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+    undoView = new QUndoView(undoStack);
+    undoView->setWindowTitle(tr("Command List"));
+    undoView->show();
+    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 
@@ -139,11 +174,14 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
 StringToTableView::~StringToTableView()
 {
+    delete undoView;
     delete ui;
 }
 
 void StringToTableView::OnItemDataChange(QStandardItem * item)
 {
+//    qDebug() << "item->index().row() = " << item->index().row();
+
     if (item->index().row() >= m_vRowDatas.size())
     {
         qDebug() << "m_vRowDatas error " << item->index();
@@ -151,8 +189,6 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
     }
 
     m_vRowDatas[item->index().row()].sField = item->index().data().toString();
-    qDebug() << "m_vRowDatas = " << m_vRowDatas;
-    OnChangeData();
     m_bDataChange = true;
 }
 
@@ -213,7 +249,15 @@ void StringToTableView::OnChangeData()
         }
         else if (data.nKeyType == LUA_TSTRING)
         {
-            sResult = sResult + data.sKey + " = ";
+            std::string sKeys = data.sKey.toStdString();
+            if(sKeys.find_first_not_of("-.0123456789") == std::string::npos)
+            {
+                sResult = sResult + "[\"" + data.sKey + "\"]" + " = ";
+            }
+            else
+            {
+                sResult = sResult + data.sKey + " = ";
+            }
         }
 
         if (data.nType == LUA_TSTRING)
@@ -239,12 +283,29 @@ void StringToTableView::OnChangeData()
 
 void StringToTableView::OnSaveData()
 {
+    QString sResult = "{";
+    for (int i = 0; i < m_standardItemModel->rowCount(); i++)
+    {
+        QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 0));
+        QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 1));
+
+        sResult = sResult + "[" + vKey.toString() + "] = ";
+        sResult = sResult + vValue.toString();
+
+        if (i < m_standardItemModel->rowCount() - 1)
+        {
+            sResult = sResult + ", ";
+        }
+    }
+
+    sResult = sResult + "}";
+
     if (m_nLevel == 0)
     {
         TabWidgetCell* tabWidget = dynamic_cast<TabWidgetCell* >(parent());
         if (tabWidget)
         {
-            tabWidget->ChangeModelIndexData(index, m_sData);
+            tabWidget->ChangeModelIndexData(index, sResult);
         }
     }
     else
@@ -252,7 +313,7 @@ void StringToTableView::OnSaveData()
         StringToTableView* view = static_cast<StringToTableView*>(parent());
         if (view)
         {
-            view->ChangeModelIndexData(index, m_sData);
+            view->ChangeModelIndexData(index, sResult);
         }
     }
 }
@@ -298,7 +359,7 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
     std::string sValueTable = "{";
     if (!(lua_type(L, -1) == LUA_TTABLE))
     {
-        qDebug () << "is not a string";
+        qDebug () << "is not a table";
         return "";
     }
 
@@ -435,7 +496,7 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         std::string sKey = vKeyValueData[i].sKey.toStdString();
         if (sKey.find_first_not_of("-.0123456789") == std::string::npos)
         {
-            sValueTable = sValueTable + "[\"" + sKey + "]\"";
+            sValueTable = sValueTable + "[\"" + sKey + "\"]";
         }
         else
         {
@@ -481,6 +542,8 @@ void StringToTableView::SetParam()
     if (ret)
     {
         qCritical() << lua_tostring(L,-1);
+        qDebug() << "m_sData not a table = " << m_sData;
+        return;
     }
 
     lua_getglobal(L, "temp_table");
@@ -666,6 +729,7 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
 {
     if (m_standardItemModel)
     {
+        qDebug() << "sData = " << sData;
         QVariant oldData = index.data();
         QVariant data = QVariant(sData);
 
@@ -673,6 +737,9 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
         {
             undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
             m_standardItemModel->setData(index, data);
+
+            OnChangeData();
+            m_bDataChange = true;
         }
     }
 }
