@@ -1,6 +1,5 @@
 #ifndef LUATABLEDATAWIDGET_H
 #define LUATABLEDATAWIDGET_H
-
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
@@ -15,6 +14,13 @@ typedef struct fieldInfo
     QString sFieldName;      //字段名字
     QString sFieldAnnonation;      //字段的备注
     QString sFieldLink;      //字段的关联
+
+    friend QDebug& operator << (QDebug out, const fieldInfo& info)
+    {
+        out << info.sFieldName << info.sFieldAnnonation << info.sFieldLink;
+
+        return out;
+    };
 }FIELDINFO;
 
 //表的字段信息
@@ -22,6 +28,13 @@ typedef struct fieldSquence
 {
     QString sIndex;         //索引
     QVector<FIELDINFO> vSFieldSquences;       //对应的字段顺序
+
+    friend QDebug& operator << (QDebug out, const fieldSquence& info)
+    {
+        out << info.sIndex << info.vSFieldSquences;
+
+        return out;
+    };
 }FIELDSQUENCE;
 
 //键值对

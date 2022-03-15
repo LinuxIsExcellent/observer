@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_TabWidgetCell_t {
-    QByteArrayData data[11];
-    char stringdata0[121];
+    QByteArrayData data[12];
+    char stringdata0[128];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,14 +39,15 @@ QT_MOC_LITERAL(4, 35, 16), // "OnItemDataChange"
 QT_MOC_LITERAL(5, 52, 14), // "QStandardItem*"
 QT_MOC_LITERAL(6, 67, 4), // "item"
 QT_MOC_LITERAL(7, 72, 17), // "OnSaveAnnonations"
-QT_MOC_LITERAL(8, 90, 3), // "str"
-QT_MOC_LITERAL(9, 94, 6), // "sField"
-QT_MOC_LITERAL(10, 101, 19) // "OnSaveButtonClicked"
+QT_MOC_LITERAL(8, 90, 6), // "sIndex"
+QT_MOC_LITERAL(9, 97, 3), // "str"
+QT_MOC_LITERAL(10, 101, 6), // "sField"
+QT_MOC_LITERAL(11, 108, 19) // "OnSaveButtonClicked"
 
     },
     "TabWidgetCell\0Flush\0\0AddAnnotation\0"
     "OnItemDataChange\0QStandardItem*\0item\0"
-    "OnSaveAnnonations\0str\0sField\0"
+    "OnSaveAnnonations\0sIndex\0str\0sField\0"
     "OnSaveButtonClicked"
 };
 #undef QT_MOC_LITERAL
@@ -68,14 +69,14 @@ static const uint qt_meta_data_TabWidgetCell[] = {
        1,    0,   39,    2, 0x0a /* Public */,
        3,    0,   40,    2, 0x08 /* Private */,
        4,    1,   41,    2, 0x08 /* Private */,
-       7,    2,   44,    2, 0x08 /* Private */,
-      10,    0,   49,    2, 0x08 /* Private */,
+       7,    3,   44,    2, 0x08 /* Private */,
+      11,    0,   51,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 5,    6,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString,    8,    9,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,    8,    9,   10,
     QMetaType::Void,
 
        0        // eod
@@ -90,7 +91,7 @@ void TabWidgetCell::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 0: _t->Flush(); break;
         case 1: _t->AddAnnotation(); break;
         case 2: _t->OnItemDataChange((*reinterpret_cast< QStandardItem*(*)>(_a[1]))); break;
-        case 3: _t->OnSaveAnnonations((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 3: _t->OnSaveAnnonations((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3]))); break;
         case 4: _t->OnSaveButtonClicked(); break;
         default: ;
         }

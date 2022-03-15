@@ -1688,10 +1688,138 @@ debug/moc_stringtotableview.cpp: ../../../../tools/Qt5.9.9/5.9.9/mingw53_32/incl
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		../luatabledatawidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVariant \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QApplication \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qcoreapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qeventloop.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdesktopwidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qguiapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qinputmethod.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qheaderview.h \
+		../msg.pb.h \
+		../protobuf-master/src/google/protobuf/port_def.inc \
+		../protobuf-master/src/google/protobuf/port_undef.inc \
+		../protobuf-master/src/google/protobuf/io/coded_stream.h \
+		../protobuf-master/src/google/protobuf/stubs/common.h \
+		../protobuf-master/src/google/protobuf/stubs/macros.h \
+		../protobuf-master/src/google/protobuf/stubs/platform_macros.h \
+		../protobuf-master/src/google/protobuf/stubs/port.h \
+		../protobuf-master/src/google/protobuf/stubs/stringpiece.h \
+		../protobuf-master/src/google/protobuf/stubs/hash.h \
+		../protobuf-master/src/google/protobuf/stubs/logging.h \
+		../protobuf-master/src/google/protobuf/stubs/status.h \
+		../protobuf-master/src/google/protobuf/stubs/strutil.h \
+		../protobuf-master/src/google/protobuf/port.h \
+		../protobuf-master/src/google/protobuf/arena.h \
+		../protobuf-master/src/google/protobuf/arena_impl.h \
+		../protobuf-master/src/google/protobuf/arenastring.h \
+		../protobuf-master/src/google/protobuf/generated_message_bases.h \
+		../protobuf-master/src/google/protobuf/parse_context.h \
+		../protobuf-master/src/google/protobuf/io/zero_copy_stream.h \
+		../protobuf-master/src/google/protobuf/implicit_weak_message.h \
+		../protobuf-master/src/google/protobuf/message_lite.h \
+		../protobuf-master/src/google/protobuf/explicitly_constructed.h \
+		../protobuf-master/src/google/protobuf/metadata_lite.h \
+		../protobuf-master/src/google/protobuf/stubs/once.h \
+		../protobuf-master/src/google/protobuf/repeated_field.h \
+		../protobuf-master/src/google/protobuf/repeated_ptr_field.h \
+		../protobuf-master/src/google/protobuf/inlined_string_field.h \
+		../protobuf-master/src/google/protobuf/wire_format_lite.h \
+		../protobuf-master/src/google/protobuf/stubs/casts.h \
+		../protobuf-master/src/google/protobuf/io/zero_copy_stream_impl.h \
+		../protobuf-master/src/google/protobuf/io/zero_copy_stream_impl_lite.h \
+		../protobuf-master/src/google/protobuf/stubs/callback.h \
+		../protobuf-master/src/google/protobuf/stubs/stl_util.h \
+		../protobuf-master/src/google/protobuf/generated_message_util.h \
+		../protobuf-master/src/google/protobuf/any.h \
+		../protobuf-master/src/google/protobuf/has_bits.h \
+		../protobuf-master/src/google/protobuf/message.h \
+		../protobuf-master/src/google/protobuf/descriptor.h \
+		../protobuf-master/src/google/protobuf/stubs/mutex.h \
+		../protobuf-master/src/google/protobuf/generated_message_reflection.h \
+		../protobuf-master/src/google/protobuf/generated_enum_reflection.h \
+		../protobuf-master/src/google/protobuf/generated_enum_util.h \
+		../protobuf-master/src/google/protobuf/unknown_field_set.h \
+		../protobuf-master/src/google/protobuf/generated_message_table_driven.h \
+		../protobuf-master/src/google/protobuf/map.h \
+		../protobuf-master/src/google/protobuf/map_type_handler.h \
+		../protobuf-master/src/google/protobuf/map_entry_lite.h \
+		../protobuf-master/src/google/protobuf/map_field_lite.h \
+		../protobuf-master/src/google/protobuf/extension_set.h \
+		../tabwidgetcell.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHBoxLayout \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qboxlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayoutitem.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qgridlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QListWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistwidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
+		../mainwindow.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QTcpSocket \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetwork-config.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QHostAddress \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qhostaddress.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLineEdit \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlineedit.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextcursor.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextformat.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpen.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextoption.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreeview.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTabWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QVBoxLayout \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLabel \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlabel.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDateTimeEdit \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdatetime.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTimer \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtimer.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qbasictimer.h \
+		../logindialog.h \
+		../globalconfig.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QString \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDir \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdir.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfileinfo.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMap \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVector \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTextCodec \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtextcodec.h \
 		../compileLua/src/lua.h \
 		../compileLua/src/luaconf.h \
 		../compileLua/src/lauxlib.h \
 		../compileLua/src/lualib.h \
+		../showmsgdialog.h \
+		../Packet.h \
+		../modifyservertimewidget.h \
+		../addfieldlinkdialog.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidgetItem \
+		../protobuf-master/src/google/protobuf/text_format.h \
+		../qloadingwidget.h \
+		../annonationeditwidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextdocument.h \
 		../stringtotableview.h \
 		debug/moc_predefs.h \
 		../../../tools/Qt5.9.9/5.9.9/mingw53_32/bin/moc.exe
@@ -2203,6 +2331,7 @@ debug/moc_luatabledatawidget.cpp: ../../../../tools/Qt5.9.9/5.9.9/mingw53_32/inc
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		../msg.pb.h \
 		../protobuf-master/src/google/protobuf/port_def.inc \
 		../protobuf-master/src/google/protobuf/port_undef.inc \
@@ -2270,7 +2399,6 @@ debug/moc_luatabledatawidget.cpp: ../../../../tools/Qt5.9.9/5.9.9/mingw53_32/inc
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
@@ -4943,75 +5071,17 @@ debug/stringtotableview.o: ../stringtotableview.cpp ../stringtotableview.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
-		../compileLua/src/lua.h \
-		../compileLua/src/luaconf.h \
-		../compileLua/src/lauxlib.h \
-		../compileLua/src/lualib.h \
-		../globalconfig.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QString \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDir \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdir.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfileinfo.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMap \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVector \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTextCodec \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtextcodec.h \
-		ui_stringtotableview.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMessageBox \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmessagebox.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMimeData \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qmimedata.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QClipboard \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qclipboard.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
-		../tabwidgetcell.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QWidget \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHBoxLayout \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qboxlayout.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayout.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayoutitem.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qgridlayout.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QListWidget \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistwidget.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
-		../mainwindow.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QTcpSocket \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtcpsocket.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetwork-config.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qabstractsocket.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QHostAddress \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qhostaddress.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLineEdit \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlineedit.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextcursor.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextformat.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpen.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextoption.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidget \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidget.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreeview.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTabWidget \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QVBoxLayout \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLabel \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlabel.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDateTimeEdit \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdatetimeedit.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdatetime.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTimer \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtimer.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qbasictimer.h \
-		../logindialog.h \
-		../showmsgdialog.h \
-		../Packet.h \
+		../luatabledatawidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVariant \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QApplication \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qcoreapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qeventloop.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdesktopwidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qguiapplication.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qinputmethod.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qheaderview.h \
 		../msg.pb.h \
 		../protobuf-master/src/google/protobuf/port_def.inc \
 		../protobuf-master/src/google/protobuf/port_undef.inc \
@@ -5062,6 +5132,68 @@ debug/stringtotableview.o: ../stringtotableview.cpp ../stringtotableview.h \
 		../protobuf-master/src/google/protobuf/map_entry_lite.h \
 		../protobuf-master/src/google/protobuf/map_field_lite.h \
 		../protobuf-master/src/google/protobuf/extension_set.h \
+		../tabwidgetcell.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHBoxLayout \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qboxlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayoutitem.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qgridlayout.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QListWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistwidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
+		../mainwindow.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QTcpSocket \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetwork-config.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QHostAddress \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qhostaddress.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLineEdit \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlineedit.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextcursor.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextformat.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpen.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextoption.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidget.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreeview.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTabWidget \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QVBoxLayout \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLabel \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlabel.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDateTimeEdit \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdatetime.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTimer \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtimer.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qbasictimer.h \
+		../logindialog.h \
+		../globalconfig.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QString \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDir \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdir.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfileinfo.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMap \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVector \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTextCodec \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtextcodec.h \
+		../compileLua/src/lua.h \
+		../compileLua/src/luaconf.h \
+		../compileLua/src/lauxlib.h \
+		../compileLua/src/lualib.h \
+		../showmsgdialog.h \
+		../Packet.h \
 		../modifyservertimewidget.h \
 		../addfieldlinkdialog.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidgetItem \
@@ -5071,12 +5203,18 @@ debug/stringtotableview.o: ../stringtotableview.cpp ../stringtotableview.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTextEdit \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtextedit.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextdocument.h \
+		ui_stringtotableview.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMessageBox \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmessagebox.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMimeData \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qmimedata.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QClipboard \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qclipboard.h \
 		../tabledelegate.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QStyledItemDelegate \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleditemdelegate.h \
 		../modifcommand.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoCommand \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVariant \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QModelIndex
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\stringtotableview.o ..\stringtotableview.cpp
 
@@ -5602,6 +5740,7 @@ debug/luatabledatawidget.o: ../luatabledatawidget.cpp ../luatabledatawidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		../msg.pb.h \
 		../protobuf-master/src/google/protobuf/port_def.inc \
 		../protobuf-master/src/google/protobuf/port_undef.inc \
@@ -5669,7 +5808,6 @@ debug/luatabledatawidget.o: ../luatabledatawidget.cpp ../luatabledatawidget.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
-		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		../../../../tools/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \

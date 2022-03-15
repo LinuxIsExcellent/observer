@@ -10,15 +10,17 @@
 #include "tabledelegate.h"
 #include "modifcommand.h"
 
-StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QWidget *parent, int nLevel) :
+StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, QWidget *parent, int nLevel) :
     QDialog(parent),
     ui(new Ui::StringToTableView),
+    m_sTableName(sTableName),
     m_nLevel(nLevel)
 {
     ui->setupUi(this);
 
     this->model = model;
     this->index = index;
+    this->m_mFieldSquence = pMFieldSquence;
 
     m_sData = index.data().toString();
 
@@ -31,8 +33,9 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->tableView->setModel(m_standardItemModel);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem("字段名"));
-    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem("字段值"));
+    ui->tableView->verticalHeader()->hide();
+    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(""));
+    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(""));
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnCancelButtonClicked()));
@@ -68,7 +71,16 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
             if (rowData.nType == LUA_TTABLE)
             {
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, this, m_nLevel + 1);
+                    QString sSubTableIndex = "";
+                    if(rowData.nKeyType == LUA_TNUMBER || rowData.nKeyType == LUA_TNIL)
+                    {
+                        sSubTableIndex = m_sTableName + "%ARRAY";
+                    }
+                    else
+                    {
+                        sSubTableIndex = m_sTableName + "#" + rowData.sKey;
+                    }
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, this, m_nLevel + 1);
                     dialog->show();
                 });
             }
@@ -132,6 +144,15 @@ StringToTableView::~StringToTableView()
 
 void StringToTableView::OnItemDataChange(QStandardItem * item)
 {
+    if (item->index().row() >= m_vRowDatas.size())
+    {
+        qDebug() << "m_vRowDatas error " << item->index();
+        return;
+    }
+
+    m_vRowDatas[item->index().row()].sField = item->index().data().toString();
+    qDebug() << "m_vRowDatas = " << m_vRowDatas;
+    OnChangeData();
     m_bDataChange = true;
 }
 
@@ -180,7 +201,7 @@ void StringToTableView::OnCancelButtonClicked()
     }
 }
 
-void StringToTableView::OnSaveData()
+void StringToTableView::OnChangeData()
 {
     QString sResult = "{";
     for (int i = 0; i < m_vRowDatas.size(); ++i) {
@@ -212,15 +233,18 @@ void StringToTableView::OnSaveData()
 
     sResult = sResult + "}";
 
-    qDebug() << "sResult = " << sResult;
-    qDebug() << "m_sData = " << m_sData;
+    m_sData = sResult;
+    SetParam();
+}
 
+void StringToTableView::OnSaveData()
+{
     if (m_nLevel == 0)
     {
         TabWidgetCell* tabWidget = dynamic_cast<TabWidgetCell* >(parent());
         if (tabWidget)
         {
-            tabWidget->ChangeModelIndexData(index, sResult);
+            tabWidget->ChangeModelIndexData(index, m_sData);
         }
     }
     else
@@ -228,7 +252,7 @@ void StringToTableView::OnSaveData()
         StringToTableView* view = static_cast<StringToTableView*>(parent());
         if (view)
         {
-            view->ChangeModelIndexData(index, sResult);
+            view->ChangeModelIndexData(index, m_sData);
         }
     }
 }
@@ -238,9 +262,22 @@ void StringToTableView::Flush()
     if (m_vRowDatas.size() <= 0) return;
 
     int row = 0;
+    disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
+
+    m_standardItemModel->clear();
+    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(""));
+    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(""));
+
     for (auto data : m_vRowDatas)
     {
-        QStandardItem* keyItem = new QStandardItem(data.sKey);
+        std::string sKeyValue = data.sKey.toStdString();
+
+        if(data.nKeyType == LUA_TSTRING && sKeyValue.find_first_not_of("-.0123456789") == std::string::npos)
+        {
+            sKeyValue = std::string("\"") + sKeyValue + std::string("\"");
+        }
+
+        QStandardItem* keyItem = new QStandardItem(QString::fromStdString(sKeyValue));
         m_standardItemModel->setItem(row, 0, keyItem);
 
         QStandardItem* dataItem = new QStandardItem(data.sField);
@@ -250,10 +287,11 @@ void StringToTableView::Flush()
     }
 
     ui->tableView->resizeColumnsToContents();
-    m_bDataChange = false;
+
+    connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 }
 
-std::string StringToTableView::ParseLuaTableToString(lua_State *L)
+std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTableKey)
 {
     if (L == NULL) return "";
 
@@ -264,67 +302,167 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L)
         return "";
     }
 
-    lua_pushnil(L);
-    bool has_field = false;
+    QVector<ROWINFO> vKeyValueData;
+    QVector<ROWINFO> vArrayValueData;
+
     // LOG_INFO("lua_rawlen - " + std::to_string(lua_rawlen(L, -2)));
+    lua_pushnil(L);
     while(lua_next(L, -2))
     {
-        std::string sKey = "";
+        RowInfo info;
 
-        if (lua_type(L, -2) == LUA_TNUMBER || lua_type(L, -2) == LUA_TNIL)
-        {
-            sKey = "[" + std::to_string(lua_tointeger(L, -2)) + "]";
-        }
-        else if (lua_type(L, -2) == LUA_TSTRING)
-        {
-            std::string strKey = lua_tostring(L, -2);
-            if (strKey.find_first_not_of("-.0123456789") == std::string::npos)
-            {
-                sKey = std::string("[\"") + lua_tostring(L, -2) + std::string("\"]");
-            }
-            else
-            {
-                sKey = lua_tostring(L, -2);
-            }
-        }
+        int nKeyType = lua_type(L, -2);
+        int nValueType = lua_type(L, -1);
 
-        sValueTable = sValueTable + sKey + " = ";
-
-        // 如果key值是一个table
-        if (lua_type(L, -1) == LUA_TTABLE)
+        //字段部分
+        QString sKey = "";
+        QString sSubTableKey = "";
+        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
         {
-            sValueTable = sValueTable + ParseLuaTableToString(L);
+            sKey = QString::number(lua_tonumber(L, -2));
+            sSubTableKey = sTableKey + "%ARRAY";
         }
-        else if (lua_type(L, -1) == LUA_TSTRING)
+        else
         {
-            sValueTable = sValueTable + std::string("\"") + lua_tostring(L, -1) + std::string("\"");
-            // cout << "sValue = " << lua_tostring(L, -1) << endl;
-        }
-        else if (lua_type(L, -1) == LUA_TBOOLEAN)
-        {
-            sValueTable = sValueTable + std::to_string(lua_toboolean(L, -1));
-            // cout << "sValue = " << lua_toboolean(L, -1) << endl;
-        }
-        else if (lua_type(L, -1) == LUA_TNIL)
-        {
-            sValueTable = sValueTable + std::to_string(lua_tointeger(L, -1));
-        }
-        else if (lua_type(L, -1) == LUA_TNUMBER)
-        {
-            double num = lua_tonumber(L, -1);
-            sValueTable = sValueTable + GlobalConfig::getInstance()->doubleToString(num);
+//            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
+            sKey = QString::fromStdString(lua_tostring(L, -2));
+            sSubTableKey = sTableKey + "#" + sKey;
         }
 
-        sValueTable = sValueTable + ", ";
+        info.nKeyType = nKeyType;
+        info.sKey = sKey;
+        info.nType = nValueType;
+
+        //数据部分
+        QString sField = "";
+
+        if (nValueType == LUA_TTABLE)
+        {
+            sField = QString::fromStdString(ParseLuaTableToString(L, sSubTableKey));
+        }
+        else if (nValueType == LUA_TSTRING)
+        {
+            sField = '\"' + QString::fromStdString(lua_tostring(L, -1)) + '\"';
+        }
+        else if (nValueType == LUA_TBOOLEAN)
+        {
+            sField = QString(lua_toboolean(L, -1));
+        }
+        else if (nValueType == LUA_TNIL)
+        {
+            sField = QString::number(lua_tointeger(L, -1));
+        }
+        else if (nValueType == LUA_TNUMBER)
+        {
+            sField = QString::number(lua_tonumber(L, -1));
+        }
+
+        info.sField = sField;
+
+        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        {
+            vArrayValueData.push_back(info);
+        }
+        else
+        {
+            vKeyValueData.push_back(info);
+        }
+
         lua_pop(L, 1);
-
-        has_field = true;
     }
 
-    // 最后一个", "要去掉，暂时找不到怎么判断lua_next中的元素全部遍历结束的方法，如果有办法判断可以在lua_next里面加方法处理
-    if(has_field)
+    //键值对部分进行排序
+    if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(sTableKey) != m_mFieldSquence->end())
     {
-        sValueTable = sValueTable.erase(sValueTable.length() - 2, 2);
+        FIELDSQUENCE fieldSquence = m_mFieldSquence->find(sTableKey).value();
+
+        QMap<QString, quint16> mFieldSquence;
+        for (int i = 0; i < fieldSquence.vSFieldSquences.size(); ++i)
+        {
+            mFieldSquence.insert(fieldSquence.vSFieldSquences[i].sFieldName, i);
+        }
+
+        std::sort(vKeyValueData.begin(), vKeyValueData.end(),
+              [=](const ROWINFO& a, const ROWINFO& b)
+                  {
+                      auto iterA = mFieldSquence.find(a.sKey);
+                      auto iterB = mFieldSquence.find(b.sKey);
+
+
+                      quint16 aSort = 9999;
+                      quint16 bSort = 9999;
+
+                      if (iterA != mFieldSquence.end())
+                      {
+                          aSort = iterA.value();
+                      }
+
+                      if (iterB != mFieldSquence.end())
+                      {
+                          bSort = iterB.value();
+                      }
+
+                      return aSort < bSort;
+                  }
+              );
+    }
+
+    //数组部分进行排序
+    std::sort(vArrayValueData.begin(), vArrayValueData.end(),
+          [=](const ROWINFO& a, const ROWINFO& b)
+              {
+                  a.sKey.toDouble();
+                  b.sKey.toDouble();
+
+                  return a.sKey.toDouble() < b.sKey.toDouble();
+              }
+          );
+
+    int nFlag = 1;
+    bool isCompleteArray = true;
+    for (int i = 0; i < vArrayValueData.size(); ++i)
+    {
+        if (nFlag != vArrayValueData[i].sKey.toInt()){
+            isCompleteArray = false;
+            break;
+        }
+
+        nFlag++;
+    }
+
+    for (int i = 0; i < vKeyValueData.size(); ++i)
+    {
+        std::string sKey = vKeyValueData[i].sKey.toStdString();
+        if (sKey.find_first_not_of("-.0123456789") == std::string::npos)
+        {
+            sValueTable = sValueTable + "[\"" + sKey + "]\"";
+        }
+        else
+        {
+            sValueTable = sValueTable + sKey;
+        }
+
+        sValueTable = sValueTable + " = " + vKeyValueData[i].sField.toStdString();
+
+        if (i < vKeyValueData.size() - 1 || vArrayValueData.size() > 0)
+        {
+            sValueTable = sValueTable + ", ";
+        }
+    }
+
+    for (int i = 0; i < vArrayValueData.size(); ++i)
+    {
+        if (!isCompleteArray)
+        {
+            sValueTable = sValueTable + "[" + vArrayValueData[i].sKey.toStdString() + "]" + " = ";
+        }
+
+        sValueTable = sValueTable + vArrayValueData[i].sField.toStdString();
+
+        if (i < vArrayValueData.size() - 1)
+        {
+            sValueTable = sValueTable + ", ";
+        }
     }
 
     sValueTable = sValueTable + "}";
@@ -336,8 +474,10 @@ void StringToTableView::SetParam()
     lua_State *L = luaL_newstate();
     if (L == NULL) return;
 
-    m_sData = "temp_table = " + m_sData;
-    int ret = luaL_dostring(L, m_sData.toStdString().c_str());
+    m_vRowDatas.clear();
+
+    QString sTempTableName = "temp_table = " + m_sData;
+    int ret = luaL_dostring(L, sTempTableName.toStdString().c_str());
     if (ret)
     {
         qCritical() << lua_tostring(L,-1);
@@ -352,61 +492,132 @@ void StringToTableView::SetParam()
         return;
     }
 
+    QVector<ROWINFO> vKeyValueData;
+    QVector<ROWINFO> vArrayValueData;
+
     //置空栈顶
     lua_pushnil(L);
 
-    int row = 0;
     while(lua_next(L, -2))
     {
         RowInfo info;
 
+        int nKeyType = lua_type(L, -2);
+        int nValueType = lua_type(L, -1);
+
         //字段部分
         QString sKey = "";
-        if (lua_type(L, -2) == LUA_TNUMBER)
+        QString sSubTableKey = "";
+        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
         {
             sKey = QString::number(lua_tonumber(L, -2));
+            sSubTableKey = m_sTableName + "%ARRAY";
         }
         else
         {
-            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
+//            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
+            sKey = QString::fromStdString(lua_tostring(L, -2));
+            sSubTableKey = m_sTableName + "#" + sKey;
         }
 
 
-        info.nKeyType = lua_type(L, -2);
+        info.nKeyType = nKeyType;
         info.sKey = sKey;
+        info.nType = nValueType;
 
         //数据部分
         QString sField = "";
-        int nType = lua_type(L, -1);
 
-        if (nType == LUA_TTABLE)
+        if (nValueType == LUA_TTABLE)
         {
-            sField = QString::fromStdString(ParseLuaTableToString(L));
+            sField = QString::fromStdString(ParseLuaTableToString(L, sSubTableKey));
         }
-        else if (nType == LUA_TSTRING)
+        else if (nValueType == LUA_TSTRING)
         {
             sField = '\"' + QString::fromStdString(lua_tostring(L, -1)) + '\"';
         }
-        else if (nType == LUA_TBOOLEAN)
+        else if (nValueType == LUA_TBOOLEAN)
         {
             sField = QString(lua_toboolean(L, -1));
         }
-        else if (nType == LUA_TNIL)
+        else if (nValueType == LUA_TNIL)
         {
             sField = QString::number(lua_tointeger(L, -1));
         }
-        else if (nType == LUA_TNUMBER)
+        else if (nValueType == LUA_TNUMBER)
         {
             sField = QString::number(lua_tonumber(L, -1));
         }
 
         info.sField = sField;
-        info.nType = nType;
 
-        m_vRowDatas.push_back(info);
+        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        {
+            vArrayValueData.push_back(info);
+        }
+        else
+        {
+            vKeyValueData.push_back(info);
+        }
 
-        row++;
         lua_pop(L, 1);
+    }
+
+    //键值对部分进行排序
+    if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
+    {
+        FIELDSQUENCE fieldSquence = m_mFieldSquence->find(m_sTableName).value();
+
+        QMap<QString, quint16> mFieldSquence;
+        for (int i = 0; i < fieldSquence.vSFieldSquences.size(); ++i)
+        {
+            mFieldSquence.insert(fieldSquence.vSFieldSquences[i].sFieldName, i);
+        }
+
+        std::sort(vKeyValueData.begin(), vKeyValueData.end(),
+              [=](const ROWINFO& a, const ROWINFO& b)
+                  {
+                      auto iterA = mFieldSquence.find(a.sKey);
+                      auto iterB = mFieldSquence.find(b.sKey);
+
+
+                      quint16 aSort = 9999;
+                      quint16 bSort = 9999;
+
+                      if (iterA != mFieldSquence.end())
+                      {
+                          aSort = iterA.value();
+                      }
+
+                      if (iterB != mFieldSquence.end())
+                      {
+                          bSort = iterB.value();
+                      }
+
+                      return aSort < bSort;
+                  }
+              );
+    }
+
+    //数组部分进行排序
+    std::sort(vArrayValueData.begin(), vArrayValueData.end(),
+          [=](const ROWINFO& a, const ROWINFO& b)
+              {
+                  a.sKey.toDouble();
+                  b.sKey.toDouble();
+
+                  return a.sKey.toDouble() < b.sKey.toDouble();
+              }
+          );
+
+    for (auto data : vKeyValueData)
+    {
+        m_vRowDatas.push_back(data);
+    }
+
+    for (auto data : vArrayValueData)
+    {
+        m_vRowDatas.push_back(data);
     }
 
     Flush();
