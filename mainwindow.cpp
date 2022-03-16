@@ -391,7 +391,9 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     packet << nDataLength << nSystem << nCmd << data.c_str();
 
     qDebug() << "请求服务器消息:" << nSystem << "  " << nCmd;
-    m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+    int nSendCount = m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+    qDebug() << "nSendCount = " << nSendCount;
+    m_ServerSockect->flush();
 }
 
 void MainWindow::OnServerMsgRecv()
@@ -413,7 +415,7 @@ void MainWindow::OnServerMsgRecv()
     }
     else
     {
-        qDebug() << "tcp数据解析错误，数据缓存区已满 :" << nBufferSize;
+//        qDebug() << "tcp数据解析错误，数据缓存区已满 :" << nBufferSize;
         m_RecvBuffer.clear();
     }
 
@@ -442,7 +444,7 @@ void MainWindow::OnServerMsgRecv()
             else
             {
                 m_RecvBuffer.clear();
-//                qDebug() << "clear after = " << m_RecvBuffer.size();
+                qDebug() << "clear after = " << m_RecvBuffer.size();
                 bProcessLoop = false;
             }
         }
@@ -652,7 +654,7 @@ void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
     if (iter != m_mTabwidgetMap.end())
     {
         m_tabWidget->setCurrentWidget(iter.value());
-        qDebug() << "重设数据";
+        qDebug() << "重设数据 : " << table_name;
         qobject_cast<LuaTableDataWidget*>(iter.value())->SetProtoData(proto);
     }
     else
