@@ -162,10 +162,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     });
 
     /* 创建UndoView */
-    undoView = new QUndoView(undoStack);
-    undoView->setWindowTitle(tr("Command List"));
-    undoView->show();
-    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+//    undoView = new QUndoView(undoStack);
+//    undoView->setWindowTitle(tr("Command List"));
+//    undoView->show();
+//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 
@@ -174,7 +174,6 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
 StringToTableView::~StringToTableView()
 {
-    delete undoView;
     delete ui;
 }
 
@@ -188,6 +187,7 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
         return;
     }
 
+    qDebug() << "asdasd";
     m_vRowDatas[item->index().row()].sField = item->index().data().toString();
     m_bDataChange = true;
 }
@@ -283,13 +283,36 @@ void StringToTableView::OnChangeData()
 
 void StringToTableView::OnSaveData()
 {
+    //重新设置table里面的key的排序，数据部分不用考虑
+    QVector<FIELDINFO> vNewKeySquence;
     QString sResult = "{";
     for (int i = 0; i < m_standardItemModel->rowCount(); i++)
     {
         QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 0));
         QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 1));
 
-        sResult = sResult + "[" + vKey.toString() + "] = ";
+        bool is_ok = false;
+        vKey.toInt(&is_ok);
+        if (!is_ok)
+        {
+            FIELDINFO fieldInfo;
+            fieldInfo.sFieldName = vKey.toString().remove("\"");
+            vNewKeySquence.push_back(fieldInfo);
+
+            if(vKey.toString().toStdString().find_first_not_of("-.0123456789\"") == std::string::npos)
+            {
+                sResult = sResult + "[" + vKey.toString() + "] = ";
+            }
+            else
+            {
+                sResult = sResult + vKey.toString() + " = ";
+            }
+        }
+        else
+        {
+            sResult = sResult + "[" + vKey.toString() + "] = ";
+        }
+
         sResult = sResult + vValue.toString();
 
         if (i < m_standardItemModel->rowCount() - 1)
@@ -299,6 +322,53 @@ void StringToTableView::OnSaveData()
     }
 
     sResult = sResult + "}";
+
+    if (vNewKeySquence.size() > 0)
+    {
+        if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
+        {
+            FIELDSQUENCE& squence = m_mFieldSquence->find(m_sTableName).value();
+            //删除squence之前部分的交集
+            for (int i = 0; i < vNewKeySquence.size(); ++i)
+            {
+                for (int j = 0; j < squence.vSFieldSquences.size();)
+                {
+                    //找出交集的部分,并且赋值到vNewKeySquence中
+                    if (vNewKeySquence[i].sFieldName == squence.vSFieldSquences[j].sFieldName)
+                    {
+                        vNewKeySquence[i].sFieldAnnonation = squence.vSFieldSquences[j].sFieldAnnonation;
+                        vNewKeySquence[i].sFieldLink = squence.vSFieldSquences[j].sFieldLink;
+
+                        squence.vSFieldSquences.remove(j);
+                    }
+                    else
+                    {
+                        ++j;
+                    }
+                }
+            }
+
+            //把vNewKeySquence通过逆序头插入squence中
+            for (int i = vNewKeySquence.size() - 1; i >= 0; --i)
+            {
+                squence.vSFieldSquences.push_front(vNewKeySquence[i]);
+            }
+
+            for (int j = 0; j < squence.vSFieldSquences.size();j++)
+            {
+                qDebug() << squence.vSFieldSquences[j];
+            }
+        }
+        //直接插入
+        else if (m_mFieldSquence)
+        {
+            FIELDSQUENCE squence;
+            squence.sIndex = m_sTableName;
+            squence.vSFieldSquences = vNewKeySquence;
+            m_mFieldSquence->insert(m_sTableName, squence);
+        }
+    }
+
 
     if (m_nLevel == 0)
     {
@@ -350,6 +420,7 @@ void StringToTableView::Flush()
     ui->tableView->resizeColumnsToContents();
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
+    m_bDataChange = false;
 }
 
 std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTableKey)
@@ -705,6 +776,8 @@ void StringToTableView::keyPressEvent(QKeyEvent *ev)
 //撤销
 void StringToTableView::undo()
 {
+    if (!undoStack->canUndo()) return;
+
     if (undoStack->canUndo())
     {
         undoAction->trigger();
@@ -733,10 +806,11 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
         QVariant oldData = index.data();
         QVariant data = QVariant(sData);
 
-        if (data != oldData)
+        if (data.toString() != oldData.toString())
         {
-            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
             m_standardItemModel->setData(index, data);
+            //这里的撤回有问题，先屏蔽
+//            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
 
             OnChangeData();
             m_bDataChange = true;

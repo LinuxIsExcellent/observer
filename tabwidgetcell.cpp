@@ -354,7 +354,7 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
 //撤销
 void TabWidgetCell::undo()
 {
-    qDebug() << "undo = " << undoStack->canRedo();
+    if (!undoStack->canUndo()) return;
     if (undoStack->canUndo())
     {
         undoAction->trigger();
@@ -370,7 +370,7 @@ void TabWidgetCell::undo()
 //返回撤销
 void TabWidgetCell::redo()
 {
-    qDebug() << "redo = " << undoStack->canRedo();
+    if (!undoStack->canRedo()) return;
     if (undoStack->canRedo())
     {
         redoAction->trigger();

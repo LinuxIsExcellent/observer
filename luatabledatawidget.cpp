@@ -455,7 +455,7 @@ void LuaTableDataWidget::OnRequestSaveData()
 {
     qDebug() << "请求保存数据";
     //如果表的信息有变化
-    if (m_bHeadIndexChange)
+    if (m_bHeadIndexChange || m_bTableDataChange)
     {
         //请求保存表的信息
         test_2::client_save_table_info_request quest;
