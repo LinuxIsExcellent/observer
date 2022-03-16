@@ -402,20 +402,13 @@ void MainWindow::OnServerMsgRecv()
     QByteArray data = m_ServerSockect->readAll();
     if (data.count() <= 0) return;
 
-
-    qDebug() << "还有多少字节可以读取：" << m_ServerSockect->bytesAvailable();
     quint32 nBufferSize = m_RecvBuffer.size();
-    qDebug() << "nBufferSize = " << nBufferSize;
     if (nBufferSize <= RECV_BUFFER_SIZE)
     {
-        qDebug() << "new datasize : " << data.size();
         m_RecvBuffer.append(data);
-
-        qDebug() << "after buffersize : " << m_RecvBuffer.size();
     }
     else
     {
-//        qDebug() << "tcp数据解析错误，数据缓存区已满 :" << nBufferSize;
         m_RecvBuffer.clear();
     }
 
@@ -427,7 +420,6 @@ void MainWindow::OnServerMsgRecv()
         QByteArray header = m_RecvBuffer.left(4);
         quint32 nLength = *(quint32*)header.data();
 
-        qDebug() << "nLength = " << nLength << ", nBufferSize = " << nBufferSize;
         if (nBufferSize - 4 >= nLength)
         {
             char* packetStr = m_RecvBuffer.data();
@@ -444,7 +436,6 @@ void MainWindow::OnServerMsgRecv()
             else
             {
                 m_RecvBuffer.clear();
-                qDebug() << "clear after = " << m_RecvBuffer.size();
                 bProcessLoop = false;
             }
         }
@@ -654,7 +645,6 @@ void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
     if (iter != m_mTabwidgetMap.end())
     {
         m_tabWidget->setCurrentWidget(iter.value());
-        qDebug() << "重设数据 : " << table_name;
         qobject_cast<LuaTableDataWidget*>(iter.value())->SetProtoData(proto);
     }
     else
