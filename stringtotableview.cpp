@@ -162,10 +162,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     });
 
     /* 创建UndoView */
-//    undoView = new QUndoView(undoStack);
-//    undoView->setWindowTitle(tr("Command List"));
-//    undoView->show();
-//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+    undoView = new QUndoView(undoStack);
+    undoView->setWindowTitle(tr("Command List"));
+    undoView->show();
+    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 

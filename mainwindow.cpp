@@ -21,8 +21,17 @@ MainWindow::MainWindow(QWidget *parent)
     m_menu_bar = new QMenuBar(this);             //创建一个菜单栏
     this->setMenuBar(m_menu_bar);
 
-    QMenu *file_menu = new QMenu("文件(&F)",m_menu_bar);
+    file_menu = new QMenu("文件(&F)",m_menu_bar);
     m_menu_bar->addMenu(file_menu);
+
+    QAction *new_action = new QAction("退出");
+    new_action->trigger();
+    file_menu->addAction(new_action);
+
+    connect(new_action, SIGNAL(triggered()), this, SLOT(OnBackLoginDialog()));
+
+    edit_menu = new QMenu("脚本(&S)",m_menu_bar);
+    m_menu_bar->addMenu(edit_menu);
 
     m_dShellScriptOpPrintDlg = new ShowMsgDialog(this);
 
@@ -73,6 +82,7 @@ void MainWindow::init_windows()
     //右边
     m_tabWidget = new QTabWidget(this);
     m_lineEdit = new QLineEdit(this);
+    m_lineEdit->setContextMenuPolicy(Qt::NoContextMenu);
 
     vlayout_right->addWidget(m_lineEdit);
     vlayout_right->addWidget(m_tabWidget);
@@ -305,30 +315,42 @@ void MainWindow::OnRequestModifyServerTime(quint64 nTime)
 //请求连接到特定服务器
 void MainWindow::OnClickConnectServerBtn(QString ip, qint32 port)
 {
-    qDebug() << "请求连接服务器: " << ip << ", " << port;
-    m_ServerSockect->connectToHost(QHostAddress(ip),port);
+    qDebug() << "请求连接服务器: " << ip << ", " << port << ", state = " << m_ServerSockect->state();
+    if (m_ServerSockect->state() == QAbstractSocket::UnconnectedState)
+    {
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        m_ServerSockect->connectToHost(QHostAddress(ip),port);
+        bool isConnect = m_ServerSockect->waitForConnected(5000);
+        if(!isConnect)
+        {
+            if (!m_loginDailog->isHidden())
+            {
+                m_loginDailog->OnShowError(QMessageBox::Critical, "服务器拒绝连接！！！");
+            }
+        }
+
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 //socket错误码
 void MainWindow::OnSocketError(QAbstractSocket::SocketError error)
 {
-    QString str;
     if (error == QAbstractSocket::ConnectionRefusedError)
     {
-        str = "服务器拒绝连接！！！";
+
     }
     else if (error == QAbstractSocket::OperationError)
     {
-        str = "重复请求连接！！！";
+        if (!m_loginDailog->isHidden())
+        {
+            m_loginDailog->OnShowError(QMessageBox::Critical, "重复请求连接！！！");
+        }
     }
     else if (error == QAbstractSocket::RemoteHostClosedError)
     {
-        str = "服务器断开连接！！！";
-        m_ServerSockect->close();
+        OnServerDisconnect();
     }
-
-    QMessageBox information(QMessageBox::Critical, tr("警告"), str, QMessageBox::Ok);
-    information.exec();
 }
 
 //双击文件树的item
@@ -351,6 +373,8 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
 //            m_loadingDialog->show();
 
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
+
+            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         }
         else if (item->parent()->text(0) == tr("全局一维表"))
         {
@@ -362,6 +386,67 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
 
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_LIST_DATA, output);
         }
+    }
+}
+
+void MainWindow::OnBackLoginDialog()
+{
+    if (m_ServerSockect->state() == QAbstractSocket::ConnectedState)
+    {
+        m_ServerSockect->close();
+    }
+    //释放界面资源
+    for(auto iter = m_mTabwidgetMap.begin(); iter != m_mTabwidgetMap.end();++iter)
+    {
+        TabWidgetCell* widgetCell = iter.value();
+        if (widgetCell)
+        {
+            delete widgetCell;
+            widgetCell = nullptr;
+        }
+    }
+    m_mTabwidgetMap.clear();
+
+    for (auto & data : m_vProcessStatusLabList)
+    {
+        QLabel* qLabel = data;
+        if(qLabel)
+        {
+            delete qLabel;
+            qLabel = nullptr;
+        }
+    }
+    m_vProcessStatusLabList.clear();
+    edit_menu->clear();
+
+    //隐藏主界面，打开登录界面
+    this->hide();
+    m_loginDailog->show();
+}
+
+void MainWindow::OnServerDisconnect()
+{
+    QMessageBox box(QMessageBox::Critical,QString::fromLocal8Bit("警告"),QString::fromLocal8Bit("服务器断开连接，返回登录界面？"));
+    QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("返回登录界面"),QMessageBox::AcceptRole));
+    QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
+    QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
+    cancelButton->hide();
+    box.exec();
+
+    //请求保存再关闭界面
+    if( box.clickedButton() == saveButton )
+    {
+        OnBackLoginDialog();
+    }
+    //直接关闭界面
+    else if ( box.clickedButton() == quitButton )
+    {
+        return;
+    }
+    //退出message对话框（直接关闭messageBox对话框）
+    else if ( box.clickedButton() == cancelButton )
+    {
+        return;
     }
 }
 
@@ -592,7 +677,6 @@ void MainWindow::OnRecvServerShellOptionPrint(const test_2::send_shell_option_pr
 
 void MainWindow::OnRecvServerShellOpsData(const test_2::server_send_shell_config_notify& proto)
 {
-    QMenu *edit_menu = new QMenu("脚本(&S)",m_menu_bar);
     for (int i = 0; i < proto.shell_ops_size();++i)
     {
         std::string file_name = proto.shell_ops(i);
@@ -603,8 +687,6 @@ void MainWindow::OnRecvServerShellOpsData(const test_2::server_send_shell_config
 
         connect(new_action, SIGNAL(triggered()), this, SLOT(OnMenuActionTriggered()));
     }
-
-    m_menu_bar->addMenu(edit_menu);
 }
 
 void MainWindow::OnRecvServerLuaListData(const test_2::send_lua_list_data_notify& proto)
@@ -663,9 +745,10 @@ void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
             m_tabWidget->setCurrentWidget(tabCell);
         }
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
-//https://blog.csdn.net/weixin_39485901/article/details/88413789
 void MainWindow::OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto)
 {
     m_treeWidget->clear();

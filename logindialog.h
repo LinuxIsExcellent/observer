@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDebug>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "globalconfig.h"
 
@@ -22,6 +23,8 @@ public:
     ~LoginDialog();
 
     void InitDialog();
+
+    void OnShowError(QMessageBox::Icon icon, QString str);
 protected:
     void mousePressEvent(QMouseEvent*);
     void mouseMoveEvent(QMouseEvent*);

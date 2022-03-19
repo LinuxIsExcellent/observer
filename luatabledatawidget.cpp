@@ -175,29 +175,30 @@ void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
 
 void LuaTableDataWidget::sectionMovableBtnClicked()
 {
-    QObject* sender = QObject::sender();
-    QPushButton* btn = nullptr;
-    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
-    {
-        btn = qobject_cast<QPushButton*>(sender);
-    }
+    m_tableView->setColumnHidden(1, true);
+//    QObject* sender = QObject::sender();
+//    QPushButton* btn = nullptr;
+//    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
+//    {
+//        btn = qobject_cast<QPushButton*>(sender);
+//    }
 
-    if(m_tableView->horizontalHeader()->sectionsMovable())
-    {
-        m_tableView->horizontalHeader()->setSectionsMovable(false);
-        if(btn)
-        {
-            btn->setText(tr("移动列"));
-        }
-    }
-    else
-    {
-        m_tableView->horizontalHeader()->setSectionsMovable(true);
-        if(btn)
-        {
-            btn->setText(tr("不可移动"));
-        }
-    }
+//    if(m_tableView->horizontalHeader()->sectionsMovable())
+//    {
+//        m_tableView->horizontalHeader()->setSectionsMovable(false);
+//        if(btn)
+//        {
+//            btn->setText(tr("移动列"));
+//        }
+//    }
+//    else
+//    {
+//        m_tableView->horizontalHeader()->setSectionsMovable(true);
+//        if(btn)
+//        {
+//            btn->setText(tr("不可移动"));
+//        }
+//    }
 }
 
 //调整表的字段顺序

@@ -53,7 +53,10 @@ public:
     void OnCloseTabWidget(QWidget* widget);
 
     void OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField, bool rootWidget = true);
-public:
+private:
+    //服务器断开连接
+    void OnServerDisconnect();
+
     //刷新左边的列表数据
     void OnLeftTreeViewData(const test_2::server_send_file_tree_notify& proto);
 
@@ -86,6 +89,8 @@ protected:
 
     void resizeEvent(QResizeEvent *event);
 public slots:
+    //返回登录界面
+    void OnBackLoginDialog();
 
     void OnServerConnect();
 
@@ -114,6 +119,9 @@ private:
     LoginDialog* m_loginDailog;
 
     QMenuBar *m_menu_bar;       //菜单栏
+    QMenu *file_menu;           //文件菜单
+    QMenu *edit_menu;           //脚本菜单
+
     ShowMsgDialog*   m_dShellScriptOpPrintDlg;    //展示shell执行结果的对话框
 
     //mainwindows中的控件

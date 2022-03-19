@@ -10,7 +10,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog | Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
     QDesktopWidget* desktopWidget = QApplication::desktop();
     if(desktopWidget)
@@ -33,6 +33,12 @@ LoginDialog::LoginDialog(QWidget *parent) :
 LoginDialog::~LoginDialog()
 {
     delete ui;
+}
+
+void LoginDialog::OnShowError(QMessageBox::Icon icon, QString str)
+{
+    QMessageBox information(icon, tr("警告"), str, QMessageBox::Ok);
+    information.exec();
 }
 
 void LoginDialog::InitDialog()
