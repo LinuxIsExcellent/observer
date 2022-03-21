@@ -107,6 +107,9 @@ public:
 
     //粘贴全局剪切板的内容
     void paste();
+
+    //获得行列高度的数据
+    QString GetRowColumnHeightData();
 public slots:
     //刷新界面
     virtual void Flush() {};

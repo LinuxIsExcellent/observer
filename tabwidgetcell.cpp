@@ -119,11 +119,21 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
         m_tableCellMenu->clear();
         m_tableCellMenu->addAction("插入行", this, [=](){
-            qDebug() << "插入一行 :" << nIndex;
+            m_standardItemModel->insertRows(nIndex, 1);
+            m_bTableDataChange = true;
+            ChangeDataModify();
         });
 
         m_tableCellMenu->addAction("增加行", this, [=](){
-            qDebug() << "增加一行 :" << nIndex;
+            m_standardItemModel->insertRows(nIndex + 1, 1);
+            m_bTableDataChange = true;
+            ChangeDataModify();
+        });
+
+        m_tableCellMenu->addAction("删除行", this, [=](){
+            m_standardItemModel->removeRows(nIndex, 1);
+            m_bTableDataChange = true;
+            ChangeDataModify();
         });
 
         m_tableCellMenu->exec(pt);
@@ -254,21 +264,12 @@ void TabWidgetCell::keyPressEvent(QKeyEvent *ev)
 
     if (ev->key() == Qt::Key_C  &&  ev->modifiers() == Qt::ControlModifier)
     {
-        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
-        qDebug() << "selectList = " << selectList;
-
         copy();
         return;
     }
 
     if (ev->key() == Qt::Key_V  &&  ev->modifiers() == Qt::ControlModifier)
     {
-        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
-        qDebug() << "selectList = " << selectList;
-
-        QClipboard* clipboard = QApplication::clipboard();
-        qDebug() << "clipboard->text() = " << clipboard->text();
-
         paste();
         return;
     }
@@ -377,14 +378,165 @@ void TabWidgetCell::redo()
     }
 }
 
-//界面优化 TODO
 void TabWidgetCell::copy()
 {
+    QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+    int min_row = 99999999;
+    int max_row = -1;
+
+    int min_col = 99999999;
+    int max_col = -1;
+
+    //赛选出最大最小的行列
+    for (auto modelIndex : selectList)
+    {
+        if (modelIndex.row() >= max_row)
+        {
+            max_row = modelIndex.row();
+        }
+
+        if (modelIndex.row() <= min_row)
+        {
+            min_row = modelIndex.row();
+        }
+
+        if (modelIndex.column() >= max_col)
+        {
+            max_col = modelIndex.column();
+        }
+
+        if (modelIndex.column() <= min_col)
+        {
+            min_col = modelIndex.column();
+        }
+    }
+
+    if (max_row < 0 || max_col < 0)
+    {
+        return;
+    }
+
+    QVector<QVector<QModelIndex>> modelTables;
+    modelTables.resize(max_row + 1);
+    for(auto& data : modelTables)
+    {
+        data.resize(max_col + 1);
+    }
+
+    QString strCopy = "";
+    for (int row = min_row; row <= max_row; ++row)
+    {
+        QString strRowCopy = "";
+        for (int col = min_col; col <= max_col; ++col)
+        {
+            QModelIndex modelIndex = m_standardItemModel->index(row, col);
+            if (selectList.contains(modelIndex))
+            {
+                strRowCopy = strRowCopy + modelIndex.data().toString();
+            }
+
+            if (col < max_col)
+            {
+                strRowCopy = strRowCopy + "\t";
+            }
+        }
+        strRowCopy = strRowCopy + "\n";
+
+        strCopy = strCopy + strRowCopy;
+    }
+
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(strCopy);
 }
 
-//界面优化 TODO
 void TabWidgetCell::paste()
 {
+    QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+
+    int min_row = 99999999;
+    int max_row = -1;
+
+    int min_col = 99999999;
+    int max_col = -1;
+
+    //赛选出最大最小的行列
+    for (auto modelIndex : selectList)
+    {
+        if (modelIndex.row() >= max_row)
+        {
+            max_row = modelIndex.row();
+        }
+
+        if (modelIndex.row() <= min_row)
+        {
+            min_row = modelIndex.row();
+        }
+
+        if (modelIndex.column() >= max_col)
+        {
+            max_col = modelIndex.column();
+        }
+
+        if (modelIndex.column() <= min_col)
+        {
+            min_col = modelIndex.column();
+        }
+    }
+
+    if (max_row < 0 || max_col < 0)
+    {
+        return;
+    }
+
+    QVector<QVector<QModelIndex>> modelTables;
+    modelTables.resize(max_row + 1);
+    for(auto& data : modelTables)
+    {
+        data.resize(max_col + 1);
+    }
+
+    QClipboard* clipboard = QApplication::clipboard();
+    QString copyStr = clipboard->text();
+    QStringList rowStringList = copyStr.split("\n");
+
+    ModifCommandList commandList;
+    for (int row = 0; row < rowStringList.size(); ++row)
+    {
+        QString rowStr = rowStringList[row];
+        if(!rowStr.isEmpty())
+        {
+            QStringList colStringList = rowStr.split("\t");
+            for (int col = 0; col < colStringList.size(); ++col)
+            {
+                QModelIndex modelIndex = m_standardItemModel->index(row + min_row, col + min_col);
+                if (selectList.contains(modelIndex))
+                {
+                    QVariant oldData = modelIndex.data();
+                    QVariant data = QVariant(colStringList[col]);
+
+                    ModifInfo sourceInfo;
+                    sourceInfo.index = modelIndex;
+                    sourceInfo.oldData = oldData;
+                    sourceInfo.data = data;
+
+                    commandList.push_front(sourceInfo);
+
+                    m_bTableDataChange = true;
+
+                    m_standardItemModel->setData(modelIndex, colStringList[col]);
+
+                    m_standardItemModel->item(modelIndex.row(), modelIndex.column())->setBackground(QColor(Qt::red));
+                }
+            }
+        }
+    }
+
+    if (commandList.size() > 0)
+    {
+        undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+    }
+
+    GetRowColumnHeightData();
 }
 
 void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)
@@ -400,4 +552,34 @@ void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)
             m_standardItemModel->setData(index, data);
         }
     }
+}
+
+QString TabWidgetCell::GetRowColumnHeightData()
+{
+    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+    {
+        for (int row = 0; row < m_standardItemModel->rowCount();++row)
+        {
+            qDebug() << m_tableView->rowHeight(row);
+        }
+
+        for (int col = 0; col < m_standardItemModel->columnCount();++col)
+        {
+            qDebug() << m_tableView->columnWidth(col);
+        }
+
+        for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
+        {
+            for (int col = 0; col < m_standardItemModel->columnCount(); ++col)
+            {
+                QStandardItem *item = m_standardItemModel->item(row, col);
+                if(item)
+                {
+                    qDebug() << item->background().color().name();
+                }
+            }
+        }
+    }
+
+    return "";
 }
