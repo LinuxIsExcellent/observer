@@ -157,10 +157,21 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QModelIndex index = m_tableView->currentIndex();
         disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
         m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
+        qDebug() << "index.data(Qt::DisplayRole) = " << index.data(Qt::DisplayRole);
         connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     });
-    connect(delegate, &TableDelegate::closeEditor, this, [ = ]()
+    connect(delegate, &TableDelegate::closeEditor, this, [ = ](QWidget *editor)
     {
+        if (editor->objectName() == "ComboboxLineedit")
+        {
+            ComboboxLineedit* lineEdit = static_cast<ComboboxLineedit*>(editor);
+            if (lineEdit)
+            {
+                QModelIndex index = lineEdit->getModelIndex();
+                m_tableView->setCurrentIndex(index);
+            }
+        }
+
         QModelIndex index = m_tableView->currentIndex();
         QVariant data = index.data(Qt::DisplayRole);
         QVariant oldData = index.data(Qt::UserRole);
@@ -524,8 +535,6 @@ void TabWidgetCell::paste()
                     m_bTableDataChange = true;
 
                     m_standardItemModel->setData(modelIndex, colStringList[col]);
-
-                    m_standardItemModel->item(modelIndex.row(), modelIndex.column())->setBackground(QColor(Qt::red));
                 }
             }
         }
@@ -535,8 +544,6 @@ void TabWidgetCell::paste()
     {
         undoStack->push(new ModifCommand(m_standardItemModel, commandList));
     }
-
-    GetRowColumnHeightData();
 }
 
 void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)

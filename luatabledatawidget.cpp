@@ -1,6 +1,7 @@
 #include "luatabledatawidget.h"
 #include "annonationeditwidget.h"
 #include "stringtotableview.h"
+#include "tabledelegate.h"
 #include <QComboBox>
 #include <regex>
 
@@ -359,6 +360,11 @@ void LuaTableDataWidget::Flush()
                 }
 
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
+                if (visualColumn == 1)
+                {
+                    dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
+                }
+
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }

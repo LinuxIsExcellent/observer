@@ -1,4 +1,5 @@
 #include "modifcommand.h"
+#include <QDebug>
 
 ModifCommand::ModifCommand(QStandardItemModel *model, QModelIndex index,
                            QVariant oldData, QVariant data, QUndoCommand *parent) : QUndoCommand(parent)
@@ -19,6 +20,7 @@ void ModifCommand::undo()
 {
     if (m_commandList.size() == 0)
     {
+        qDebug() << "undo: index = " << index;
         model->setData(index, oldData);
     }
     //如果是一堆ModelIndex

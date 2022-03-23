@@ -2,6 +2,21 @@
 #define TABLEDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include "comboboxlineedit.h"
+
+extern "C"
+{
+     #include "lua.h"
+     #include "lauxlib.h"
+     #include "lualib.h"
+}
+
+enum DelegateModel
+{
+    NormalEdit = 1,         //普通的lineEdit
+    EditAndCombox = 2,      //ComboboxLineedit
+    EditAndExpandDataButton = 3,
+};
 
 class TableDelegate : public QStyledItemDelegate
 {
