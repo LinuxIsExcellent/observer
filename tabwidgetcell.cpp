@@ -590,3 +590,25 @@ QString TabWidgetCell::GetRowColumnHeightData()
 
     return "";
 }
+
+void TabWidgetCell::SetRowAndColParam()
+{
+    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+    {
+        for (int row = 0; row < m_standardItemModel->rowCount();++row)
+        {
+            if (row < m_vRowHeight.size())
+            {
+                m_tableView->setRowHeight(row, m_vRowHeight[row]);
+            }
+        }
+
+        for (int col = 0; col < m_standardItemModel->rowCount();++col)
+        {
+            if (col < m_vColWidth.size())
+            {
+                m_tableView->setColumnWidth(col, m_vColWidth[col]);
+            }
+        }
+    }
+}

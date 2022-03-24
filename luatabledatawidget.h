@@ -9,34 +9,6 @@
 #include "msg.pb.h"
 #include "tabwidgetcell.h"
 
-typedef struct fieldInfo
-{
-    QString sFieldName;      //字段名字
-    QString sFieldAnnonation;      //字段的备注
-    QString sFieldLink;      //字段的关联
-
-    friend QDebug& operator << (QDebug out, const fieldInfo& info)
-    {
-        out << info.sFieldName << info.sFieldAnnonation << info.sFieldLink;
-
-        return out;
-    };
-}FIELDINFO;
-
-//表的字段信息
-typedef struct fieldSquence
-{
-    QString sIndex;         //索引
-    QVector<FIELDINFO> vSFieldSquences;       //对应的字段顺序
-
-    friend QDebug& operator << (QDebug out, const fieldSquence& info)
-    {
-        out << info.sIndex << info.vSFieldSquences;
-
-        return out;
-    };
-}FIELDSQUENCE;
-
 //键值对
 typedef struct oneValuePair
 {
@@ -113,7 +85,6 @@ private:
     QMap<QString, int>  m_mFieldNames; //表的字段的顺序
     QMap<QString, int>  m_mFieldTypes; //表的字段对应的类型
 
-    QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //二维表的表头顺序
 
 //    QVector<RowState>   m_vBRowDataChange;  //行数据是否被改变(数据变化存储以二维表的行为粒度)
 };

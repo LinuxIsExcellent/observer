@@ -366,6 +366,8 @@ void LuaTableDataWidget::Flush()
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }
+
+        SetRowAndColParam();
     }
 }
 

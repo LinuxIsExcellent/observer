@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[27]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[26]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -134,9 +134,6 @@ extern table_dataDefaultTypeInternal _table_data_default_instance_;
 class table_field_list;
 struct table_field_listDefaultTypeInternal;
 extern table_field_listDefaultTypeInternal _table_field_list_default_instance_;
-class table_info;
-struct table_infoDefaultTypeInternal;
-extern table_infoDefaultTypeInternal _table_info_default_instance_;
 }  // namespace test_2
 PROTOBUF_NAMESPACE_OPEN
 template<> ::test_2::client_field_link_info_quest* Arena::CreateMaybeMessage<::test_2::client_field_link_info_quest>(Arena*);
@@ -165,7 +162,6 @@ template<> ::test_2::server_send_file_tree_notify* Arena::CreateMaybeMessage<::t
 template<> ::test_2::server_send_shell_config_notify* Arena::CreateMaybeMessage<::test_2::server_send_shell_config_notify>(Arena*);
 template<> ::test_2::table_data* Arena::CreateMaybeMessage<::test_2::table_data>(Arena*);
 template<> ::test_2::table_field_list* Arena::CreateMaybeMessage<::test_2::table_field_list>(Arena*);
-template<> ::test_2::table_info* Arena::CreateMaybeMessage<::test_2::table_info>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace test_2 {
 
@@ -2331,177 +2327,6 @@ class table_data final :
 };
 // -------------------------------------------------------------------
 
-class table_info final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.table_info) */ {
- public:
-  inline table_info() : table_info(nullptr) {}
-  ~table_info() override;
-  explicit constexpr table_info(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  table_info(const table_info& from);
-  table_info(table_info&& from) noexcept
-    : table_info() {
-    *this = ::std::move(from);
-  }
-
-  inline table_info& operator=(const table_info& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline table_info& operator=(table_info&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const table_info& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const table_info* internal_default_instance() {
-    return reinterpret_cast<const table_info*>(
-               &_table_info_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    12;
-
-  friend void swap(table_info& a, table_info& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(table_info* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(table_info* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  table_info* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<table_info>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const table_info& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const table_info& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(table_info* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "test_2.table_info";
-  }
-  protected:
-  explicit table_info(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kFiledSequencesFieldNumber = 2,
-    kTableNameFieldNumber = 1,
-  };
-  // repeated .test_2.field_squence filed_sequences = 2;
-  int filed_sequences_size() const;
-  private:
-  int _internal_filed_sequences_size() const;
-  public:
-  void clear_filed_sequences();
-  ::test_2::field_squence* mutable_filed_sequences(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
-      mutable_filed_sequences();
-  private:
-  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
-  ::test_2::field_squence* _internal_add_filed_sequences();
-  public:
-  const ::test_2::field_squence& filed_sequences(int index) const;
-  ::test_2::field_squence* add_filed_sequences();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
-      filed_sequences() const;
-
-  // bytes table_name = 1;
-  void clear_table_name();
-  const std::string& table_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_table_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_table_name();
-  PROTOBUF_NODISCARD std::string* release_table_name();
-  void set_allocated_table_name(std::string* table_name);
-  private:
-  const std::string& _internal_table_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_table_name(const std::string& value);
-  std::string* _internal_mutable_table_name();
-  public:
-
-  // @@protoc_insertion_point(class_scope:test_2.table_info)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_2eproto;
-};
-// -------------------------------------------------------------------
-
 class client_save_table_data_request final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:test_2.client_save_table_data_request) */ {
  public:
@@ -2550,7 +2375,7 @@ class client_save_table_data_request final :
                &_client_save_table_data_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    12;
 
   friend void swap(client_save_table_data_request& a, client_save_table_data_request& b) {
     a.Swap(&b);
@@ -2721,7 +2546,7 @@ class send_shell_option_print_notify final :
                &_send_shell_option_print_notify_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    13;
 
   friend void swap(send_shell_option_print_notify& a, send_shell_option_print_notify& b) {
     a.Swap(&b);
@@ -2883,7 +2708,7 @@ class client_save_table_info_request final :
                &_client_save_table_info_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    14;
 
   friend void swap(client_save_table_info_request& a, client_save_table_info_request& b) {
     a.Swap(&b);
@@ -3054,7 +2879,7 @@ class send_server_current_time_nofity final :
                &_send_server_current_time_nofity_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    15;
 
   friend void swap(send_server_current_time_nofity& a, send_server_current_time_nofity& b) {
     a.Swap(&b);
@@ -3200,7 +3025,7 @@ class client_modify_server_time_quest final :
                &_client_modify_server_time_quest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    16;
 
   friend void swap(client_modify_server_time_quest& a, client_modify_server_time_quest& b) {
     a.Swap(&b);
@@ -3346,7 +3171,7 @@ class client_lua_list_data_quest final :
                &_client_lua_list_data_quest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    17;
 
   friend void swap(client_lua_list_data_quest& a, client_lua_list_data_quest& b) {
     a.Swap(&b);
@@ -3497,7 +3322,7 @@ class field_type_key_value final :
                &_field_type_key_value_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    18;
 
   friend void swap(field_type_key_value& a, field_type_key_value& b) {
     a.Swap(&b);
@@ -3675,7 +3500,7 @@ class send_lua_list_data_notify final :
                &_send_lua_list_data_notify_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    19;
 
   friend void swap(send_lua_list_data_notify& a, send_lua_list_data_notify& b) {
     a.Swap(&b);
@@ -3750,6 +3575,7 @@ class send_lua_list_data_notify final :
 
   enum : int {
     kFiledTypesFieldNumber = 2,
+    kFiledSequencesFieldNumber = 3,
     kTableNameFieldNumber = 1,
   };
   // repeated .test_2.field_type_key_value filed_types = 2;
@@ -3769,6 +3595,24 @@ class send_lua_list_data_notify final :
   ::test_2::field_type_key_value* add_filed_types();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_key_value >&
       filed_types() const;
+
+  // repeated .test_2.field_squence filed_sequences = 3;
+  int filed_sequences_size() const;
+  private:
+  int _internal_filed_sequences_size() const;
+  public:
+  void clear_filed_sequences();
+  ::test_2::field_squence* mutable_filed_sequences(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+      mutable_filed_sequences();
+  private:
+  const ::test_2::field_squence& _internal_filed_sequences(int index) const;
+  ::test_2::field_squence* _internal_add_filed_sequences();
+  public:
+  const ::test_2::field_squence& filed_sequences(int index) const;
+  ::test_2::field_squence* add_filed_sequences();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+      filed_sequences() const;
 
   // bytes table_name = 1;
   void clear_table_name();
@@ -3792,6 +3636,7 @@ class send_lua_list_data_notify final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_type_key_value > filed_types_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
@@ -3846,7 +3691,7 @@ class save_lua_list_data_request final :
                &_save_lua_list_data_request_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    20;
 
   friend void swap(save_lua_list_data_request& a, save_lua_list_data_request& b) {
     a.Swap(&b);
@@ -4016,7 +3861,7 @@ class client_field_link_info_quest final :
                &_client_field_link_info_quest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    21;
 
   friend void swap(client_field_link_info_quest& a, client_field_link_info_quest& b) {
     a.Swap(&b);
@@ -4135,7 +3980,7 @@ class table_field_list final :
                &_table_field_list_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    22;
 
   friend void swap(table_field_list& a, table_field_list& b) {
     a.Swap(&b);
@@ -4312,7 +4157,7 @@ class send_field_link_info final :
                &_send_field_link_info_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    23;
 
   friend void swap(send_field_link_info& a, send_field_link_info& b) {
     a.Swap(&b);
@@ -4487,7 +4332,7 @@ class process_statue_info final :
                &_process_statue_info_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    24;
 
   friend void swap(process_statue_info& a, process_statue_info& b) {
     a.Swap(&b);
@@ -4649,7 +4494,7 @@ class send_process_listening_status_info final :
                &_send_process_listening_status_info_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    25;
 
   friend void swap(send_process_listening_status_info& a, send_process_listening_status_info& b) {
     a.Swap(&b);
@@ -6078,101 +5923,6 @@ table_data::filed_sequences() const {
 
 // -------------------------------------------------------------------
 
-// table_info
-
-// bytes table_name = 1;
-inline void table_info::clear_table_name() {
-  table_name_.ClearToEmpty();
-}
-inline const std::string& table_info::table_name() const {
-  // @@protoc_insertion_point(field_get:test_2.table_info.table_name)
-  return _internal_table_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void table_info::set_table_name(ArgT0&& arg0, ArgT... args) {
- 
- table_name_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:test_2.table_info.table_name)
-}
-inline std::string* table_info::mutable_table_name() {
-  std::string* _s = _internal_mutable_table_name();
-  // @@protoc_insertion_point(field_mutable:test_2.table_info.table_name)
-  return _s;
-}
-inline const std::string& table_info::_internal_table_name() const {
-  return table_name_.Get();
-}
-inline void table_info::_internal_set_table_name(const std::string& value) {
-  
-  table_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* table_info::_internal_mutable_table_name() {
-  
-  return table_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* table_info::release_table_name() {
-  // @@protoc_insertion_point(field_release:test_2.table_info.table_name)
-  return table_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void table_info::set_allocated_table_name(std::string* table_name) {
-  if (table_name != nullptr) {
-    
-  } else {
-    
-  }
-  table_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), table_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (table_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    table_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:test_2.table_info.table_name)
-}
-
-// repeated .test_2.field_squence filed_sequences = 2;
-inline int table_info::_internal_filed_sequences_size() const {
-  return filed_sequences_.size();
-}
-inline int table_info::filed_sequences_size() const {
-  return _internal_filed_sequences_size();
-}
-inline void table_info::clear_filed_sequences() {
-  filed_sequences_.Clear();
-}
-inline ::test_2::field_squence* table_info::mutable_filed_sequences(int index) {
-  // @@protoc_insertion_point(field_mutable:test_2.table_info.filed_sequences)
-  return filed_sequences_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
-table_info::mutable_filed_sequences() {
-  // @@protoc_insertion_point(field_mutable_list:test_2.table_info.filed_sequences)
-  return &filed_sequences_;
-}
-inline const ::test_2::field_squence& table_info::_internal_filed_sequences(int index) const {
-  return filed_sequences_.Get(index);
-}
-inline const ::test_2::field_squence& table_info::filed_sequences(int index) const {
-  // @@protoc_insertion_point(field_get:test_2.table_info.filed_sequences)
-  return _internal_filed_sequences(index);
-}
-inline ::test_2::field_squence* table_info::_internal_add_filed_sequences() {
-  return filed_sequences_.Add();
-}
-inline ::test_2::field_squence* table_info::add_filed_sequences() {
-  ::test_2::field_squence* _add = _internal_add_filed_sequences();
-  // @@protoc_insertion_point(field_add:test_2.table_info.filed_sequences)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
-table_info::filed_sequences() const {
-  // @@protoc_insertion_point(field_list:test_2.table_info.filed_sequences)
-  return filed_sequences_;
-}
-
-// -------------------------------------------------------------------
-
 // client_save_table_data_request
 
 // bytes table_name = 1;
@@ -6760,6 +6510,46 @@ send_lua_list_data_notify::filed_types() const {
   return filed_types_;
 }
 
+// repeated .test_2.field_squence filed_sequences = 3;
+inline int send_lua_list_data_notify::_internal_filed_sequences_size() const {
+  return filed_sequences_.size();
+}
+inline int send_lua_list_data_notify::filed_sequences_size() const {
+  return _internal_filed_sequences_size();
+}
+inline void send_lua_list_data_notify::clear_filed_sequences() {
+  filed_sequences_.Clear();
+}
+inline ::test_2::field_squence* send_lua_list_data_notify::mutable_filed_sequences(int index) {
+  // @@protoc_insertion_point(field_mutable:test_2.send_lua_list_data_notify.filed_sequences)
+  return filed_sequences_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >*
+send_lua_list_data_notify::mutable_filed_sequences() {
+  // @@protoc_insertion_point(field_mutable_list:test_2.send_lua_list_data_notify.filed_sequences)
+  return &filed_sequences_;
+}
+inline const ::test_2::field_squence& send_lua_list_data_notify::_internal_filed_sequences(int index) const {
+  return filed_sequences_.Get(index);
+}
+inline const ::test_2::field_squence& send_lua_list_data_notify::filed_sequences(int index) const {
+  // @@protoc_insertion_point(field_get:test_2.send_lua_list_data_notify.filed_sequences)
+  return _internal_filed_sequences(index);
+}
+inline ::test_2::field_squence* send_lua_list_data_notify::_internal_add_filed_sequences() {
+  return filed_sequences_.Add();
+}
+inline ::test_2::field_squence* send_lua_list_data_notify::add_filed_sequences() {
+  ::test_2::field_squence* _add = _internal_add_filed_sequences();
+  // @@protoc_insertion_point(field_add:test_2.send_lua_list_data_notify.filed_sequences)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence >&
+send_lua_list_data_notify::filed_sequences() const {
+  // @@protoc_insertion_point(field_list:test_2.send_lua_list_data_notify.filed_sequences)
+  return filed_sequences_;
+}
+
 // -------------------------------------------------------------------
 
 // save_lua_list_data_request
@@ -7195,8 +6985,6 @@ send_process_listening_status_info::infos() const {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

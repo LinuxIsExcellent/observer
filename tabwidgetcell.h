@@ -34,13 +34,33 @@ namespace Ui {
 class TabWidgetCell;
 }
 
-//enum RowState
-//{
-//    NONE = 0,
-//    MODIFY = 1,
-//    ADD = 2,
-//    DELETE = 3,
-//};
+typedef struct fieldInfo
+{
+    QString sFieldName;      //字段名字
+    QString sFieldAnnonation;      //字段的备注
+    QString sFieldLink;      //字段的关联
+
+    friend QDebug& operator << (QDebug out, const fieldInfo& info)
+    {
+        out << info.sFieldName << info.sFieldAnnonation << info.sFieldLink;
+
+        return out;
+    };
+}FIELDINFO;
+
+//表的字段信息
+typedef struct fieldSquence
+{
+    QString sIndex;         //索引
+    QVector<FIELDINFO> vSFieldSquences;       //对应的字段顺序
+
+    friend QDebug& operator << (QDebug out, const fieldSquence& info)
+    {
+        out << info.sIndex << info.vSFieldSquences;
+
+        return out;
+    };
+}FIELDSQUENCE;
 
 class TabWidgetCell : public QWidget
 {
@@ -75,6 +95,13 @@ public:
     //请求保存数据
     virtual void OnRequestSaveData() {}
 
+    void SetDataModify()
+    {
+        m_bTableDataChange = true;
+
+        ChangeDataModify();
+    }
+
     virtual inline bool IsTableDataChange()
     {
         return m_bTableDataChange;
@@ -108,12 +135,13 @@ public:
     //粘贴全局剪切板的内容
     void paste();
 
+    //设置行高和列宽
+    void SetRowAndColParam();
     //获得行列高度的数据
     QString GetRowColumnHeightData();
 public slots:
     //刷新界面
     virtual void Flush() {};
-
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
@@ -149,6 +177,9 @@ public:
     QVBoxLayout* vlayout_all;  //整个TabWidget类的垂直布局
 
     QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
+
+    QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //表的外围信息
+
     bool    m_bTableDataChange; //表的数据是否被更改
 
     QPushButton* m_saveDataButton;  //保存数据的按钮
@@ -162,6 +193,9 @@ public:
     QAction *redoAction;
     QUndoStack *undoStack;
     QUndoView *undoView;
+
+    QVector<int>    m_vRowHeight;       //行高
+    QVector<int>    m_vColWidth;        //列宽
 };
 
 #endif // TABWIDGETCELL_H

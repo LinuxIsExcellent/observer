@@ -42,6 +42,8 @@ private slots:
     virtual void Flush();
 private:
     QVector<FIELDKEYTYPE> m_mDataList;  //表的数据
+
+    QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //二维表的表头顺序
 };
 
 #endif // LUALISTDATAWIDGET_H

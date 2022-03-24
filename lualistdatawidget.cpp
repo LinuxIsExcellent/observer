@@ -24,7 +24,7 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
             if (m_mDataList[nRow].nType == LUA_TTABLE)
             {
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, "", nullptr, this);
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, m_mDataList[nRow].sKey, &m_mFieldSquence, this);
                     dialog->show();
                 });
             }
@@ -50,6 +50,27 @@ void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& pr
         fkt.nType = fieldKeyType.type();
 
         m_mDataList.push_back(fkt);
+    }
+
+    for (int i = 0; i < proto.filed_sequences_size();++i)
+    {
+        test_2::field_squence fieldSquence = proto.filed_sequences(i);
+
+        QString sIndex = QString::fromStdString(fieldSquence.index());
+
+        FIELDSQUENCE squence;
+        for (int j = 0; j < fieldSquence.infos_size();++j)
+        {
+            FIELDINFO fieldInfo;
+
+            fieldInfo.sFieldName = QString::fromStdString(fieldSquence.infos(j).field_name());
+            fieldInfo.sFieldAnnonation = QString::fromStdString(fieldSquence.infos(j).field_desc());
+            fieldInfo.sFieldLink = QString::fromStdString(fieldSquence.infos(j).field_link());
+
+            squence.vSFieldSquences.push_back(fieldInfo);
+        }
+
+        m_mFieldSquence.insert(sIndex, squence);
     }
 
     Flush();
@@ -85,14 +106,54 @@ void LuaListDataWidget::Flush()
         m_bTableDataChange = false;
 
         ChangeDataModify();
+
+        SetRowAndColParam();
     }
 }
 
 void LuaListDataWidget::OnRequestSaveData()
 {
+    for (auto& data : m_mFieldSquence)
+    {
+        qDebug() << data.sIndex;
+        for (auto vData : data.vSFieldSquences)
+        {
+            qDebug() << vData;
+        }
+    }
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
+        //请求保存表的信息
+        {
+            test_2::client_save_table_info_request quest;
+            quest.set_table_name(m_sName.toStdString());
+
+            for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
+            {
+                test_2::field_squence* field_squence = quest.add_field_squences();
+                if (field_squence)
+                {
+                    field_squence->set_index(iter.key().toStdString());
+                    for (auto sData : iter.value().vSFieldSquences)
+                    {
+                        test_2::field_info* fieldInfo = field_squence->add_infos();
+                        if (fieldInfo)
+                        {
+                            fieldInfo->set_field_name(sData.sFieldName.toStdString());
+                            fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
+                            fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+                        }
+                    }
+                }
+            }
+
+            std::string output;
+            quest.SerializeToString(&output);
+
+            m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
+        }
+
         QAbstractItemModel* model = m_tableView->model();
 
         test_2::save_lua_list_data_request quest;

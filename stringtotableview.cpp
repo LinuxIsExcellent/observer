@@ -322,6 +322,7 @@ void StringToTableView::OnSaveData()
 
     sResult = sResult + "}";
 
+    bool fieldSquenceChange = false;
     if (vNewKeySquence.size() > 0)
     {
         if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
@@ -351,11 +352,7 @@ void StringToTableView::OnSaveData()
             for (int i = vNewKeySquence.size() - 1; i >= 0; --i)
             {
                 squence.vSFieldSquences.push_front(vNewKeySquence[i]);
-            }
-
-            for (int j = 0; j < squence.vSFieldSquences.size();j++)
-            {
-                qDebug() << squence.vSFieldSquences[j];
+                fieldSquenceChange = true;
             }
         }
         //直接插入
@@ -365,6 +362,8 @@ void StringToTableView::OnSaveData()
             squence.sIndex = m_sTableName;
             squence.vSFieldSquences = vNewKeySquence;
             m_mFieldSquence->insert(m_sTableName, squence);
+
+            fieldSquenceChange = true;
         }
     }
 
@@ -375,6 +374,11 @@ void StringToTableView::OnSaveData()
         if (tabWidget)
         {
             tabWidget->ChangeModelIndexData(index, sResult);
+
+            if (fieldSquenceChange)
+            {
+                tabWidget->SetDataModify();
+            }
         }
     }
     else
@@ -383,6 +387,11 @@ void StringToTableView::OnSaveData()
         if (view)
         {
             view->ChangeModelIndexData(index, sResult);
+
+            if (fieldSquenceChange)
+            {
+                view->SetDataModify();
+            }
         }
     }
 }

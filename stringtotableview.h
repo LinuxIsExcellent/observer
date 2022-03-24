@@ -58,6 +58,11 @@ public:
         undoStack->clear();
     }
 
+    void SetDataModify()
+    {
+        m_bDataChange = true;
+    }
+
     //改变一个modelIndex的数据
     void ChangeModelIndexData(QModelIndex index, QString sData);
 
