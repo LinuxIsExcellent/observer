@@ -83,9 +83,6 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
 {
-    qDebug() << "sField = " << sField;
-    qDebug() << "sFieldLink = " << sFieldLink;
-
     if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
         for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
@@ -176,30 +173,29 @@ void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
 
 void LuaTableDataWidget::sectionMovableBtnClicked()
 {
-    m_tableView->setColumnHidden(1, true);
-//    QObject* sender = QObject::sender();
-//    QPushButton* btn = nullptr;
-//    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
-//    {
-//        btn = qobject_cast<QPushButton*>(sender);
-//    }
+    QObject* sender = QObject::sender();
+    QPushButton* btn = nullptr;
+    if (sender->metaObject()->className() == QStringLiteral("QPushButton"))
+    {
+        btn = qobject_cast<QPushButton*>(sender);
+    }
 
-//    if(m_tableView->horizontalHeader()->sectionsMovable())
-//    {
-//        m_tableView->horizontalHeader()->setSectionsMovable(false);
-//        if(btn)
-//        {
-//            btn->setText(tr("移动列"));
-//        }
-//    }
-//    else
-//    {
-//        m_tableView->horizontalHeader()->setSectionsMovable(true);
-//        if(btn)
-//        {
-//            btn->setText(tr("不可移动"));
-//        }
-//    }
+    if(m_tableView->horizontalHeader()->sectionsMovable())
+    {
+        m_tableView->horizontalHeader()->setSectionsMovable(false);
+        if(btn)
+        {
+            btn->setText(tr("移动列"));
+        }
+    }
+    else
+    {
+        m_tableView->horizontalHeader()->setSectionsMovable(true);
+        if(btn)
+        {
+            btn->setText(tr("不可移动"));
+        }
+    }
 }
 
 //调整表的字段顺序
@@ -355,9 +351,10 @@ void LuaTableDataWidget::Flush()
 
                 if(m_mFieldTypes.find(strFieldName).value() == LUA_TSTRING)
                 {
-                    strFieldValue = strFieldValue.replace('\n',"\\n");
                     strFieldValue = strFieldValue.replace('\"', "\\\"");
                 }
+
+                strFieldValue = strFieldValue.replace('\n',"\\n");
 
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
                 if (visualColumn == 1)
@@ -365,6 +362,7 @@ void LuaTableDataWidget::Flush()
                     dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
                 }
 
+                qDebug() << "strFieldValue" << strFieldValue;
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }

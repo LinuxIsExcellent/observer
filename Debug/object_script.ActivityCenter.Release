@@ -1,6 +1,7 @@
 INPUT(
 ./release\addfieldlinkdialog.o
 ./release\annonationeditwidget.o
+./release\comboboxlineedit.o
 ./release\globalapplication.o
 ./release\globalconfig.o
 ./release\log.o
@@ -20,6 +21,7 @@ INPUT(
 ./release\mainwindow.o
 ./release\moc_addfieldlinkdialog.o
 ./release\moc_annonationeditwidget.o
+./release\moc_comboboxlineedit.o
 ./release\moc_logindialog.o
 ./release\moc_lualistdatawidget.o
 ./release\moc_modifyservertimewidget.o

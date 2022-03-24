@@ -162,10 +162,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     });
 
     /* 创建UndoView */
-    undoView = new QUndoView(undoStack);
-    undoView->setWindowTitle(tr("Command List"));
-    undoView->show();
-    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+//    undoView = new QUndoView(undoStack);
+//    undoView->setWindowTitle(tr("Command List"));
+//    undoView->show();
+//    undoView->setAttribute(Qt::WA_QuitOnClose, false);
 
     //*********************实现表格的撤销功能****************************//
 
@@ -187,7 +187,6 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
         return;
     }
 
-    qDebug() << "asdasd";
     m_vRowDatas[item->index().row()].sField = item->index().data().toString();
     m_bDataChange = true;
 }
@@ -401,6 +400,9 @@ void StringToTableView::Flush()
 
     for (auto data : m_vRowDatas)
     {
+        QString sQValue = data.sField;
+        sQValue = sQValue.replace('\n',"\\n");
+
         std::string sKeyValue = data.sKey.toStdString();
 
         if(data.nKeyType == LUA_TSTRING && sKeyValue.find_first_not_of("-.0123456789") == std::string::npos)
@@ -411,7 +413,7 @@ void StringToTableView::Flush()
         QStandardItem* keyItem = new QStandardItem(QString::fromStdString(sKeyValue));
         m_standardItemModel->setItem(row, 0, keyItem);
 
-        QStandardItem* dataItem = new QStandardItem(data.sField);
+        QStandardItem* dataItem = new QStandardItem(sQValue);
         m_standardItemModel->setItem(row, 1, dataItem);
 
         row++;
@@ -480,13 +482,9 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         {
             sField = QString(lua_toboolean(L, -1));
         }
-        else if (nValueType == LUA_TNIL)
+        else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
         {
-            sField = QString::number(lua_tointeger(L, -1));
-        }
-        else if (nValueType == LUA_TNUMBER)
-        {
-            sField = QString::number(lua_tonumber(L, -1));
+            sField = QString::fromStdString(lua_tostring(L, -1));
         }
 
         info.sField = sField;
@@ -674,13 +672,9 @@ void StringToTableView::SetParam()
         {
             sField = QString(lua_toboolean(L, -1));
         }
-        else if (nValueType == LUA_TNIL)
+        else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
         {
-            sField = QString::number(lua_tointeger(L, -1));
-        }
-        else if (nValueType == LUA_TNUMBER)
-        {
-            sField = QString::number(lua_tonumber(L, -1));
+            sField = QString::fromStdString(lua_tostring(L, -1));
         }
 
         info.sField = sField;

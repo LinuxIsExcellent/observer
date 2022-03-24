@@ -1,8 +1,37 @@
 #include "lualistdatawidget.h"
+#include "stringtotableview.h"
 
 LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
 {
+    connect(m_tableView, &QAbstractItemView::customContextMenuRequested, m_tableView,[=](const QPoint& pos){
+        int nHeight = m_tableView->horizontalHeader()->height();
+        int nWidth = m_tableView->verticalHeader()->width();
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos + QPoint(nWidth, nHeight);
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        QModelIndex index = m_tableView->indexAt(pos);
+        if (!index.isValid()){
+            //m_tableView->clearSelection();
+            return;
+        }
 
+        m_tableCellMenu->clear();
+        int nRow = index.row();
+        if (nRow >= 0 && nRow < m_mDataList.size())
+        {
+            if (m_mDataList[nRow].nType == LUA_TTABLE)
+            {
+                m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, "", nullptr, this);
+                    dialog->show();
+                });
+            }
+        }
+
+        m_tableCellMenu->exec(pt);
+    });
 }
 
 
@@ -38,8 +67,18 @@ void LuaListDataWidget::Flush()
         {
             QStandardItem* keyItem = new QStandardItem(m_mDataList[i].sKey);
             keyItem->setFlags(Qt::ItemIsEnabled);
+
+            QString sValue = m_mDataList[i].sValue;
+
+            if(m_mDataList[i].nType == LUA_TSTRING)
+            {
+                sValue = sValue.replace('\"', "\\\"");
+            }
+
+            sValue = sValue.replace('\n',"\\n");
+
             m_standardItemModel->setItem(i, 0, keyItem);
-            m_standardItemModel->setItem(i, 1, new QStandardItem(m_mDataList[i].sValue));
+            m_standardItemModel->setItem(i, 1, new QStandardItem(sValue));
             m_standardItemModel->setItem(i, 2, new QStandardItem(QString::number(m_mDataList[i].nType)));
         }
 
@@ -54,7 +93,6 @@ void LuaListDataWidget::OnRequestSaveData()
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
-        qDebug() << "save data";
         QAbstractItemModel* model = m_tableView->model();
 
         test_2::save_lua_list_data_request quest;

@@ -14,6 +14,13 @@ typedef struct FieldKeyType
     QString sKey;
     QString sValue;
     quint16 nType;
+
+    friend QDebug& operator << (QDebug out, const FieldKeyType& info)
+    {
+        out << info.sKey << info.sValue << info.nType;
+
+        return out;
+    };
 }FIELDKEYTYPE;
 
 class LuaListDataWidget : public TabWidgetCell

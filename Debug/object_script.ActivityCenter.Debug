@@ -1,6 +1,7 @@
 INPUT(
 ./debug\addfieldlinkdialog.o
 ./debug\annonationeditwidget.o
+./debug\comboboxlineedit.o
 ./debug\globalapplication.o
 ./debug\globalconfig.o
 ./debug\log.o
@@ -20,6 +21,7 @@ INPUT(
 ./debug\mainwindow.o
 ./debug\moc_addfieldlinkdialog.o
 ./debug\moc_annonationeditwidget.o
+./debug\moc_comboboxlineedit.o
 ./debug\moc_logindialog.o
 ./debug\moc_lualistdatawidget.o
 ./debug\moc_modifyservertimewidget.o
