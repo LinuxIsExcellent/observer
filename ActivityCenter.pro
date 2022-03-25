@@ -31,6 +31,7 @@ SOURCES += \
     msg.pb.cc \
     parseconfig.cpp \
     qloadingwidget.cpp \
+    selectrowdatadialog.cpp \
     showmsgdialog.cpp \
     stringtotableview.cpp \
     tabledelegate.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     msg.pb.h \
     parseconfig.h \
     qloadingwidget.h \
+    selectrowdatadialog.h \
     showmsgdialog.h \
     stringtotableview.h \
     tabledelegate.h \
@@ -67,6 +69,7 @@ FORMS += \
     logindialog.ui \
     modifyservertimewidget.ui \
     qloadingwidget.ui \
+    selectrowdatadialog.ui \
     showmsgdialog.ui \
     stringtotableview.ui \
     tabwidgetcell.ui \

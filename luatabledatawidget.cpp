@@ -49,6 +49,10 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             m_mainWindow->OnOpenAddLinkFieldDialog(this, sField, true);
         });
 
+        m_tableCellMenu->addAction("筛选", this, [=](){
+            m_tableView->hideRow(nIndex);
+        });
+
         m_tableCellMenu->exec(pt);
     });
 
