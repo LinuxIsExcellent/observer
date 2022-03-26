@@ -126,11 +126,11 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
-void MainWindow::OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
+void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
 {
     if (m_addFieldLinkDialog)
     {
-        m_addFieldLinkDialog->OnShow(widget, sField, rootWidget);
+        m_addFieldLinkDialog->OnShow(sIndex, widget, sField, rootWidget);
 
         test_2::client_field_link_info_quest quest;
         std::string output;
@@ -320,7 +320,7 @@ void MainWindow::OnClickConnectServerBtn(QString ip, qint32 port)
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         m_ServerSockect->connectToHost(QHostAddress(ip),port);
-        bool isConnect = m_ServerSockect->waitForConnected(5000);
+        bool isConnect = m_ServerSockect->waitForConnected(10000);
         if(!isConnect)
         {
             if (!m_loginDailog->isHidden())

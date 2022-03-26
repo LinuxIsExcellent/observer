@@ -52,7 +52,7 @@ public:
 
     void OnCloseTabWidget(QWidget* widget);
 
-    void OnOpenAddLinkFieldDialog(TabWidgetCell* widget, QString sField, bool rootWidget = true);
+    void OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget = true);
 private:
     //服务器断开连接
     void OnServerDisconnect();

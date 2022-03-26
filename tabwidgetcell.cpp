@@ -58,11 +58,11 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     QListWidgetItem *item = new QListWidgetItem(m_rightButtonList);
     if (item)
     {
-        resizeContentBtn->setText(tr("全展开"));
+        resizeContentBtn->setText(tr("显示所有的行列"));
         m_rightButtonList->addItem(item);
         m_rightButtonList->setItemWidget(item, resizeContentBtn);
 
-        connect(resizeContentBtn, SIGNAL(clicked()), m_tableView, SLOT(resizeColumnsToContents()));
+        connect(resizeContentBtn, SIGNAL(clicked()), this, SLOT(OnShowAllRow()));
     }
 
     m_saveDataButton = new QPushButton(this);
@@ -210,6 +210,14 @@ void TabWidgetCell::ChangeDataModify()
             m_tabWidget->setTabText(nIndex, m_sName);
             m_saveDataButton->setDisabled(true);
         }
+    }
+}
+
+void TabWidgetCell::OnShowAllRow()
+{
+    for (int i = 0; i < m_standardItemModel->rowCount(); ++i)
+    {
+        m_tableView->setRowHidden(i, false);
     }
 }
 

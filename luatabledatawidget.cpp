@@ -2,6 +2,7 @@
 #include "annonationeditwidget.h"
 #include "stringtotableview.h"
 #include "tabledelegate.h"
+#include "selectrowdatadialog.h"
 #include <QComboBox>
 #include <regex>
 
@@ -46,11 +47,13 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 
         m_tableCellMenu->addAction("增加关联", this, [=](){
-            m_mainWindow->OnOpenAddLinkFieldDialog(this, sField, true);
+            m_mainWindow->OnOpenAddLinkFieldDialog("field_sequence", this, sField, true);
         });
 
         m_tableCellMenu->addAction("筛选", this, [=](){
-            m_tableView->hideRow(nIndex);
+            SelectRowDataDialog* dialog = new SelectRowDataDialog(nIndex, m_tableView);
+            dialog->show();
+            dialog->move(pt);
         });
 
         m_tableCellMenu->exec(pt);
@@ -87,6 +90,10 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
 {
+    qDebug() << "sIndex = " << sIndex;
+    qDebug() << "sField = " << sField;
+    qDebug() << "sFieldLink = " << sFieldLink;
+
     if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
         for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
@@ -301,9 +308,6 @@ void LuaTableDataWidget::Flush()
                 fieldKeyItem->setToolTip((*vSFieldSquences)[i].sFieldAnnonation);
             }
 
-//            fieldKeyItem->setToolTip(strField);
-
-
             m_standardItemModel->setHorizontalHeaderItem(i, fieldKeyItem);
 
             QString dataTypeStr;
@@ -361,12 +365,21 @@ void LuaTableDataWidget::Flush()
                 strFieldValue = strFieldValue.replace('\n',"\\n");
 
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
-                if (visualColumn == 1)
+                if (vSFieldSquences)
                 {
-                    dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
+                    for (int i = 0;i < (*vSFieldSquences).size(); ++i)
+                    {
+                        if ((*vSFieldSquences)[i].sFieldName == strFieldName)
+                        {
+                            if ((*vSFieldSquences)[i].sFieldLink != "")
+                            {
+                                dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
+                                dataItem->setData(QVariant((*vSFieldSquences)[i].sFieldLink), Qt::UserRole+3);
+                            }
+                        }
+                    }
                 }
 
-                qDebug() << "strFieldValue" << strFieldValue;
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
         }
