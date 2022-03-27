@@ -91,4 +91,4 @@ INCLUDEPATH += E:/workspace/observer/compileLua/src
 DEPENDPATH += E:/workspace/observer/compileLua/src
 
 RESOURCES += \
-    资源.qrc
+    res.qrc
