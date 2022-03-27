@@ -84,14 +84,14 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             });
         }
 
-        //如果有对应的关联
-        //弹出跳转到关联的菜单
-        if (index.data(Qt::UserRole+2) == QVariant(DelegateModel::EditAndCombox) && index.data(Qt::UserRole+3).toString() != "")
-        {
-            m_tableCellMenu->addAction(tr("跳转到关联的表"), this, [=](){
-                m_mainWindow->OnJumpLinkTable(index.data(Qt::UserRole+3).toString(), index.data().toString());
-            });
-        }
+//        //如果有对应的关联
+//        //弹出跳转到关联的菜单
+//        if (index.data(Qt::UserRole+2) == QVariant(DelegateModel::EditAndCombox) && index.data(Qt::UserRole+3).toString() != "")
+//        {
+//            m_tableCellMenu->addAction(tr("跳转到关联的表"), this, [=](){
+//                m_mainWindow->OnJumpLinkTable(index.data(Qt::UserRole+3).toString(), index.data().toString());
+//            });
+//        }
 
         m_tableCellMenu->exec(pt);
     });

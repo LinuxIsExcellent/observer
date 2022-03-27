@@ -31,6 +31,7 @@ public:
 
 private slots:
     void OnChangeCurrentText(const QString &str);
+    void OnJumpButtonClicked();
 protected:
     void resizeEvent(QResizeEvent *event);
 

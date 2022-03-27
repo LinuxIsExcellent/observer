@@ -1,6 +1,7 @@
 #include "comboboxlineedit.h"
 #include "ui_comboboxlineedit.h"
 #include <QDebug>
+#include "mainwindow.h"
 
 ComboboxLineedit::ComboboxLineedit(QModelIndex index, QWidget *parent) :
     QWidget(parent),
@@ -9,8 +10,9 @@ ComboboxLineedit::ComboboxLineedit(QModelIndex index, QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(OnChangeCurrentText(const QString &)));
-
-    GlobalConfig::getInstance()->GetMainWindow();
+    connect(ui->jumpBtn, SIGNAL(clicked()), this, SLOT(OnJumpButtonClicked()));
+    ui->jumpBtn->setToolTip(tr("跳转到字段关联的表"));
+    ui->comboBox->setToolTip(tr("展开关联字段现有项"));
 }
 
 ComboboxLineedit::~ComboboxLineedit()
@@ -45,6 +47,18 @@ void ComboboxLineedit::resizeEvent(QResizeEvent *)
     ui->lineEdit->setFixedWidth(geometry().width() - 33);
     ui->lineEdit->setFixedHeight(geometry().height());
     ui->jumpBtn->setFixedHeight(geometry().height());
+}
+
+void ComboboxLineedit::OnJumpButtonClicked()
+{
+    QString sLinkInfo = m_index.data(Qt::UserRole+3).toString();
+    QString sField = text();
+
+    MainWindow* mainWindow = GlobalConfig::getInstance()->GetMainWindow();
+    if (mainWindow)
+    {
+        mainWindow->OnJumpLinkTable(sLinkInfo, sField);
+    }
 }
 
 void ComboboxLineedit::OnChangeCurrentText(const QString &str)
