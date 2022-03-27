@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QMessageBox>
 #include "mainwindow.h"
-#include "globalconfig.h"
 
 namespace Ui {
 class LoginDialog;

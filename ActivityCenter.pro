@@ -89,3 +89,6 @@ unix|win32: LIBS += -LE:/workspace/observer/compileLua/ -lcompileLua
 
 INCLUDEPATH += E:/workspace/observer/compileLua/src
 DEPENDPATH += E:/workspace/observer/compileLua/src
+
+RESOURCES += \
+    资源.qrc

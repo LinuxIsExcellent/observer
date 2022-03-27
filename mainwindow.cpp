@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "parseconfig.h"
-#include "globalconfig.h"
 #include <QSettings>
 #include <QDebug>
 #include <QMessageBox>
@@ -124,6 +123,12 @@ void MainWindow::init_windows()
     m_timeWidget->hide();
 
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
+}
+
+void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
+{
+    qDebug() << "sLinkInfo" << sLinkInfo;
+    qDebug() << "sField" << sField;
 }
 
 void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)

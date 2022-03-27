@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QResizeEvent>
 #include <QModelIndex>
+#include "globalconfig.h"
 
 namespace Ui {
 class ComboboxLineedit;

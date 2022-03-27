@@ -45,6 +45,8 @@ struct sProgram
 
 typedef QMap <QString, sProgram> qMapPrograms;
 
+class MainWindow;
+
 class GlobalConfig
 {
 private:
@@ -75,6 +77,16 @@ public:
 
     void ParseLuaTable(lua_State* L);
 
+    void SetMainWindow(MainWindow* mainWindow)
+    {
+        m_mainWindow = mainWindow;
+    }
+
+    MainWindow* GetMainWindow()
+    {
+        return m_mainWindow;
+    }
+
     const qMapPrograms* GetProgramData()
     {
         return &m_programs;
@@ -90,6 +102,7 @@ private:
     static GlobalConfig* m_instance;
 
     qMapPrograms  m_programs;
+    MainWindow*   m_mainWindow;
 };
 
 #endif // GLOBALCONFIG_H

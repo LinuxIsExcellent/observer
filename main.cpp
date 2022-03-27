@@ -59,6 +59,7 @@ int main(int argc, char *argv[])
 //    logSysInit("log");
 
     GlobalConfig::getInstance()->LoadConfig(qLConfigPath);
+    GlobalConfig::getInstance()->SetMainWindow(&w);
 
     LoginDialog loginDialog(&w);
 

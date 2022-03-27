@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QDateTimeEdit>
 #include <QTimer>
+#include "globalconfig.h"
 #include "logindialog.h"
 #include "showmsgdialog.h"
 #include "Packet.h"
@@ -53,6 +54,8 @@ public:
     void OnCloseTabWidget(QWidget* widget);
 
     void OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget = true);
+
+    void OnJumpLinkTable(QString sLinkInfo, QString sField);
 private:
     //服务器断开连接
     void OnServerDisconnect();

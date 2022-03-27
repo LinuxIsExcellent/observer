@@ -20,7 +20,7 @@ AddFieldLinkDialog::AddFieldLinkDialog(QWidget *parent) :
     ui->treeWidget->setHeaderHidden(true);
     ui->pushButton->setDisabled(true);
 
-    connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(OnClickTreeWidgetItem(QTreeWidgetItem *, int)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnPushButtonClicked()));
 }
 
@@ -40,10 +40,8 @@ void AddFieldLinkDialog::OnShow(QString sIndex, TabWidgetCell* widget, QString s
 
 void AddFieldLinkDialog::OnPushButtonClicked()
 {
-    qDebug() << "click1";
     if (m_bRootWidget)
     {
-        qDebug() << "click22";
         m_activeWidget->SetFieldLink(m_sIndex, m_sField, ui->msgLabel->text());
     }
 }

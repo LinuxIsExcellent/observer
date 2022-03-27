@@ -84,16 +84,21 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             });
         }
 
+        //如果有对应的关联
+        //弹出跳转到关联的菜单
+        if (index.data(Qt::UserRole+2) == QVariant(DelegateModel::EditAndCombox) && index.data(Qt::UserRole+3).toString() != "")
+        {
+            m_tableCellMenu->addAction(tr("跳转到关联的表"), this, [=](){
+                m_mainWindow->OnJumpLinkTable(index.data(Qt::UserRole+3).toString(), index.data().toString());
+            });
+        }
+
         m_tableCellMenu->exec(pt);
     });
 }
 
 void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
 {
-    qDebug() << "sIndex = " << sIndex;
-    qDebug() << "sField = " << sField;
-    qDebug() << "sFieldLink = " << sFieldLink;
-
     if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
         for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
@@ -102,6 +107,26 @@ void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sF
             {
                 field.sFieldLink = sFieldLink;
                 break;
+            }
+        }
+    }
+
+    //修改对应列的关联信息
+    for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
+    {
+        int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
+        if (m_tableView->model()->headerData(i, Qt::Horizontal).toString() == sField)
+        {
+            qDebug() << "i = " << i;
+            qDebug() << "nVisualIndex = " << nVisualIndex;
+            for (int row = 1; row < m_standardItemModel->rowCount(); ++row)
+            {
+                QStandardItem* dataItem = m_standardItemModel->item(1, i);
+                if (dataItem)
+                {
+                    dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
+                    dataItem->setData(QVariant(sFieldLink), Qt::UserRole+3);
+                }
             }
         }
     }
@@ -145,7 +170,6 @@ void LuaTableDataWidget::OnSaveAnnonations(QString sIndex, QString str, QString 
         for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
         {
             int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-            m_tableView->model()->headerData(i, Qt::Horizontal).toString();
             mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
 
             FIELDINFO fieldInfo;

@@ -16,9 +16,9 @@
   <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>23</x>
      <y>0</y>
-     <width>125</width>
+     <width>102</width>
      <height>24</height>
     </rect>
    </property>
@@ -44,9 +44,9 @@
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>19</x>
      <y>0</y>
-     <width>106</width>
+     <width>92</width>
      <height>24</height>
     </rect>
    </property>
@@ -57,7 +57,35 @@
     </sizepolicy>
    </property>
   </widget>
+  <widget class="QPushButton" name="jumpBtn">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>20</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="资源.qrc">
+     <normaloff>:/images/jump</normaloff>:/images/jump</iconset>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="资源.qrc"/>
+ </resources>
  <connections/>
 </ui>
