@@ -142,6 +142,9 @@ public:
 public slots:
     //刷新界面
     virtual void Flush() {};
+
+    //item改变
+    virtual void OnItemDataChange(QStandardItem *item);
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
@@ -150,8 +153,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private slots:
     virtual void AddAnnotation() {};
-
-    void OnItemDataChange(QStandardItem *item);
 
 //    void onCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
 

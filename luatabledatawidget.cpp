@@ -117,8 +117,6 @@ void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sF
         int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
         if (m_tableView->model()->headerData(i, Qt::Horizontal).toString() == sField)
         {
-            qDebug() << "i = " << i;
-            qDebug() << "nVisualIndex = " << nVisualIndex;
             for (int row = 1; row < m_standardItemModel->rowCount(); ++row)
             {
                 QStandardItem* dataItem = m_standardItemModel->item(1, i);
@@ -142,6 +140,11 @@ void LuaTableDataWidget::InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vF
     fieldSquence.vSFieldSquences = vFieldInfos;
 
     m_mFieldSquence.insert(sIndex, fieldSquence);
+}
+
+void LuaTableDataWidget::OnItemDataChange(QStandardItem *item)
+{
+    TabWidgetCell::OnItemDataChange(item);
 }
 
 void LuaTableDataWidget::OnSaveAnnonations(QString sIndex, QString str, QString sField)

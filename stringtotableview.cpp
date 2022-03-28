@@ -260,17 +260,8 @@ void StringToTableView::OnChangeData()
         }
 
         QString sField = data.sField;
-        sField = sField.replace("\\n", "\n");
-        sField = sField.replace('\"', '"');
-
-        if (data.nType == LUA_TSTRING)
-        {
-            sResult = sResult + '"' + sField + '"';
-        }
-        else
-        {
-            sResult = sResult + sField;
-        }
+        sField = sField.replace('\n',"\\n");
+        sResult = sResult + sField;
 
         if (i < m_vRowDatas.size() - 1)
         {

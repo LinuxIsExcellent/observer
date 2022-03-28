@@ -67,6 +67,8 @@ public:
     FIELDINFO* GetFieldInfos(QString sIndex, quint16 nIndex);
 
     void InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vFieldInfos);
+public:
+    virtual void OnItemDataChange(QStandardItem *item);
 private slots:
     //移动列
     void OnTableViewSectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);

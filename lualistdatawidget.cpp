@@ -73,16 +73,27 @@ void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& pr
         m_mFieldSquence.insert(sIndex, squence);
     }
 
+    disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     Flush();
+    connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 }
 
 void LuaListDataWidget::Flush()
 {
     if(m_tableView && m_mDataList.count() > 0)
     {
-        m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem("key"));
-        m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem("value"));
-        m_standardItemModel->setHorizontalHeaderItem(2, new QStandardItem("desc"));
+        m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(tr("备注")));
+        m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(tr("字段")));
+        m_standardItemModel->setHorizontalHeaderItem(2, new QStandardItem(tr("值")));
+        m_standardItemModel->setHorizontalHeaderItem(3, new QStandardItem(tr("类型")));
+
+        FIELDSQUENCE* squence = nullptr;
+
+        if(m_mFieldSquence.find("field_sequence") != m_mFieldSquence.end())
+        {
+            squence = &m_mFieldSquence.find("field_sequence").value();
+        }
+
 
         for (int i = 0; i < m_mDataList.size(); ++i)
         {
@@ -98,9 +109,16 @@ void LuaListDataWidget::Flush()
 
             sValue = sValue.replace('\n',"\\n");
 
-            m_standardItemModel->setItem(i, 0, keyItem);
-            m_standardItemModel->setItem(i, 1, new QStandardItem(sValue));
-            m_standardItemModel->setItem(i, 2, new QStandardItem(QString::number(m_mDataList[i].nType)));
+            QString sAnnonation = "";
+            if (squence && i < squence->vSFieldSquences.size())
+            {
+                sAnnonation = squence->vSFieldSquences[i].sFieldAnnonation;
+            }
+
+            m_standardItemModel->setItem(i, 0, new QStandardItem(sAnnonation));
+            m_standardItemModel->setItem(i, 1, keyItem);
+            m_standardItemModel->setItem(i, 2, new QStandardItem(sValue));
+            m_standardItemModel->setItem(i, 3, new QStandardItem(QString::number(m_mDataList[i].nType)));
         }
 
         m_bTableDataChange = false;
@@ -111,16 +129,87 @@ void LuaListDataWidget::Flush()
     }
 }
 
-void LuaListDataWidget::OnRequestSaveData()
+void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
 {
-    for (auto& data : m_mFieldSquence)
+    TabWidgetCell::OnItemDataChange(item);
+
+    bool isChange = false;
+    if (item && item->index().isValid())
     {
-        qDebug() << data.sIndex;
-        for (auto vData : data.vSFieldSquences)
+        int nCol = item->index().column();
+        int nRow = item->index().row();
+        if(nCol == 0)
         {
-            qDebug() << vData;
+            bool isHas = false;
+
+            QString sFieldName = "";
+            QStandardItem *itemField = m_standardItemModel->item(nRow, 1);
+            if (itemField && itemField->index().isValid())
+            {
+                sFieldName = itemField->index().data().toString();
+            }
+            if (m_mFieldSquence.size() > 0 && m_mFieldSquence.find("field_sequence") != m_mFieldSquence.end())
+            {
+                FIELDSQUENCE& squence = m_mFieldSquence.find("field_sequence").value();
+                for (auto& data : squence.vSFieldSquences)
+                {
+                    if (data.sFieldName == sFieldName)
+                    {
+                        isHas = true;
+                        if (data.sFieldAnnonation != item->index().data().toString())
+                        {
+                            data.sFieldAnnonation = item->index().data().toString();
+                            isChange = true;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (isHas == false)
+            {
+                FIELDSQUENCE squence;
+                squence.sIndex = "field_sequence";
+
+                for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
+                {
+                    QStandardItem *itemAnnonation = m_standardItemModel->item(row, 0);
+                    QStandardItem *itemField = m_standardItemModel->item(row, 1);
+
+                    QString sAnnonation = "";
+                    if (itemAnnonation && itemAnnonation->index().isValid())
+                    {
+                        sAnnonation = itemAnnonation->index().data().toString();
+                    }
+
+                    QString sField = "";
+                    if (itemField && itemField->index().isValid())
+                    {
+                        sField = itemField->index().data().toString();
+                    }
+
+                    FIELDINFO info;
+                    info.sFieldName = sField;
+                    info.sFieldAnnonation = sAnnonation;
+
+                    squence.vSFieldSquences.push_back(info);
+                }
+
+                m_mFieldSquence.insert("field_sequence", squence);
+                isChange = true;
+            }
         }
     }
+
+    if (isChange)
+    {
+        m_bTableDataChange = true;
+        ChangeDataModify();
+    }
+}
+
+void LuaListDataWidget::OnRequestSaveData()
+{
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
@@ -164,9 +253,9 @@ void LuaListDataWidget::OnRequestSaveData()
             test_2::field_type_key_value* fieldTypeKeyValue = quest.add_filed_types();
             if (fieldTypeKeyValue)
             {
-                QString strKey = model->data(model->index(i, 0)).toString();
-                QString strValue = model->data(model->index(i, 1)).toString();
-                quint16 nType = model->data(model->index(i, 2)).toUInt();
+                QString strKey = model->data(model->index(i, 1)).toString();
+                QString strValue = model->data(model->index(i, 2)).toString();
+                quint16 nType = model->data(model->index(i, 3)).toUInt();
 
                 fieldTypeKeyValue->set_key(strKey.toStdString());
                 fieldTypeKeyValue->set_value(strValue.toStdString());
