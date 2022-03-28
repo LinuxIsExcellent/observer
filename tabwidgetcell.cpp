@@ -157,7 +157,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QModelIndex index = m_tableView->currentIndex();
         disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
         m_standardItemModel->setData(index, index.data(Qt::DisplayRole), Qt::UserRole);
-        qDebug() << "index.data(Qt::DisplayRole) = " << index.data(Qt::DisplayRole);
         connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     });
     connect(delegate, &TableDelegate::closeEditor, this, [ = ](QWidget *editor)

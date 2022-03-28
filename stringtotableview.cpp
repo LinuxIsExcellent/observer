@@ -259,13 +259,17 @@ void StringToTableView::OnChangeData()
             }
         }
 
+        QString sField = data.sField;
+        sField = sField.replace("\\n", "\n");
+        sField = sField.replace('\"', '"');
+
         if (data.nType == LUA_TSTRING)
         {
-            sResult = sResult + '"' + data.sField + '"';
+            sResult = sResult + '"' + sField + '"';
         }
         else
         {
-            sResult = sResult + data.sField;
+            sResult = sResult + sField;
         }
 
         if (i < m_vRowDatas.size() - 1)
@@ -805,7 +809,6 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
 {
     if (m_standardItemModel)
     {
-        qDebug() << "sData = " << sData;
         QVariant oldData = index.data();
         QVariant data = QVariant(sData);
 
