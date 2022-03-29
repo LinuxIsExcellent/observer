@@ -58,6 +58,9 @@ public:
 
     virtual void OnRequestSaveData();
 
+    //设置行高和列宽
+    virtual void SetRowAndColParam();
+
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 
     virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);

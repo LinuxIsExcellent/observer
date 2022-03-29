@@ -34,8 +34,6 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
     });
 }
 
-
-
 void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& proto)
 {
     m_mDataList.clear();
@@ -89,9 +87,9 @@ void LuaListDataWidget::Flush()
 
         FIELDSQUENCE* squence = nullptr;
 
-        if(m_mFieldSquence.find("field_sequence") != m_mFieldSquence.end())
+        if(m_mFieldSquence.find("###field_sequence###") != m_mFieldSquence.end())
         {
-            squence = &m_mFieldSquence.find("field_sequence").value();
+            squence = &m_mFieldSquence.find("###field_sequence###").value();
         }
 
 
@@ -148,9 +146,9 @@ void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
             {
                 sFieldName = itemField->index().data().toString();
             }
-            if (m_mFieldSquence.size() > 0 && m_mFieldSquence.find("field_sequence") != m_mFieldSquence.end())
+            if (m_mFieldSquence.size() > 0 && m_mFieldSquence.find("###field_sequence###") != m_mFieldSquence.end())
             {
-                FIELDSQUENCE& squence = m_mFieldSquence.find("field_sequence").value();
+                FIELDSQUENCE& squence = m_mFieldSquence.find("###field_sequence###").value();
                 for (auto& data : squence.vSFieldSquences)
                 {
                     if (data.sFieldName == sFieldName)
@@ -169,7 +167,7 @@ void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
             if (isHas == false)
             {
                 FIELDSQUENCE squence;
-                squence.sIndex = "field_sequence";
+                squence.sIndex = "###field_sequence###";
 
                 for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
                 {
@@ -195,7 +193,7 @@ void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
                     squence.vSFieldSquences.push_back(info);
                 }
 
-                m_mFieldSquence.insert("field_sequence", squence);
+                m_mFieldSquence.insert("###field_sequence###", squence);
                 isChange = true;
             }
         }
@@ -213,8 +211,41 @@ void LuaListDataWidget::OnRequestSaveData()
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
-        //请求保存表的信息
+        //请求保存表的外围信息
         {
+            //保存表的行和列
+            if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+            {
+                QString rowInfoKey = "###row_height###";
+                FIELDSQUENCE rowFieldSquence;
+                rowFieldSquence.sIndex = rowInfoKey;
+                for (int row = 0; row < m_standardItemModel->rowCount();++row)
+                {
+                    FIELDINFO fieldInfo;
+                    fieldInfo.sFieldName = QString::number(m_tableView->rowHeight(row));
+
+                    rowFieldSquence.vSFieldSquences.push_back(fieldInfo);
+                }
+
+                m_mFieldSquence.remove(rowInfoKey);
+                m_mFieldSquence.insert(rowInfoKey, rowFieldSquence);
+
+
+                QString colInfoKey = "###col_width###";
+                FIELDSQUENCE colFieldSquence;
+                colFieldSquence.sIndex = colInfoKey;
+                for (int col = 0; col < m_standardItemModel->rowCount();++col)
+                {
+                    FIELDINFO fieldInfo;
+                    fieldInfo.sFieldName = QString::number(m_tableView->columnWidth(col));
+
+                    colFieldSquence.vSFieldSquences.push_back(fieldInfo);
+                }
+
+                m_mFieldSquence.remove(colInfoKey);
+                m_mFieldSquence.insert(colInfoKey, colFieldSquence);
+            }
+
             test_2::client_save_table_info_request quest;
             quest.set_table_name(m_sName.toStdString());
 
@@ -270,5 +301,46 @@ void LuaListDataWidget::OnRequestSaveData()
 
         //保存之后清空undo栈
         clearUndoStack();
+    }
+}
+
+void LuaListDataWidget::SetRowAndColParam()
+{
+    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+    {
+        if (m_mFieldSquence.find("###row_height###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###row_height###").value();
+
+            for (int row = 0; row < m_standardItemModel->rowCount();++row)
+            {
+                if (row < fieldSquence.vSFieldSquences.size())
+                {
+                    int nHeight = fieldSquence.vSFieldSquences[row].sFieldName.toInt();
+                    if (nHeight > 0)
+                    {
+                        m_tableView->setRowHeight(row, nHeight);
+                    }
+                }
+            }
+        }
+
+        if (m_mFieldSquence.find("###col_width###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###col_width###").value();
+
+            for (int col = 0; col < m_standardItemModel->rowCount();++col)
+            {
+                if (col < fieldSquence.vSFieldSquences.size())
+                {
+                    int nWidth = fieldSquence.vSFieldSquences[col].sFieldName.toInt();
+                    if (nWidth > 0)
+                    {
+
+                        m_tableView->setColumnWidth(col, nWidth);
+                    }
+                }
+            }
+        }
     }
 }

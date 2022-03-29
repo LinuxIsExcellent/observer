@@ -189,3 +189,28 @@ std::string GlobalConfig::doubleToString(double price) {
 
     return res;
 }
+
+bool GlobalConfig::CheckStrIsLuaTable(QString str, bool justCheckCorrect/* = true*/)
+{
+    lua_State *L = luaL_newstate();
+    if (L == NULL) return false;
+
+    QString sTempTableName = "temp_table = " + str;
+    int ret = luaL_dostring(L, sTempTableName.toStdString().c_str());
+    if (ret)
+    {
+        return false;
+    }
+
+    if (justCheckCorrect) return true;
+
+    lua_getglobal(L, "temp_table");
+//    ParseLuaTable(L);
+
+    if (!lua_istable(L, -1))
+    {
+        return false;
+    }
+
+    return true;
+}

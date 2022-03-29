@@ -34,8 +34,6 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 //    ui->tableView->verticalHeader()->hide();
-    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(""));
-    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(""));
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(OnCancelButtonClicked()));
@@ -100,21 +98,61 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
         }
 
         m_tableCellMenu->clear();
-        if (index.column() == 1)
+
+        if (GlobalConfig::getInstance()->CheckStrIsLuaTable(index.data().toString(), false) == false)
         {
-            auto rowData = m_vRowDatas[index.row()];
-            if (rowData.nType == LUA_TTABLE)
+            return;
+        }
+
+        if (index.column() == 2)
+        {
+            QString sField = m_standardItemModel->data(m_standardItemModel->index(index.row(), 1)).toString();
+
+            bool isNew = true;
+            for (int row = 0; row < m_vRowDatas.size(); ++row)
             {
+                if (sField == m_vRowDatas[row].sKey)
+                {
+                    ROWINFO rowData = m_vRowDatas[index.row()];
+
+                    if (rowData.nType == LUA_TTABLE)
+                    {
+                        m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
+                            QString sSubTableIndex = "";
+                            if(rowData.nKeyType == LUA_TNUMBER || rowData.nKeyType == LUA_TNIL)
+                            {
+                                sSubTableIndex = m_sTableName + "%ARRAY";
+                            }
+                            else
+                            {
+                                sSubTableIndex = m_sTableName + "#" + rowData.sKey;
+                            }
+                            StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, this, m_nLevel + 1);
+                            dialog->show();
+                        });
+                    }
+
+                    isNew = false;
+                    break;
+                }
+            }
+
+            if (isNew)
+            {
+                bool is_ok = false;
+                sField.toInt(&is_ok);
+
+                QString sSubTableIndex = "";
+                if (is_ok)
+                {
+                    sSubTableIndex = m_sTableName + "%ARRAY";
+                }
+                else
+                {
+                    sSubTableIndex = m_sTableName + "#" + sField;
+                }
+
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    QString sSubTableIndex = "";
-                    if(rowData.nKeyType == LUA_TNUMBER || rowData.nKeyType == LUA_TNIL)
-                    {
-                        sSubTableIndex = m_sTableName + "%ARRAY";
-                    }
-                    else
-                    {
-                        sSubTableIndex = m_sTableName + "#" + rowData.sKey;
-                    }
                     StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, this, m_nLevel + 1);
                     dialog->show();
                 });
@@ -179,16 +217,79 @@ StringToTableView::~StringToTableView()
 
 void StringToTableView::OnItemDataChange(QStandardItem * item)
 {
-//    qDebug() << "item->index().row() = " << item->index().row();
-
-    if (item->index().row() >= m_vRowDatas.size())
+    if (item && item->index().isValid())
     {
-        qDebug() << "m_vRowDatas error " << item->index();
-        return;
-    }
+        QString sField = m_standardItemModel->data(m_standardItemModel->index(item->index().row(), 1)).toString();
+        bool is_ok = false;
+        sField.toInt(&is_ok);
 
-    m_vRowDatas[item->index().row()].sField = item->index().data().toString();
-    m_bDataChange = true;
+        if (item->column() == 0 && is_ok == false)
+        {
+            int nCol = item->index().column();
+            int nRow = item->index().row();
+            if(nCol == 0)
+            {
+                bool isHas = false;
+
+                QString sFieldName = "";
+                QStandardItem *itemField = m_standardItemModel->item(nRow, 1);
+                if (itemField && itemField->index().isValid())
+                {
+                    sFieldName = itemField->index().data().toString();
+                }
+                if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
+                {
+                    FIELDSQUENCE& squence = m_mFieldSquence->find(m_sTableName).value();
+                    for (auto& data : squence.vSFieldSquences)
+                    {
+                        if (data.sFieldName == sFieldName)
+                        {
+                            isHas = true;
+                            if (data.sFieldAnnonation != item->index().data().toString())
+                            {
+                                data.sFieldAnnonation = item->index().data().toString();
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (isHas == false)
+                {
+                    FIELDSQUENCE squence;
+                    squence.sIndex = m_sTableName;
+
+                    for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
+                    {
+                        QStandardItem *itemAnnonation = m_standardItemModel->item(row, 0);
+                        QStandardItem *itemField = m_standardItemModel->item(row, 1);
+
+                        QString sAnnonation = "";
+                        if (itemAnnonation && itemAnnonation->index().isValid())
+                        {
+                            sAnnonation = itemAnnonation->index().data().toString();
+                        }
+
+                        QString sField = "";
+                        if (itemField && itemField->index().isValid())
+                        {
+                            sField = itemField->index().data().toString();
+                        }
+
+                        FIELDINFO info;
+                        info.sFieldName = sField;
+                        info.sFieldAnnonation = sAnnonation;
+
+                        squence.vSFieldSquences.push_back(info);
+                    }
+
+                    m_mFieldSquence->insert(m_sTableName, squence);
+                }
+            }
+        }
+
+        m_bDataChange = true;
+    }
 }
 
 void StringToTableView::OnConfirmButtonClicked()
@@ -282,8 +383,8 @@ void StringToTableView::OnSaveData()
     QString sResult = "{";
     for (int i = 0; i < m_standardItemModel->rowCount(); i++)
     {
-        QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 0));
-        QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 1));
+        QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 1));
+        QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 2));
 
         bool is_ok = false;
         vKey.toInt(&is_ok);
@@ -395,15 +496,25 @@ void StringToTableView::Flush()
 {
     if (m_vRowDatas.size() <= 0) return;
 
-    int row = 0;
     disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 
     m_standardItemModel->clear();
-    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(""));
-    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(""));
 
-    for (auto data : m_vRowDatas)
+    m_standardItemModel->setHorizontalHeaderItem(0, new QStandardItem(tr("备注")));
+    m_standardItemModel->setHorizontalHeaderItem(1, new QStandardItem(tr("字段")));
+    m_standardItemModel->setHorizontalHeaderItem(2, new QStandardItem(tr("值")));
+
+    FIELDSQUENCE* squence = nullptr;
+
+    if(m_mFieldSquence && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
     {
+        squence = &m_mFieldSquence->find(m_sTableName).value();
+    }
+
+    for (int row = 0; row < m_vRowDatas.size(); ++row)
+    {
+        auto data = m_vRowDatas[row];
+
         QString sQValue = data.sField;
         sQValue = sQValue.replace('\n',"\\n");
 
@@ -414,13 +525,28 @@ void StringToTableView::Flush()
             sKeyValue = std::string("\"") + sKeyValue + std::string("\"");
         }
 
+        QString sAnnonation = "";
+        if (squence && row < squence->vSFieldSquences.size())
+        {
+            sAnnonation = squence->vSFieldSquences[row].sFieldAnnonation;
+        }
+
+        QStandardItem* descItem = new QStandardItem(sAnnonation);
+
+        bool is_ok = false;
+        data.sKey.toInt(&is_ok);
+        if (is_ok)
+        {
+            descItem->setEnabled(false);
+        }
+
+        m_standardItemModel->setItem(row, 0, descItem);
+
         QStandardItem* keyItem = new QStandardItem(QString::fromStdString(sKeyValue));
-        m_standardItemModel->setItem(row, 0, keyItem);
+        m_standardItemModel->setItem(row, 1, keyItem);
 
         QStandardItem* dataItem = new QStandardItem(sQValue);
-        m_standardItemModel->setItem(row, 1, dataItem);
-
-        row++;
+        m_standardItemModel->setItem(row, 2, dataItem);
     }
 
     ui->tableView->resizeColumnsToContents();
@@ -758,6 +884,16 @@ void StringToTableView::SetParam()
 
 void StringToTableView::keyPressEvent(QKeyEvent *ev)
 {
+    if (ev->key() == Qt::Key_S  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        if(m_bDataChange)
+        {
+            OnSaveData();
+        }
+
+        return;
+    }
+
     if (ev->key() == Qt::Key_Z  &&  ev->modifiers() == Qt::ControlModifier)
     {
         undo();
@@ -767,6 +903,18 @@ void StringToTableView::keyPressEvent(QKeyEvent *ev)
     if (ev->key() == Qt::Key_Y  &&  ev->modifiers() == Qt::ControlModifier)
     {
         redo();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_C  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        copy();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_V  &&  ev->modifiers() == Qt::ControlModifier)
+    {
+        paste();
         return;
     }
 }
@@ -793,6 +941,163 @@ void StringToTableView::redo()
     if (undoStack->canRedo())
     {
         redoAction->trigger();
+    }
+}
+
+void StringToTableView::copy()
+{
+    QModelIndexList selectList = ui->tableView->selectionModel()->selectedIndexes();
+    int min_row = 99999999;
+    int max_row = -1;
+
+    int min_col = 99999999;
+    int max_col = -1;
+
+    //赛选出最大最小的行列
+    for (auto modelIndex : selectList)
+    {
+        if (modelIndex.row() >= max_row)
+        {
+            max_row = modelIndex.row();
+        }
+
+        if (modelIndex.row() <= min_row)
+        {
+            min_row = modelIndex.row();
+        }
+
+        if (modelIndex.column() >= max_col)
+        {
+            max_col = modelIndex.column();
+        }
+
+        if (modelIndex.column() <= min_col)
+        {
+            min_col = modelIndex.column();
+        }
+    }
+
+    if (max_row < 0 || max_col < 0)
+    {
+        return;
+    }
+
+    QVector<QVector<QModelIndex>> modelTables;
+    modelTables.resize(max_row + 1);
+    for(auto& data : modelTables)
+    {
+        data.resize(max_col + 1);
+    }
+
+    QString strCopy = "";
+    for (int row = min_row; row <= max_row; ++row)
+    {
+        QString strRowCopy = "";
+        for (int col = min_col; col <= max_col; ++col)
+        {
+            QModelIndex modelIndex = m_standardItemModel->index(row, col);
+            if (selectList.contains(modelIndex))
+            {
+                strRowCopy = strRowCopy + modelIndex.data().toString();
+            }
+
+            if (col < max_col)
+            {
+                strRowCopy = strRowCopy + "\t";
+            }
+        }
+        strRowCopy = strRowCopy + "\n";
+
+        strCopy = strCopy + strRowCopy;
+    }
+
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(strCopy);
+}
+
+void StringToTableView::paste()
+{
+    QModelIndexList selectList = ui->tableView->selectionModel()->selectedIndexes();
+
+    int min_row = 99999999;
+    int max_row = -1;
+
+    int min_col = 99999999;
+    int max_col = -1;
+
+    //赛选出最大最小的行列
+    for (auto modelIndex : selectList)
+    {
+        if (modelIndex.row() >= max_row)
+        {
+            max_row = modelIndex.row();
+        }
+
+        if (modelIndex.row() <= min_row)
+        {
+            min_row = modelIndex.row();
+        }
+
+        if (modelIndex.column() >= max_col)
+        {
+            max_col = modelIndex.column();
+        }
+
+        if (modelIndex.column() <= min_col)
+        {
+            min_col = modelIndex.column();
+        }
+    }
+
+    if (max_row < 0 || max_col < 0)
+    {
+        return;
+    }
+
+    QVector<QVector<QModelIndex>> modelTables;
+    modelTables.resize(max_row + 1);
+    for(auto& data : modelTables)
+    {
+        data.resize(max_col + 1);
+    }
+
+    QClipboard* clipboard = QApplication::clipboard();
+    QString copyStr = clipboard->text();
+    QStringList rowStringList = copyStr.split("\n");
+
+    ModifCommandList commandList;
+    for (int row = 0; row < rowStringList.size(); ++row)
+    {
+        QString rowStr = rowStringList[row];
+        if(!rowStr.isEmpty())
+        {
+            QStringList colStringList = rowStr.split("\t");
+            for (int col = 0; col < colStringList.size(); ++col)
+            {
+                QModelIndex modelIndex = m_standardItemModel->index(row + min_row, col + min_col);
+                if (selectList.contains(modelIndex))
+                {
+                    QVariant oldData = modelIndex.data();
+                    QVariant data = QVariant(colStringList[col]);
+
+                    ModifInfo sourceInfo;
+                    sourceInfo.index = modelIndex;
+                    sourceInfo.oldData = oldData;
+                    sourceInfo.data = data;
+
+                    commandList.push_front(sourceInfo);
+
+                    m_bDataChange = true;
+
+                    m_standardItemModel->setData(modelIndex, colStringList[col]);
+                }
+            }
+        }
+    }
+
+    if (commandList.size() > 0)
+    {
+        undoStack->push(new ModifCommand(m_standardItemModel, commandList));
     }
 }
 

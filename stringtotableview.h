@@ -72,6 +72,12 @@ public:
     //返回撤销
     void redo();
 
+    //复制单元格的内容
+    void copy();
+
+    //粘贴全局剪切板的内容
+    void paste();
+
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
@@ -94,7 +100,7 @@ private:
 
     QVector<ROWINFO>    m_vRowDatas;    //数据
 
-    QString m_sTableName;       //表名
+    QString m_sTableName;       //该展开界面在额外信息表内的表名
 
     bool        m_bDataChange;      //数据是否改变
 

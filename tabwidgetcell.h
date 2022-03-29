@@ -136,15 +136,19 @@ public:
     void paste();
 
     //设置行高和列宽
-    void SetRowAndColParam();
-    //获得行列高度的数据
-    QString GetRowColumnHeightData();
+    virtual void SetRowAndColParam(){}
 public slots:
     //刷新界面
     virtual void Flush() {};
 
     //item改变
     virtual void OnItemDataChange(QStandardItem *item);
+
+    //行大小改变
+    virtual void OnRowResized(int logicalIndex, int oldSize, int newSize);
+
+    //列大小改变
+    virtual void OnColResized(int logicalIndex, int oldSize, int newSize);
 protected:
     virtual void keyPressEvent(QKeyEvent *ev);
 
@@ -179,9 +183,9 @@ public:
     QListWidget*    m_bottomButtonList; //底部的显示按钮列表
     QVBoxLayout* vlayout_all;  //整个TabWidget类的垂直布局
 
-    QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
-
     QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //表的外围信息
+
+    QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
 
     bool    m_bTableDataChange; //表的数据是否被更改
 

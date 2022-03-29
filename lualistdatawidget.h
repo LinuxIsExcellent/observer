@@ -38,6 +38,8 @@ public:
     void SetProtoData(const test_2::send_lua_list_data_notify& proto);
 
     virtual void OnRequestSaveData();
+
+    virtual void SetRowAndColParam();
 public slots:
     virtual void OnItemDataChange(QStandardItem *item);
 private slots:

@@ -47,7 +47,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 
         m_tableCellMenu->addAction("增加关联", this, [=](){
-            m_mainWindow->OnOpenAddLinkFieldDialog("field_sequence", this, sField, true);
+            m_mainWindow->OnOpenAddLinkFieldDialog("###field_sequence###", this, sField, true);
         });
 
         m_tableCellMenu->addAction("筛选", this, [=](){
@@ -269,7 +269,7 @@ void LuaTableDataWidget::ModifyFieldSquences(QString sIndex, QMap<QString, quint
             vFieldInfos[iter.value()] = info;
         }
 
-        InsertSquenceInfo("field_sequence", vFieldInfos);
+        InsertSquenceInfo("###field_sequence###", vFieldInfos);
     }
 }
 
@@ -290,7 +290,7 @@ void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
         mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
     }
 
-    ModifyFieldSquences("field_sequence", mFieldSortMap);
+    ModifyFieldSquences("###field_sequence###", mFieldSortMap);
 }
 
 FIELDINFO* LuaTableDataWidget::GetFieldInfos(QString sIndex, quint16 nIndex)
@@ -322,7 +322,7 @@ void LuaTableDataWidget::Flush()
         m_standardItemModel->clear();
 
         QVector<quint16> vNLevels;
-        QVector<FIELDINFO>* vSFieldSquences = GetFieldInfos("field_sequence");
+        QVector<FIELDINFO>* vSFieldSquences = GetFieldInfos("###field_sequence###");
 
         //设置表头
         for (int i = 0; i < m_mFieldLists.count(); ++i)
@@ -508,6 +508,39 @@ void LuaTableDataWidget::OnRequestSaveData()
     //如果表的信息有变化
     if (m_bHeadIndexChange || m_bTableDataChange)
     {
+        //保存表的行和列
+        if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+        {
+            QString rowInfoKey = "###row_height###";
+            FIELDSQUENCE rowFieldSquence;
+            rowFieldSquence.sIndex = rowInfoKey;
+            for (int row = 0; row < m_standardItemModel->rowCount();++row)
+            {
+                FIELDINFO fieldInfo;
+                fieldInfo.sFieldName = QString::number(m_tableView->rowHeight(row));
+
+                rowFieldSquence.vSFieldSquences.push_back(fieldInfo);
+            }
+
+            m_mFieldSquence.remove(rowInfoKey);
+            m_mFieldSquence.insert(rowInfoKey, rowFieldSquence);
+
+
+            QString colInfoKey = "###col_width###";
+            FIELDSQUENCE colFieldSquence;
+            colFieldSquence.sIndex = colInfoKey;
+            for (int col = 0; col < m_standardItemModel->rowCount();++col)
+            {
+                FIELDINFO fieldInfo;
+                fieldInfo.sFieldName = QString::number(m_tableView->columnWidth(col));
+
+                colFieldSquence.vSFieldSquences.push_back(fieldInfo);
+            }
+
+            m_mFieldSquence.remove(colInfoKey);
+            m_mFieldSquence.insert(colInfoKey, colFieldSquence);
+        }
+
         //请求保存表的信息
         test_2::client_save_table_info_request quest;
         quest.set_table_name(m_tableData.sTableName.toStdString());
@@ -580,4 +613,45 @@ void LuaTableDataWidget::OnRequestSaveData()
 
     //保存之后清空undo栈
     clearUndoStack();
+}
+
+void LuaTableDataWidget::SetRowAndColParam()
+{
+    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+    {
+        if (m_mFieldSquence.find("###row_height###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###row_height###").value();
+
+            for (int row = 0; row < m_standardItemModel->rowCount();++row)
+            {
+                if (row < fieldSquence.vSFieldSquences.size())
+                {
+                    int nHeight = fieldSquence.vSFieldSquences[row].sFieldName.toInt();
+                    if (nHeight > 0)
+                    {
+                        m_tableView->setRowHeight(row, nHeight);
+                    }
+                }
+            }
+        }
+
+        if (m_mFieldSquence.find("###col_width###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###col_width###").value();
+
+            for (int col = 0; col < m_standardItemModel->rowCount();++col)
+            {
+                if (col < fieldSquence.vSFieldSquences.size())
+                {
+                    int nWidth = fieldSquence.vSFieldSquences[col].sFieldName.toInt();
+                    if (nWidth > 0)
+                    {
+
+                        m_tableView->setColumnWidth(col, nWidth);
+                    }
+                }
+            }
+        }
+    }
 }

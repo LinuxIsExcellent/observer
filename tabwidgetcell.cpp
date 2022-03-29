@@ -90,6 +90,9 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
     m_standardItemModel = new QStandardItemModel(m_tableView);
 
+//    connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
+//    connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
+
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     m_tableView->setModel(m_standardItemModel);
 
@@ -192,6 +195,18 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 TabWidgetCell::~TabWidgetCell()
 {
     delete ui;
+}
+
+void TabWidgetCell::OnRowResized(int, int, int)
+{
+    m_bTableDataChange = true;
+    ChangeDataModify();
+}
+
+void TabWidgetCell::OnColResized(int, int, int)
+{
+    m_bTableDataChange = true;
+    ChangeDataModify();
 }
 
 void TabWidgetCell::ChangeDataModify()
@@ -564,58 +579,6 @@ void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)
         {
             undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
             m_standardItemModel->setData(index, data);
-        }
-    }
-}
-
-QString TabWidgetCell::GetRowColumnHeightData()
-{
-    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
-    {
-        for (int row = 0; row < m_standardItemModel->rowCount();++row)
-        {
-            qDebug() << m_tableView->rowHeight(row);
-        }
-
-        for (int col = 0; col < m_standardItemModel->columnCount();++col)
-        {
-            qDebug() << m_tableView->columnWidth(col);
-        }
-
-        for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
-        {
-            for (int col = 0; col < m_standardItemModel->columnCount(); ++col)
-            {
-                QStandardItem *item = m_standardItemModel->item(row, col);
-                if(item)
-                {
-                    qDebug() << item->background().color().name();
-                }
-            }
-        }
-    }
-
-    return "";
-}
-
-void TabWidgetCell::SetRowAndColParam()
-{
-    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
-    {
-        for (int row = 0; row < m_standardItemModel->rowCount();++row)
-        {
-            if (row < m_vRowHeight.size())
-            {
-                m_tableView->setRowHeight(row, m_vRowHeight[row]);
-            }
-        }
-
-        for (int col = 0; col < m_standardItemModel->rowCount();++col)
-        {
-            if (col < m_vColWidth.size())
-            {
-                m_tableView->setColumnWidth(col, m_vColWidth[col]);
-            }
         }
     }
 }

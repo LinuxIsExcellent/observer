@@ -98,6 +98,8 @@ public:
     }
 
     std::string doubleToString(double price);
+
+    bool CheckStrIsLuaTable(QString str, bool justCheckCorrect = true);
 private:
     static GlobalConfig* m_instance;
 

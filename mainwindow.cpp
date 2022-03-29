@@ -480,9 +480,8 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     Packet packet;
     packet << nDataLength << nSystem << nCmd << data.c_str();
 
-    qDebug() << "请求服务器消息:" << nSystem << "  " << nCmd;
-    int nSendCount = m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
-    qDebug() << "nSendCount = " << nSendCount;
+    m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+
     m_ServerSockect->flush();
 }
 
