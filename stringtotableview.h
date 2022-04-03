@@ -107,7 +107,7 @@ private:
     int         m_nLevel;       //多少级
 
     QStandardItemModel *model;  //对应的tableView的model
-    QModelIndex index;      //tableView的modelindex
+    QModelIndex m_index;      //tableView的modelindex
     QString m_sData;        //原本的dataStr
 
     //实现撤销功能

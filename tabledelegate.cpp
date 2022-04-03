@@ -40,7 +40,6 @@ QWidget *TableDelegate::createEditor(QWidget *parent,
 void TableDelegate::setEditorData(QWidget *editor,
                                   const QModelIndex &index) const
 {
-    qDebug() << "setEditorData";
     int nDataType = index.model()->data(index, Qt::UserRole+2).toInt();
     if (nDataType == DelegateModel::EditAndCombox)
     {
@@ -64,7 +63,6 @@ void TableDelegate::setEditorData(QWidget *editor,
 void TableDelegate::setModelData(QWidget *editor,
                                  QAbstractItemModel *model, const QModelIndex &index) const
 {
-    qDebug() << "setModelData";
     int nDataType = index.model()->data(index, Qt::UserRole+2).toInt();
     if (nDataType == DelegateModel::EditAndCombox)
     {

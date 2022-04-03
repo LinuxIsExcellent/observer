@@ -77,8 +77,6 @@ void LoginDialog::OnShowProgramServerLists(const QString &)
 
         QStringListModel *model;
         model = new QStringListModel(this);
-
-        qDebug() << "list_str = " << list_str;
         model->setStringList(list_str);
 
         ui->listView->setModel(model);
@@ -114,7 +112,7 @@ void LoginDialog::OnclickCloseBtn()
 
 void LoginDialog::mouseMoveEvent(QMouseEvent* e)
 {
-    if (m_bPressed && (e->buttons() && Qt::LeftButton))
+    if (m_bPressed && (e->buttons() == Qt::LeftButton))
     {
         this->move(e->globalPos() - m_ptPress);  //移动事件进行进行位置计算
         e->accept();

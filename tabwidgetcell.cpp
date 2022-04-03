@@ -90,9 +90,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 
     m_standardItemModel = new QStandardItemModel(m_tableView);
 
-//    connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
-//    connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
-
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     m_tableView->setModel(m_standardItemModel);
 

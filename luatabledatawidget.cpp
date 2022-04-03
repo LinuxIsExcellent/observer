@@ -491,8 +491,6 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 
             m_tableData.dataList.push_back(rowData);
         }
-
-        qDebug() << "数据重设成功";
     }
 
     Flush();
@@ -617,6 +615,8 @@ void LuaTableDataWidget::OnRequestSaveData()
 
 void LuaTableDataWidget::SetRowAndColParam()
 {
+    disconnect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
+    disconnect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
     if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
     {
         if (m_mFieldSquence.find("###row_height###") != m_mFieldSquence.end())
@@ -654,4 +654,7 @@ void LuaTableDataWidget::SetRowAndColParam()
             }
         }
     }
+
+    connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
+    connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
 }

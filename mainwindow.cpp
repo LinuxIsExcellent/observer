@@ -307,7 +307,6 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
 
 void MainWindow::OnRequestModifyServerTime(quint64 nTime)
 {
-    qDebug() << "asdsa = " << nTime;
     test_2::client_modify_server_time_quest quest;
     quest.set_time(nTime);
 
@@ -320,7 +319,7 @@ void MainWindow::OnRequestModifyServerTime(quint64 nTime)
 //请求连接到特定服务器
 void MainWindow::OnClickConnectServerBtn(QString ip, qint32 port)
 {
-    qDebug() << "请求连接服务器: " << ip << ", " << port << ", state = " << m_ServerSockect->state();
+//    qDebug() << "请求连接服务器: " << ip << ", " << port << ", state = " << m_ServerSockect->state();
     if (m_ServerSockect->state() == QAbstractSocket::UnconnectedState)
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -541,7 +540,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
     const char* strData;
 
     packet >> nSystem >> nCmd >> strData;
-    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
+//    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
 
     if (nSystem == 0)
     {
@@ -695,8 +694,6 @@ void MainWindow::OnRecvServerShellOpsData(const test_2::server_send_shell_config
 
 void MainWindow::OnRecvServerLuaListData(const test_2::send_lua_list_data_notify& proto)
 {
-    qDebug() << QString::fromStdString(proto.table_name());
-
     QString table_name = QString::fromStdString(proto.table_name());
     auto iter = m_mTabwidgetMap.find(table_name);
     //如果tab里面有这个widget

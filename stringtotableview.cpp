@@ -19,7 +19,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->setupUi(this);
 
     this->model = model;
-    this->index = index;
+    this->m_index = index;
     this->m_mFieldSquence = pMFieldSquence;
 
     m_sData = index.data().toString();
@@ -340,40 +340,45 @@ void StringToTableView::OnCancelButtonClicked()
 void StringToTableView::OnChangeData()
 {
     QString sResult = "{";
-    for (int i = 0; i < m_vRowDatas.size(); ++i) {
-        auto data = m_vRowDatas[i];
+//    QString sResult = "{";
+    for (int i = 0; i < m_standardItemModel->rowCount(); i++)
+    {
+        QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 1));
+        QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 2));
 
-        if (data.nKeyType == LUA_TNUMBER)
+        bool is_ok = false;
+        vKey.toInt(&is_ok);
+        if (!is_ok)
         {
-            sResult = sResult + "[" + data.sKey + "] = ";
-        }
-        else if (data.nKeyType == LUA_TSTRING)
-        {
-            std::string sKeys = data.sKey.toStdString();
-            if(sKeys.find_first_not_of("-.0123456789") == std::string::npos)
+//            FIELDINFO fieldInfo;
+//            fieldInfo.sFieldName = vKey.toString().remove("\"");
+//            vNewKeySquence.push_back(fieldInfo);
+
+            if(vKey.toString().toStdString().find_first_not_of("-.0123456789\"") == std::string::npos)
             {
-                sResult = sResult + "[\"" + data.sKey + "\"]" + " = ";
+                sResult = sResult + "[" + vKey.toString() + "] = ";
             }
             else
             {
-                sResult = sResult + data.sKey + " = ";
+                sResult = sResult + vKey.toString() + " = ";
             }
         }
+        else
+        {
+            sResult = sResult + "[" + vKey.toString() + "] = ";
+        }
 
-        QString sField = data.sField;
-        sField = sField.replace('\n',"\\n");
-        sResult = sResult + sField;
+        sResult = sResult + vValue.toString();
 
-        if (i < m_vRowDatas.size() - 1)
+        if (i < m_standardItemModel->rowCount() - 1)
         {
             sResult = sResult + ", ";
         }
     }
 
     sResult = sResult + "}";
-
     m_sData = sResult;
-    SetParam();
+//    SetParam();
 }
 
 void StringToTableView::OnSaveData()
@@ -469,7 +474,7 @@ void StringToTableView::OnSaveData()
         TabWidgetCell* tabWidget = dynamic_cast<TabWidgetCell* >(parent());
         if (tabWidget)
         {
-            tabWidget->ChangeModelIndexData(index, sResult);
+            tabWidget->ChangeModelIndexData(m_index, sResult);
 
             if (fieldSquenceChange)
             {
@@ -482,7 +487,7 @@ void StringToTableView::OnSaveData()
         StringToTableView* view = static_cast<StringToTableView*>(parent());
         if (view)
         {
-            view->ChangeModelIndexData(index, sResult);
+            view->ChangeModelIndexData(m_index, sResult);
 
             if (fieldSquenceChange)
             {
@@ -588,7 +593,6 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         }
         else
         {
-//            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
             sKey = QString::fromStdString(lua_tostring(L, -2));
             sSubTableKey = sTableKey + "#" + sKey;
         }
@@ -777,7 +781,6 @@ void StringToTableView::SetParam()
         }
         else
         {
-//            sKey = '\"' + QString::fromStdString(lua_tostring(L, -2)) + '\"';
             sKey = QString::fromStdString(lua_tostring(L, -2));
             sSubTableKey = m_sTableName + "#" + sKey;
         }
@@ -1111,10 +1114,9 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
         if (data.toString() != oldData.toString())
         {
             m_standardItemModel->setData(index, data);
-            //这里的撤回有问题，先屏蔽
-//            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
 
-            OnChangeData();
+//            OnChangeData();
             m_bDataChange = true;
         }
     }
