@@ -3,6 +3,7 @@
 #include <QTableWidget>
 #include <QMimeData>
 #include <QClipboard>
+#include <QColorDialog>
 
 #include "tabledelegate.h"
 #include "modifcommand.h"
@@ -13,6 +14,8 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 {
     ui->setupUi(this);
     m_bTableDataChange = false;
+    m_currentVSlider = 0;
+    m_currentHSlider = 0;
 
     //初始化上边的widget和layout
     m_topWidget = new QWidget(this);
@@ -20,18 +23,12 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_tableView = new QTableView(this);
     m_rightButtonList = new QListWidget(this);
 
-    m_annonationWidget = new AnnonationEditWidget(this);
-    m_annonationWidget->raise();
-    m_annonationWidget->hide();
-
-    connect(m_annonationWidget, SIGNAL(SaveAnnonationsSignal(QString, QString, QString)), this, SLOT(OnSaveAnnonations(QString, QString, QString)));
-
     hlayout_top = new QHBoxLayout(m_topWidget);
 
     hlayout_top->addWidget(m_tableView);
     hlayout_top->addWidget(m_rightButtonList);
 
-    hlayout_top->setStretchFactor(m_tableView, 10);
+    hlayout_top->setStretchFactor(m_tableView, 14);
     hlayout_top->setStretchFactor(m_rightButtonList, 2);
 
     m_topWidget->setLayout(hlayout_top);
@@ -58,7 +55,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     QListWidgetItem *item = new QListWidgetItem(m_rightButtonList);
     if (item)
     {
-        resizeContentBtn->setText(tr("显示所有的行列"));
+        resizeContentBtn->setText(tr("显示所有的行"));
         m_rightButtonList->addItem(item);
         m_rightButtonList->setItemWidget(item, resizeContentBtn);
 
@@ -87,6 +84,11 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_tableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:white;color: black;}");
+    m_tableView->verticalHeader()->setStyleSheet("QHeaderView::section{background:white;color: black;}");
+
+    m_tableView->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
+    m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
 
     m_standardItemModel = new QStandardItemModel(m_tableView);
 
@@ -111,7 +113,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
         //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
         int nIndex = m_tableView->verticalHeader()->logicalIndexAt(pos);
-        qDebug() << "index = " << nIndex;
         if (nIndex < 0){
             //m_tableView->clearSelection();
             return;
@@ -135,6 +136,58 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
             m_bTableDataChange = true;
             ChangeDataModify();
         });
+
+        QSet<int> rowSet;        
+        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+        for (auto& data : selectList)
+        {
+            rowSet.insert(data.row());
+        }
+
+        if (m_type == TabWidgetType::enTabWidgetTable)
+        {
+            m_tableCellMenu->addAction("隐藏行", this, [=](){
+                for (int row : rowSet.toList())
+                {
+                    m_tableView->setRowHidden(row, true);
+                }
+
+                undoStack->push(new ModifCommand(m_standardItemModel, rowSet.toList(), m_tableView, ModifCommandType::hiddenRow));
+            });
+
+            m_tableCellMenu->addAction(tr("设置单元格颜色"), this, [=](){
+                QColor color = QColorDialog::getColor(Qt::white,this,"选择你要的颜色");
+                if (color.isValid())
+                {
+                    ModifCommandList commandList;
+                    for (int row : rowSet.toList())
+                    {
+                        for (int i = 0; i < m_standardItemModel->columnCount(); ++i)
+                        {
+                            QModelIndex modelIndex = m_standardItemModel->item(row, i)->index();
+                            QVariant data = QVariant(color);
+                            QVariant oldData = modelIndex.data(Qt::BackgroundRole);
+                            m_standardItemModel->setData(modelIndex, color, Qt::BackgroundRole);
+
+                            if (data != oldData)
+                            {
+                                ModifInfo sourceInfo;
+                                sourceInfo.index = modelIndex;
+                                sourceInfo.oldData = oldData;
+                                sourceInfo.data = data;
+
+                                commandList.push_front(sourceInfo);
+                            }
+                        }
+
+                        if (commandList.size() > 0)
+                        {
+                            undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex, Qt::BackgroundRole));
+                        }
+                    }
+                }
+            });
+        }
 
         m_tableCellMenu->exec(pt);
     });
@@ -176,7 +229,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QVariant oldData = index.data(Qt::UserRole);
         if (data != oldData)
         {
-            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
         }
     });
 
@@ -192,6 +245,36 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 TabWidgetCell::~TabWidgetCell()
 {
     delete ui;
+}
+
+void TabWidgetCell::SetRowAndColParam()
+{
+    QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
+    if (vScrollbar)
+    {
+        vScrollbar->setSliderPosition(m_currentVSlider);
+    }
+
+    QScrollBar *hScrollbar = m_tableView->horizontalScrollBar();
+    if (hScrollbar)
+    {
+        hScrollbar->setSliderPosition(m_currentHSlider);
+    }
+}
+
+void TabWidgetCell::OnRequestSaveData()
+{
+    QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
+    if (vScrollbar)
+    {
+        m_currentVSlider = vScrollbar->sliderPosition();
+    }
+
+    QScrollBar *hScrollbar = m_tableView->horizontalScrollBar();
+    if (hScrollbar)
+    {
+        m_currentHSlider = hScrollbar->sliderPosition();
+    }
 }
 
 void TabWidgetCell::OnRowResized(int, int, int)
@@ -368,7 +451,7 @@ bool TabWidgetCell::eventFilter(QObject *obj, QEvent *eve)
 
             if (commandList.size() > 0)
             {
-                undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+                undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
             }
 
             return true;
@@ -561,7 +644,7 @@ void TabWidgetCell::paste()
 
     if (commandList.size() > 0)
     {
-        undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+        undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
     }
 }
 
@@ -574,7 +657,7 @@ void TabWidgetCell::ChangeModelIndexData(QModelIndex index, QString sData)
 
         if (data != oldData)
         {
-            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
             m_standardItemModel->setData(index, data);
         }
     }

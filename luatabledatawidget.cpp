@@ -3,7 +3,9 @@
 #include "stringtotableview.h"
 #include "tabledelegate.h"
 #include "selectrowdatadialog.h"
+#include "modifcommand.h"
 #include <QComboBox>
+#include <QColorDialog>
 #include <regex>
 
 LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
@@ -30,7 +32,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         //pos鼠标点击时在表格中的相对位置
         QPoint pt = m_tableView->parentWidget()->mapToGlobal(m_tableView->pos()) + pos;
         //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
-        quint32 nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
+        int nIndex = m_tableView->horizontalHeader()->logicalIndexAt(pos);
         if (nIndex < 0){
             //m_tableView->clearSelection();
             return;
@@ -38,11 +40,21 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
         QString sField = m_standardItemModel->horizontalHeaderItem(nIndex)->text();
         m_tableCellMenu->clear();
+
+        QSet<int> colSet;
+        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+        for (auto& data : selectList)
+        {
+            colSet.insert(data.column());
+        }
+
         m_tableCellMenu->addAction("编辑批注", this, [=](){
 //            m_annonationWidget->OnShow(pt.x(), pt.y());
 
             QString sToolTips = m_standardItemModel->horizontalHeaderItem(nIndex)->toolTip();
-            m_annonationWidget->OnShow(pos.x(), pos.y(), sField, sToolTips);
+            AnnonationEditWidget* annonationWidget = new AnnonationEditWidget(sField, sToolTips, this);
+            annonationWidget->show();
+            annonationWidget->move(pt);
         });
 
 
@@ -55,6 +67,35 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             dialog->show();
             dialog->move(pt);
         });
+
+        m_tableCellMenu->addAction("隐藏列", this, [=](){
+            QMap<int, int> colMapWidth;
+            for (int col : colSet.toList())
+            {
+                int width = m_tableView->columnWidth(col);
+                colMapWidth.insert(col, width);
+            }
+
+            undoStack->push(new ModifCommand(m_standardItemModel, colMapWidth, m_tableView, ModifCommandType::hiddenCol));
+        });
+
+        QMap<int, int> colMapWidth;
+        for (int col : colSet.toList())
+        {
+            int width = m_tableView->columnWidth(col);
+            //因为通过界面去拉，是不会把列宽拉到25以下的，所以默认25以下的都是"隐藏"的
+            if (width < 25)
+            {
+                colMapWidth.insert(col, width);
+            }
+        }
+
+        if (colMapWidth.count() > 0)
+        {
+            m_tableCellMenu->addAction("取消隐藏", this, [=](){
+                undoStack->push(new ModifCommand(m_standardItemModel, colMapWidth, m_tableView, ModifCommandType::expandCol));
+            });
+        }
 
         m_tableCellMenu->exec(pt);
     });
@@ -84,6 +125,37 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             });
         }
 
+        QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
+        m_tableCellMenu->addAction(tr("设置单元格颜色"), this, [=](){
+            QColor color = QColorDialog::getColor(Qt::white,this,"选择你要的颜色");
+            if (color.isValid())
+            {
+                ModifCommandList commandList;
+                for (auto& modelIndex : selectList)
+                {
+                    QVariant oldData = modelIndex.data(Qt::BackgroundRole);
+                    m_standardItemModel->setData(modelIndex, color, Qt::BackgroundRole);
+                    QVariant data = QVariant(color);
+
+                    if (data != oldData)
+                    {
+                        ModifInfo sourceInfo;
+                        sourceInfo.index = modelIndex;
+                        sourceInfo.oldData = oldData;
+                        sourceInfo.data = data;
+
+                        commandList.push_front(sourceInfo);
+                    }
+                }
+
+                if (commandList.size() > 0)
+                {
+                    undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex, Qt::BackgroundRole));
+                }
+            }
+        });
+
+
 //        //如果有对应的关联
 //        //弹出跳转到关联的菜单
 //        if (index.data(Qt::UserRole+2) == QVariant(DelegateModel::EditAndCombox) && index.data(Qt::UserRole+3).toString() != "")
@@ -95,6 +167,43 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
         m_tableCellMenu->exec(pt);
     });
+}
+
+void LuaTableDataWidget::OnShowTableWithLinkMsg(QString sField, QString sValue)
+{
+    for (int col = 0; col < m_standardItemModel->columnCount(); ++col)
+    {
+        if (m_standardItemModel->horizontalHeaderItem(col)->text() == sField)
+        {
+            for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
+            {
+                QStandardItem* item = m_standardItemModel->item(row, col);
+                if (item)
+                {
+                    if (item->index().isValid())
+                    {
+                        if (item->index().data().toString() == sValue)
+                        {
+                            QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
+                            if (vScrollbar)
+                            {
+                                vScrollbar->setSliderPosition(row);
+                            }
+
+                            QScrollBar *hScrollbar = m_tableView->horizontalScrollBar();
+                            if (hScrollbar)
+                            {
+                                hScrollbar->setSliderPosition(col);
+                            }
+
+                            m_tableView->setCurrentIndex(item->index());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
@@ -114,7 +223,6 @@ void LuaTableDataWidget::SetFieldLink(QString sIndex, QString sField, QString sF
     //修改对应列的关联信息
     for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
     {
-        int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
         if (m_tableView->model()->headerData(i, Qt::Horizontal).toString() == sField)
         {
             for (int row = 1; row < m_standardItemModel->rowCount(); ++row)
@@ -205,7 +313,7 @@ void LuaTableDataWidget::GlobalKeyPressEevent(QKeyEvent *ev)
 {
     if (ev->key() == Qt::Key_Escape)
     {
-        m_annonationWidget->OnQuit();
+
     }
 }
 
@@ -409,6 +517,21 @@ void LuaTableDataWidget::Flush()
 
                 m_standardItemModel->setItem(i + 1, visualColumn, dataItem);
             }
+
+            //设置行表头
+            QStandardItem* verItem = new QStandardItem();
+            if (i == 0)
+            {
+                verItem->setText("数据类型");
+            }
+            else
+            {
+                verItem->setText(QString::number(i));
+            }
+
+            verItem->setFlags(Qt::ItemIsEnabled);
+            verItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+            m_standardItemModel->setVerticalHeaderItem(i, verItem);
         }
 
         SetRowAndColParam();
@@ -417,8 +540,10 @@ void LuaTableDataWidget::Flush()
 
 void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 {
+    QString sLinkInfo;
     if(m_tableView)
     {
+        sLinkInfo = QString::fromStdString(proto.link_info());
         m_tableData.sTableName = QString::fromStdString(proto.table_name());
         m_tableData.nRow = proto.row_count();
         m_tableData.nColumn = proto.column_count();
@@ -495,6 +620,17 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
 
     Flush();
 
+    if (sLinkInfo != "")
+    {
+        QStringList stringList = sLinkInfo.split("#");
+        if (stringList.size() == 4)
+        {
+            QString sFieldName = stringList[2];
+            QString sField = stringList[3];
+            OnShowTableWithLinkMsg(sFieldName, sField);
+        }
+    }
+
     m_bTableDataChange = false;
     m_bHeadIndexChange = false;
     ChangeDataModify();
@@ -504,6 +640,8 @@ void LuaTableDataWidget::OnRequestSaveData()
 {
     qDebug() << "请求保存数据";
     //如果表的信息有变化
+    TabWidgetCell::OnRequestSaveData();
+
     if (m_bHeadIndexChange || m_bTableDataChange)
     {
         //保存表的行和列
@@ -520,14 +658,16 @@ void LuaTableDataWidget::OnRequestSaveData()
                 rowFieldSquence.vSFieldSquences.push_back(fieldInfo);
             }
 
-            m_mFieldSquence.remove(rowInfoKey);
+            if (m_mFieldSquence.find(rowInfoKey) != m_mFieldSquence.end())
+            {
+                m_mFieldSquence.remove(rowInfoKey);
+            }
             m_mFieldSquence.insert(rowInfoKey, rowFieldSquence);
-
 
             QString colInfoKey = "###col_width###";
             FIELDSQUENCE colFieldSquence;
             colFieldSquence.sIndex = colInfoKey;
-            for (int col = 0; col < m_standardItemModel->rowCount();++col)
+            for (int col = 0; col < m_standardItemModel->columnCount();++col)
             {
                 FIELDINFO fieldInfo;
                 fieldInfo.sFieldName = QString::number(m_tableView->columnWidth(col));
@@ -535,8 +675,48 @@ void LuaTableDataWidget::OnRequestSaveData()
                 colFieldSquence.vSFieldSquences.push_back(fieldInfo);
             }
 
-            m_mFieldSquence.remove(colInfoKey);
+            if (m_mFieldSquence.find(colInfoKey) != m_mFieldSquence.end())
+            {
+                m_mFieldSquence.remove(colInfoKey);
+            }
             m_mFieldSquence.insert(colInfoKey, colFieldSquence);
+
+            QString colorInfoKey = "###cell_color###";
+            FIELDSQUENCE colorFieldSquence;
+            colorFieldSquence.sIndex = colorInfoKey;
+            for (int row = 0; row < m_standardItemModel->rowCount();++row)
+            {
+                for (int col = 0; col < m_standardItemModel->columnCount();++col)
+                {
+                    QStandardItem* item = m_standardItemModel->item(row, col);
+                    if (item)
+                    {
+                        QModelIndex modelIndex = item->index();
+                        if (modelIndex.isValid())
+                        {
+                            QVariant colorData = modelIndex.data(Qt::BackgroundRole);
+                            if (colorData.isValid())
+                            {
+                                if (colorData.toString() != "#ffffff")
+                                {
+                                    FIELDINFO fieldInfo;
+                                    fieldInfo.sFieldName = QString::number(row);
+                                    fieldInfo.sFieldAnnonation = QString::number(col);
+                                    fieldInfo.sFieldLink = colorData.toString();
+
+                                    colorFieldSquence.vSFieldSquences.push_back(fieldInfo);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (m_mFieldSquence.find(colorInfoKey) != m_mFieldSquence.end())
+            {
+                m_mFieldSquence.remove(colorInfoKey);
+            }
+            m_mFieldSquence.insert(colorInfoKey, colorFieldSquence);
         }
 
         //请求保存表的信息
@@ -653,7 +833,26 @@ void LuaTableDataWidget::SetRowAndColParam()
                 }
             }
         }
+
+        if (m_mFieldSquence.find("###cell_color###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###cell_color###").value();
+            for (auto& field : fieldSquence.vSFieldSquences)
+            {
+                int nRow = field.sFieldName.toInt();
+                int nCol = field.sFieldAnnonation.toInt();
+                QString qColorStr = field.sFieldLink;
+
+                QStandardItem *item = m_standardItemModel->item(nRow, nCol);
+                if (item)
+                {
+                    item->setData(QColor(qColorStr), Qt::BackgroundRole);
+                }
+            }
+        }
     }
+
+    TabWidgetCell::SetRowAndColParam();
 
     connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
     connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));

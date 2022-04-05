@@ -51,6 +51,8 @@ public:
         return m_bHeadIndexChange | m_bTableDataChange;
     }
 
+    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField);
+
     //调整表的字段顺序
     void ModifyFieldSquences(QString sIndex, QMap<QString, quint16> mFieldSortMap);
 
@@ -70,6 +72,8 @@ public:
     FIELDINFO* GetFieldInfos(QString sIndex, quint16 nIndex);
 
     void InsertSquenceInfo(QString sIndex, QVector<FIELDINFO> vFieldInfos);
+
+    void OnShowTableWithLinkMsg(QString sField, QString sValue);
 public:
     virtual void OnItemDataChange(QStandardItem *item);
 private slots:
@@ -79,8 +83,6 @@ private slots:
     void sectionMovableBtnClicked();
 
     virtual void Flush();
-
-    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField);
 private:
 
     TABLEDATA   m_tableData;    //表的数据

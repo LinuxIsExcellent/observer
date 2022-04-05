@@ -47,6 +47,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:white;color: black;}");
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
@@ -195,7 +196,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
         QVariant oldData = index.data(Qt::UserRole);
         if (data != oldData)
         {
-            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
         }
     });
 
@@ -1100,7 +1101,7 @@ void StringToTableView::paste()
 
     if (commandList.size() > 0)
     {
-        undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+        undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
     }
 }
 
@@ -1114,7 +1115,7 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
         if (data.toString() != oldData.toString())
         {
             m_standardItemModel->setData(index, data);
-            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data));
+            undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
 
 //            OnChangeData();
             m_bDataChange = true;
@@ -1178,7 +1179,7 @@ bool StringToTableView::eventFilter(QObject *obj, QEvent *eve)
 
             if (commandList.size() > 0)
             {
-                undoStack->push(new ModifCommand(m_standardItemModel, commandList));
+                undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
             }
 
             return true;

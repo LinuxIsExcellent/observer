@@ -10,7 +10,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
 
     QDesktopWidget* desktopWidget = QApplication::desktop();
     if(desktopWidget)
@@ -89,7 +89,7 @@ void LoginDialog::OnListViewDoubleClicked(const QModelIndex & model)
 
     if(nRow < 0 || m_sProgram.serverList.size() <= 0 || model.row() >= m_sProgram.serverList.size()) return;
 
-    ((MainWindow*)parent())->OnClickConnectServerBtn(m_sProgram.serverList[model.row()].ip, m_sProgram.serverList[model.row()].port);
+    m_mainWindow->OnClickConnectServerBtn(m_sProgram.serverList[model.row()].ip, m_sProgram.serverList[model.row()].port);
 }
 
 void LoginDialog::OnConnectBtnClicked()
@@ -97,17 +97,16 @@ void LoginDialog::OnConnectBtnClicked()
     int nRow = ui->listView->selectionModel()->currentIndex().row();
     if(nRow < 0 || m_sProgram.serverList.size() <= 0 || nRow >= m_sProgram.serverList.size())
     {
-        qDebug() << "请选择有效行号";
         return;
     }
 
-    ((MainWindow*)parent())->OnClickConnectServerBtn(m_sProgram.serverList[nRow].ip, m_sProgram.serverList[nRow].port);
+    m_mainWindow->OnClickConnectServerBtn(m_sProgram.serverList[nRow].ip, m_sProgram.serverList[nRow].port);
 }
 
 void LoginDialog::OnclickCloseBtn()
 {
-    QApplication::setQuitOnLastWindowClosed(true);
-    ((MainWindow*)parent())->close();
+    m_mainWindow->close();
+    close();
 }
 
 void LoginDialog::mouseMoveEvent(QMouseEvent* e)

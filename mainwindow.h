@@ -45,9 +45,11 @@ public:
 
     void init_windows();
 
+    void OnRequestTableWidget(QString sTableName, QString sLinkInfo = "");
+
     void OnClickConnectServerBtn(QString ip, qint32 port);
 
-    void SetLoginDialog(LoginDialog* dialog);
+    void SetLoginDialog();
 
     void OnNetMsgProcess(Packet& packet);
 

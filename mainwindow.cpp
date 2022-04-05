@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_loadingDialog = new QLoadingWidget(this);
     m_loadingDialog->hide();
+
+//    setWindowIcon(QIcon(":/images/jump"));
 }
 
 MainWindow::~MainWindow()
@@ -59,9 +61,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::SetLoginDialog(LoginDialog* dialog)
+void MainWindow::SetLoginDialog()
 {
-    m_loginDailog = dialog;
+    LoginDialog* loginDialog = new LoginDialog();
+    loginDialog->show();
+    loginDialog->SetMainWindow(this);
+
+    m_loginDailog = loginDialog;
 }
 
 void MainWindow::init_windows()
@@ -95,7 +101,7 @@ void MainWindow::init_windows()
     hlayout_all->addWidget(m_leftWidget);
     hlayout_all->addWidget(m_rightWidget);
     hlayout_all->setStretchFactor(m_leftWidget, 1);
-    hlayout_all->setStretchFactor(m_rightWidget, 4);
+    hlayout_all->setStretchFactor(m_rightWidget, 6);
 
     m_mainWindowWidget->setLayout(hlayout_all);
 
@@ -127,8 +133,43 @@ void MainWindow::init_windows()
 
 void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
 {
-    qDebug() << "sLinkInfo" << sLinkInfo;
-    qDebug() << "sField" << sField;
+    QStringList stringList = sLinkInfo.split("#");
+    if (stringList.size() < 3)
+    {
+        qCritical() << "jump info error: " << sLinkInfo;
+        return;
+    }
+    QString sTableType = stringList[0];
+    QString sTableName = stringList[1];
+    QString sFieldName = stringList[2];
+    auto iter = m_mTabwidgetMap.find(sTableName);
+    if (iter != m_mTabwidgetMap.end())
+    {
+        m_tabWidget->setCurrentWidget(iter.value());
+        if (sTableType == "table" && iter.value()->GetType() == TabWidgetType::enTabWidgetTable)
+        {
+            LuaTableDataWidget* cellWidget = qobject_cast<LuaTableDataWidget*>(iter.value());
+            if (cellWidget)
+            {
+                cellWidget->OnShowTableWithLinkMsg(sFieldName, sField);
+            }
+        }
+        else if (iter.value()->GetType() == TabWidgetType::enTabWidgetList)
+        {
+//            LuaTableDataWidget* cellWidget = qobject_cast<LuaTableDataWidget*>(iter.value());
+//            if (cellWidget)
+//            {
+//                cellWidget->OnShowTableWithLinkMsg(sFieldName, sField);
+//            }
+        }
+    }
+    else
+    {
+        if (sTableType == "table")
+        {
+            OnRequestTableWidget(sTableName, sLinkInfo + "#" + sField);
+        }
+    }
 }
 
 void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
@@ -364,21 +405,7 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
     {
         if (item->parent()->text(0) == tr("二维表"))
         {
-            qDebug() << item->text(0);
-            //请求二维表的数据
-
-            test_2::client_lua_table_data_quest quest;
-            quest.set_file_name(item->text(0).toStdString());
-
-            std::string output;
-            quest.SerializeToString(&output);
-
-//            setCursor(Qt::WaitCursor);
-//            m_loadingDialog->show();
-
-            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
-
-            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+            OnRequestTableWidget(item->text(0));
         }
         else if (item->parent()->text(0) == tr("全局一维表"))
         {
@@ -391,6 +418,20 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
             OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_LIST_DATA, output);
         }
     }
+}
+
+void MainWindow::OnRequestTableWidget(QString sTableName, QString sLinkInfo/* = ""*/)
+{
+    test_2::client_lua_table_data_quest quest;
+    quest.set_file_name(sTableName.toStdString());
+    quest.set_link_info(sLinkInfo.toStdString());
+
+    std::string output;
+    quest.SerializeToString(&output);
+
+    OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_TABLE_DATA, output);
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
 void MainWindow::OnBackLoginDialog()
@@ -709,6 +750,7 @@ void MainWindow::OnRecvServerLuaListData(const test_2::send_lua_list_data_notify
         {
             tabCell->SetTabWidget(m_tabWidget);
             tabCell->SetManWindows(this);
+            tabCell->SetType(TabWidgetType::enTabWidgetList);
 
             m_tabWidget->addTab(tabCell, table_name);
             tabCell->SetName(table_name);
@@ -737,6 +779,7 @@ void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
         {
             tabCell->SetTabWidget(m_tabWidget);
             tabCell->SetManWindows(this);
+            tabCell->SetType(TabWidgetType::enTabWidgetTable);
 
             m_tabWidget->addTab(tabCell, table_name);
             tabCell->SetName(table_name);

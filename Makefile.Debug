@@ -355,6 +355,7 @@ debug/moc_addfieldlinkdialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -583,6 +584,151 @@ debug/moc_annonationeditwidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidget
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextformat.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpen.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		tabwidgetcell.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHBoxLayout \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qboxlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayoutitem.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qgridlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleoption.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractspinbox.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qvalidator.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qregularexpression.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qicon.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyle.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QListWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QStandardItemModel \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qstandarditemmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qactiongroup.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
+		mainwindow.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QTcpSocket \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetwork-config.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QHostAddress \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qhostaddress.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLineEdit \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlineedit.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreeview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTabWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QVBoxLayout \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLabel \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlabel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDateTimeEdit \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdatetime.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTimer \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtimer.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qbasictimer.h \
+		globalconfig.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QString \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDir \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdir.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfileinfo.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMap \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVector \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTextCodec \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtextcodec.h \
+		compileLua/src/lua.h \
+		compileLua/src/luaconf.h \
+		compileLua/src/lauxlib.h \
+		compileLua/src/lualib.h \
+		logindialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDialog \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMessageBox \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmessagebox.h \
+		showmsgdialog.h \
+		Packet.h \
+		msg.pb.h \
+		protobuf-master/src/google/protobuf/port_def.inc \
+		protobuf-master/src/google/protobuf/port_undef.inc \
+		protobuf-master/src/google/protobuf/io/coded_stream.h \
+		protobuf-master/src/google/protobuf/stubs/common.h \
+		protobuf-master/src/google/protobuf/stubs/macros.h \
+		protobuf-master/src/google/protobuf/stubs/platform_macros.h \
+		protobuf-master/src/google/protobuf/stubs/port.h \
+		protobuf-master/src/google/protobuf/stubs/stringpiece.h \
+		protobuf-master/src/google/protobuf/stubs/hash.h \
+		protobuf-master/src/google/protobuf/stubs/logging.h \
+		protobuf-master/src/google/protobuf/stubs/status.h \
+		protobuf-master/src/google/protobuf/stubs/strutil.h \
+		protobuf-master/src/google/protobuf/port.h \
+		protobuf-master/src/google/protobuf/arena.h \
+		protobuf-master/src/google/protobuf/arena_impl.h \
+		protobuf-master/src/google/protobuf/arenastring.h \
+		protobuf-master/src/google/protobuf/generated_message_bases.h \
+		protobuf-master/src/google/protobuf/parse_context.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream.h \
+		protobuf-master/src/google/protobuf/implicit_weak_message.h \
+		protobuf-master/src/google/protobuf/message_lite.h \
+		protobuf-master/src/google/protobuf/explicitly_constructed.h \
+		protobuf-master/src/google/protobuf/metadata_lite.h \
+		protobuf-master/src/google/protobuf/stubs/once.h \
+		protobuf-master/src/google/protobuf/repeated_field.h \
+		protobuf-master/src/google/protobuf/repeated_ptr_field.h \
+		protobuf-master/src/google/protobuf/inlined_string_field.h \
+		protobuf-master/src/google/protobuf/wire_format_lite.h \
+		protobuf-master/src/google/protobuf/stubs/casts.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream_impl.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream_impl_lite.h \
+		protobuf-master/src/google/protobuf/stubs/callback.h \
+		protobuf-master/src/google/protobuf/stubs/stl_util.h \
+		protobuf-master/src/google/protobuf/generated_message_util.h \
+		protobuf-master/src/google/protobuf/any.h \
+		protobuf-master/src/google/protobuf/has_bits.h \
+		protobuf-master/src/google/protobuf/message.h \
+		protobuf-master/src/google/protobuf/descriptor.h \
+		protobuf-master/src/google/protobuf/stubs/mutex.h \
+		protobuf-master/src/google/protobuf/generated_message_reflection.h \
+		protobuf-master/src/google/protobuf/generated_enum_reflection.h \
+		protobuf-master/src/google/protobuf/generated_enum_util.h \
+		protobuf-master/src/google/protobuf/unknown_field_set.h \
+		protobuf-master/src/google/protobuf/generated_message_table_driven.h \
+		protobuf-master/src/google/protobuf/map.h \
+		protobuf-master/src/google/protobuf/map_type_handler.h \
+		protobuf-master/src/google/protobuf/map_entry_lite.h \
+		protobuf-master/src/google/protobuf/map_field_lite.h \
+		protobuf-master/src/google/protobuf/extension_set.h \
+		modifyservertimewidget.h \
+		addfieldlinkdialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidgetItem \
+		protobuf-master/src/google/protobuf/text_format.h \
+		qloadingwidget.h \
+		annonationeditwidget.h \
 		annonationeditwidget.h \
 		debug/moc_predefs.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/bin/moc.exe
@@ -948,6 +1094,7 @@ debug/moc_logindialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDialog
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -1167,6 +1314,7 @@ debug/moc_lualistdatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVar
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
@@ -1817,6 +1965,7 @@ debug/moc_showmsgdialog.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDial
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -2045,6 +2194,7 @@ debug/moc_stringtotableview.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/Q
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
@@ -2380,6 +2530,7 @@ debug/moc_tabwidgetcell.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QWidg
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -2703,6 +2854,7 @@ debug/moc_luatabledatawidget.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVa
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
@@ -3012,6 +3164,7 @@ debug/moc_mainwindow.cpp: F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWin
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -3236,6 +3389,7 @@ debug/addfieldlinkdialog.o: addfieldlinkdialog.cpp addfieldlinkdialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -3462,8 +3616,151 @@ debug/annonationeditwidget.o: annonationeditwidget.cpp annonationeditwidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtextformat.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpen.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
-		ui_annonationeditwidget.h \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug
+		tabwidgetcell.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QHBoxLayout \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qboxlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlayoutitem.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qgridlayout.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleoption.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractspinbox.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qvalidator.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qregularexpression.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qicon.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyle.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QListWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlistview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QStandardItemModel \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qstandarditemmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qactiongroup.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundostack.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoView \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qundoview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QAction \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
+		mainwindow.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmainwindow.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QTcpSocket \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qtnetwork-config.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/QHostAddress \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtNetwork/qhostaddress.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLineEdit \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlineedit.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreeview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTabWidget \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QVBoxLayout \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QLabel \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qlabel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDateTimeEdit \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdatetime.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTimer \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtimer.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qbasictimer.h \
+		globalconfig.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QString \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDir \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qdir.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfileinfo.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QMap \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVector \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QTextCodec \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qtextcodec.h \
+		compileLua/src/lua.h \
+		compileLua/src/luaconf.h \
+		compileLua/src/lauxlib.h \
+		compileLua/src/lualib.h \
+		logindialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDialog \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMessageBox \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmessagebox.h \
+		showmsgdialog.h \
+		Packet.h \
+		msg.pb.h \
+		protobuf-master/src/google/protobuf/port_def.inc \
+		protobuf-master/src/google/protobuf/port_undef.inc \
+		protobuf-master/src/google/protobuf/io/coded_stream.h \
+		protobuf-master/src/google/protobuf/stubs/common.h \
+		protobuf-master/src/google/protobuf/stubs/macros.h \
+		protobuf-master/src/google/protobuf/stubs/platform_macros.h \
+		protobuf-master/src/google/protobuf/stubs/port.h \
+		protobuf-master/src/google/protobuf/stubs/stringpiece.h \
+		protobuf-master/src/google/protobuf/stubs/hash.h \
+		protobuf-master/src/google/protobuf/stubs/logging.h \
+		protobuf-master/src/google/protobuf/stubs/status.h \
+		protobuf-master/src/google/protobuf/stubs/strutil.h \
+		protobuf-master/src/google/protobuf/port.h \
+		protobuf-master/src/google/protobuf/arena.h \
+		protobuf-master/src/google/protobuf/arena_impl.h \
+		protobuf-master/src/google/protobuf/arenastring.h \
+		protobuf-master/src/google/protobuf/generated_message_bases.h \
+		protobuf-master/src/google/protobuf/parse_context.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream.h \
+		protobuf-master/src/google/protobuf/implicit_weak_message.h \
+		protobuf-master/src/google/protobuf/message_lite.h \
+		protobuf-master/src/google/protobuf/explicitly_constructed.h \
+		protobuf-master/src/google/protobuf/metadata_lite.h \
+		protobuf-master/src/google/protobuf/stubs/once.h \
+		protobuf-master/src/google/protobuf/repeated_field.h \
+		protobuf-master/src/google/protobuf/repeated_ptr_field.h \
+		protobuf-master/src/google/protobuf/inlined_string_field.h \
+		protobuf-master/src/google/protobuf/wire_format_lite.h \
+		protobuf-master/src/google/protobuf/stubs/casts.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream_impl.h \
+		protobuf-master/src/google/protobuf/io/zero_copy_stream_impl_lite.h \
+		protobuf-master/src/google/protobuf/stubs/callback.h \
+		protobuf-master/src/google/protobuf/stubs/stl_util.h \
+		protobuf-master/src/google/protobuf/generated_message_util.h \
+		protobuf-master/src/google/protobuf/any.h \
+		protobuf-master/src/google/protobuf/has_bits.h \
+		protobuf-master/src/google/protobuf/message.h \
+		protobuf-master/src/google/protobuf/descriptor.h \
+		protobuf-master/src/google/protobuf/stubs/mutex.h \
+		protobuf-master/src/google/protobuf/generated_message_reflection.h \
+		protobuf-master/src/google/protobuf/generated_enum_reflection.h \
+		protobuf-master/src/google/protobuf/generated_enum_util.h \
+		protobuf-master/src/google/protobuf/unknown_field_set.h \
+		protobuf-master/src/google/protobuf/generated_message_table_driven.h \
+		protobuf-master/src/google/protobuf/map.h \
+		protobuf-master/src/google/protobuf/map_type_handler.h \
+		protobuf-master/src/google/protobuf/map_entry_lite.h \
+		protobuf-master/src/google/protobuf/map_field_lite.h \
+		protobuf-master/src/google/protobuf/extension_set.h \
+		modifyservertimewidget.h \
+		addfieldlinkdialog.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTreeWidgetItem \
+		protobuf-master/src/google/protobuf/text_format.h \
+		qloadingwidget.h \
+		ui_annonationeditwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\annonationeditwidget.o annonationeditwidget.cpp
 
 debug/comboboxlineedit.o: comboboxlineedit.cpp comboboxlineedit.h \
@@ -3708,6 +4005,7 @@ debug/comboboxlineedit.o: comboboxlineedit.cpp comboboxlineedit.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -4233,6 +4531,7 @@ debug/logindialog.o: logindialog.cpp logindialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -4253,8 +4552,7 @@ debug/logindialog.o: logindialog.cpp logindialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QStringListModel \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qstringlistmodel.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QDesktopWidget \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdesktopwidget.h \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qdesktopwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\logindialog.o logindialog.cpp
 
 debug/lualistdatawidget.o: lualistdatawidget.cpp lualistdatawidget.h \
@@ -4456,6 +4754,7 @@ debug/lualistdatawidget.o: lualistdatawidget.cpp lualistdatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
@@ -4772,6 +5071,7 @@ debug/main.o: main.cpp globalapplication.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QPushButton \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -4896,6 +5196,37 @@ debug/modifcommand.o: modifcommand.cpp modifcommand.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qicon.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QVariant \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QModelIndex \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QTableView \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtableview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qframe.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qpalette.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qfontmetrics.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qfontinfo.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qcursor.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qkeysequence.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qevent.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qurl.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qurlquery.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfile.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qfiledevice.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qvector2d.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qtouchdevice.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleoption.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractspinbox.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qvalidator.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qregularexpression.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractslider.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyle.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabbar.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qtabwidget.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qrubberband.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\modifcommand.o modifcommand.cpp
 
@@ -5622,6 +5953,7 @@ debug/showmsgdialog.o: showmsgdialog.cpp showmsgdialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -5849,6 +6181,7 @@ debug/stringtotableview.o: stringtotableview.cpp stringtotableview.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QItemSelectionModel \
 		mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMainWindow \
@@ -6199,6 +6532,7 @@ debug/tabwidgetcell.o: tabwidgetcell.cpp tabwidgetcell.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/QDebug \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \
@@ -6325,6 +6659,8 @@ debug/tabwidgetcell.o: tabwidgetcell.cpp tabwidgetcell.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtCore/qmimedata.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QClipboard \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/qclipboard.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QColorDialog \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcolordialog.h \
 		tabledelegate.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QStyledItemDelegate \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qstyleditemdelegate.h \
@@ -6535,6 +6871,7 @@ debug/luatabledatawidget.o: luatabledatawidget.cpp luatabledatawidget.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoStack \
@@ -6611,8 +6948,12 @@ debug/luatabledatawidget.o: luatabledatawidget.cpp luatabledatawidget.h \
 		selectrowdatadialog.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QCheckBox \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcheckbox.h \
+		modifcommand.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QUndoCommand \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QComboBox \
-		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcombobox.h
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcombobox.h \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QColorDialog \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qcolordialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\luatabledatawidget.o luatabledatawidget.cpp
 
 debug/mainwindow.o: mainwindow.cpp mainwindow.h \
@@ -6853,6 +7194,7 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QKeyEvent \
+		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtGui/QMouseEvent \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/QMenu \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qmenu.h \
 		F:/Qt5.9.9/5.9.9/mingw53_32/include/QtWidgets/qaction.h \

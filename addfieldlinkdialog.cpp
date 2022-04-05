@@ -44,6 +44,7 @@ void AddFieldLinkDialog::OnPushButtonClicked()
     {
         m_activeWidget->SetFieldLink(m_sIndex, m_sField, ui->msgLabel->text());
     }
+    close();
 }
 
 void AddFieldLinkDialog::OnClickTreeWidgetItem(QTreeWidgetItem* item, int nIndex)
@@ -51,8 +52,7 @@ void AddFieldLinkDialog::OnClickTreeWidgetItem(QTreeWidgetItem* item, int nIndex
     if (item)
     {
         QString linkInfo;
-        linkInfo = linkInfo + item->text(nIndex);
-        qDebug() << item->text(nIndex);
+        linkInfo = linkInfo + item->text(nIndex);        
 
         quint8 nLevel = 0;
         while (item->parent()) {

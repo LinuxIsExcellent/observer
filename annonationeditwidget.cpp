@@ -2,14 +2,16 @@
 #include "ui_annonationeditwidget.h"
 #include <QDebug>
 
-AnnonationEditWidget::AnnonationEditWidget(QWidget *parent) :
+AnnonationEditWidget::AnnonationEditWidget(QString sField, QString str/* = ""*/, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::AnnonationEditWidget)
+    ui(new Ui::AnnonationEditWidget),
+    m_sField(sField)
 {
     ui->setupUi(this);
+    SetText(str);
+
     m_bModify = false;
-//    setWindowFlags(Qt::Popup | Qt::FramelessWindowHint);
-    setWindowFlags(Qt::Widget | Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::Popup);
     connect(ui->textEdit, &QTextEdit::textChanged, this, [=] () {
         m_bModify = true;
     });
@@ -17,6 +19,7 @@ AnnonationEditWidget::AnnonationEditWidget(QWidget *parent) :
 
 AnnonationEditWidget::~AnnonationEditWidget()
 {
+
     delete ui;
 }
 
@@ -30,27 +33,14 @@ QString AnnonationEditWidget::GetText()
     return ui->textEdit ? ui->textEdit->toPlainText() : "";
 }
 
-void AnnonationEditWidget::OnShow(quint32 x, quint32 y, QString sField, QString str/* = ""*/)
-{
-    show();
-
-    m_sField = sField;
-    setGeometry(x, y, 200, 230);
-    ui->textEdit->clear();
-
-    if(!str.isEmpty())
-    {
-        SetText(str);
-    }
-
-    m_bModify = false;
-}
-
-void AnnonationEditWidget::OnQuit()
+void AnnonationEditWidget::closeEvent(QCloseEvent *)
 {
     if (m_bModify)
     {
-        emit SaveAnnonationsSignal("###field_sequence###", ui->textEdit->toPlainText(), m_sField);
+        TabWidgetCell* tabWidgetCell = dynamic_cast<TabWidgetCell*>(parent());
+        if (tabWidgetCell)
+        {
+            tabWidgetCell->OnSaveAnnonations("###field_sequence###", ui->textEdit->toPlainText(), m_sField);
+        }
     }
-    this->hide();
 }

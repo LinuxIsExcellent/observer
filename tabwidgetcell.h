@@ -9,11 +9,13 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <QMenu>
 #include <QUndoStack>
 #include <QUndoView>
 #include <QAction>
 #include <QItemSelectionModel>
+#include <QScrollBar>
 #include "mainwindow.h"
 #include "annonationeditwidget.h"
 
@@ -62,6 +64,12 @@ typedef struct fieldSquence
     };
 }FIELDSQUENCE;
 
+enum TabWidgetType
+{
+    enTabWidgetTable = 1,
+    enTabWidgetList = 2,
+};
+
 class TabWidgetCell : public QWidget
 {
     Q_OBJECT
@@ -69,6 +77,16 @@ class TabWidgetCell : public QWidget
 public:
     TabWidgetCell(QWidget *parent = nullptr);
     virtual ~TabWidgetCell();
+
+    void SetType(TabWidgetType type)
+    {
+        m_type = type;
+    }
+
+    TabWidgetType GetType()
+    {
+        return m_type;
+    }
 
     void SetName(QString sName)
     {
@@ -93,7 +111,7 @@ public:
     }
 
     //请求保存数据
-    virtual void OnRequestSaveData() {}
+    virtual void OnRequestSaveData();
 
     void SetDataModify()
     {
@@ -136,7 +154,9 @@ public:
     void paste();
 
     //设置行高和列宽
-    virtual void SetRowAndColParam(){}
+    virtual void SetRowAndColParam();
+
+    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
 public slots:
     //刷新界面
     virtual void Flush() {};
@@ -160,14 +180,13 @@ private slots:
 
 //    void onCurrentChanged(const QModelIndex& current, const QModelIndex& previous);
 
-    virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
-
     void OnSaveButtonClicked();
 
     void OnShowAllRow();
 public:
     Ui::TabWidgetCell *ui;
 
+    TabWidgetType m_type;
     QTabWidget* m_tabWidget;    //所在的tabwidget
     MainWindow* m_mainWindow;    //所在的mainWindow
 
@@ -189,9 +208,7 @@ public:
 
     bool    m_bTableDataChange; //表的数据是否被更改
 
-    QPushButton* m_saveDataButton;  //保存数据的按钮
-
-    AnnonationEditWidget* m_annonationWidget;   //批注界面
+    QPushButton* m_saveDataButton;  //保存数据的按钮    
 
     QString m_sName;      //表的名字
 
@@ -203,6 +220,9 @@ public:
 
     QVector<int>    m_vRowHeight;       //行高
     QVector<int>    m_vColWidth;        //列宽
+
+    int m_currentVSlider;       //记录之前的垂直滑动条位置
+    int m_currentHSlider;       //记录之前的水平滑动条位置
 };
 
 #endif // TABWIDGETCELL_H

@@ -6,36 +6,35 @@
 #include <QKeyEvent>
 #include <windows.h>        //注意头文件
 #include <windowsx.h>
+#include "tabwidgetcell.h"
 
 namespace Ui {
 class AnnonationEditWidget;
 }
+
+class TabWidgetCell;
 
 class AnnonationEditWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AnnonationEditWidget(QWidget *parent = nullptr);
+    explicit AnnonationEditWidget(QString sField, QString str = "", QWidget *parent = nullptr);
     ~AnnonationEditWidget();
 
     void SetText(QString& str);
     QString GetText();
-
-    void OnQuit();
-
-    void OnShow(quint32 x, quint32 y, QString sField, QString str = "");
-
 signals:
     //保存注释
     void SaveAnnonationsSignal(QString sIndex, QString str, QString sField);
 protected:
-
+    void closeEvent(QCloseEvent *event);
 private:
     Ui::AnnonationEditWidget *ui;
 
-    QString     m_sField;
+    TabWidgetCell* tabWidget;
 
+    QString     m_sField;
     bool        m_bModify;
 };
 

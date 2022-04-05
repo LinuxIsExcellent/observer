@@ -124,11 +124,13 @@ void LuaListDataWidget::Flush()
             m_standardItemModel->setItem(i, 3, new QStandardItem(QString::number(m_mDataList[i].nType)));
         }
 
+        m_tableView->setColumnHidden(3, true);
+        SetRowAndColParam();
+
         m_bTableDataChange = false;
 
         ChangeDataModify();
 
-        SetRowAndColParam();
     }
 }
 
@@ -213,6 +215,7 @@ void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
 
 void LuaListDataWidget::OnRequestSaveData()
 {
+    TabWidgetCell::OnRequestSaveData();
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
@@ -239,7 +242,7 @@ void LuaListDataWidget::OnRequestSaveData()
                 QString colInfoKey = "###col_width###";
                 FIELDSQUENCE colFieldSquence;
                 colFieldSquence.sIndex = colInfoKey;
-                for (int col = 0; col < m_standardItemModel->rowCount();++col)
+                for (int col = 0; col < m_standardItemModel->columnCount();++col)
                 {
                     FIELDINFO fieldInfo;
                     fieldInfo.sFieldName = QString::number(m_tableView->columnWidth(col));
@@ -350,6 +353,8 @@ void LuaListDataWidget::SetRowAndColParam()
             }
         }
     }
+
+    TabWidgetCell::SetRowAndColParam();
 
     connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
     connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));

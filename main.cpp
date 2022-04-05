@@ -42,11 +42,7 @@ int main(int argc, char *argv[])
     GlobalConfig::getInstance()->LoadConfig(qLConfigPath);
     GlobalConfig::getInstance()->SetMainWindow(&w);
 
-    LoginDialog loginDialog(&w);
-
-    loginDialog.show();
-
-    w.SetLoginDialog(&loginDialog);
+    w.SetLoginDialog();
 
     return a.exec();
 }

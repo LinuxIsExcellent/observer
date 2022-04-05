@@ -21,6 +21,11 @@ public:
     explicit LoginDialog(QWidget *parent = nullptr);
     ~LoginDialog();
 
+    void SetMainWindow(MainWindow* mainWindow)
+    {
+        m_mainWindow = mainWindow;
+    }
+
     void InitDialog();
 
     void OnShowError(QMessageBox::Icon icon, QString str);
@@ -42,6 +47,8 @@ private:
     Ui::LoginDialog *ui;
 
     sProgram m_sProgram;
+
+    MainWindow* m_mainWindow;
 
     bool m_bPressed;
     QPoint m_ptPress;

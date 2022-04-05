@@ -48,7 +48,7 @@ struct TableStruct_msg_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[26]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[27]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -71,6 +71,9 @@ extern client_lua_table_data_questDefaultTypeInternal _client_lua_table_data_que
 class client_modify_server_time_quest;
 struct client_modify_server_time_questDefaultTypeInternal;
 extern client_modify_server_time_questDefaultTypeInternal _client_modify_server_time_quest_default_instance_;
+class client_request_field_link_info;
+struct client_request_field_link_infoDefaultTypeInternal;
+extern client_request_field_link_infoDefaultTypeInternal _client_request_field_link_info_default_instance_;
 class client_save_table_data_request;
 struct client_save_table_data_requestDefaultTypeInternal;
 extern client_save_table_data_requestDefaultTypeInternal _client_save_table_data_request_default_instance_;
@@ -141,6 +144,7 @@ template<> ::test_2::client_login_request* Arena::CreateMaybeMessage<::test_2::c
 template<> ::test_2::client_lua_list_data_quest* Arena::CreateMaybeMessage<::test_2::client_lua_list_data_quest>(Arena*);
 template<> ::test_2::client_lua_table_data_quest* Arena::CreateMaybeMessage<::test_2::client_lua_table_data_quest>(Arena*);
 template<> ::test_2::client_modify_server_time_quest* Arena::CreateMaybeMessage<::test_2::client_modify_server_time_quest>(Arena*);
+template<> ::test_2::client_request_field_link_info* Arena::CreateMaybeMessage<::test_2::client_request_field_link_info>(Arena*);
 template<> ::test_2::client_save_table_data_request* Arena::CreateMaybeMessage<::test_2::client_save_table_data_request>(Arena*);
 template<> ::test_2::client_save_table_info_request* Arena::CreateMaybeMessage<::test_2::client_save_table_info_request>(Arena*);
 template<> ::test_2::client_shell_option_quest* Arena::CreateMaybeMessage<::test_2::client_shell_option_quest>(Arena*);
@@ -175,12 +179,13 @@ enum client_msg : int {
   REQUSET_LUA_LIST_DATA = 6,
   REQUSET_SAVE_LUA_LIST_DATA = 7,
   REQUSET_FIELD_LINK_INFO = 8,
+  REQUSET_FIELD_INFO_BY_LINK = 9,
   client_msg_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   client_msg_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool client_msg_IsValid(int value);
 constexpr client_msg client_msg_MIN = REQUEST_LOGIN;
-constexpr client_msg client_msg_MAX = REQUSET_FIELD_LINK_INFO;
+constexpr client_msg client_msg_MAX = REQUSET_FIELD_INFO_BY_LINK;
 constexpr int client_msg_ARRAYSIZE = client_msg_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* client_msg_descriptor();
@@ -873,6 +878,7 @@ class client_lua_table_data_quest final :
 
   enum : int {
     kFileNameFieldNumber = 1,
+    kLinkInfoFieldNumber = 2,
   };
   // bytes file_name = 1;
   void clear_file_name();
@@ -888,6 +894,20 @@ class client_lua_table_data_quest final :
   std::string* _internal_mutable_file_name();
   public:
 
+  // bytes link_info = 2;
+  void clear_link_info();
+  const std::string& link_info() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_link_info(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_link_info();
+  PROTOBUF_NODISCARD std::string* release_link_info();
+  void set_allocated_link_info(std::string* link_info);
+  private:
+  const std::string& _internal_link_info() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_link_info(const std::string& value);
+  std::string* _internal_mutable_link_info();
+  public:
+
   // @@protoc_insertion_point(class_scope:test_2.client_lua_table_data_quest)
  private:
   class _Internal;
@@ -896,6 +916,7 @@ class client_lua_table_data_quest final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr link_info_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
@@ -2195,6 +2216,7 @@ class table_data final :
     kRowListsFieldNumber = 6,
     kFiledSequencesFieldNumber = 7,
     kTableNameFieldNumber = 1,
+    kLinkInfoFieldNumber = 8,
     kRowCountFieldNumber = 2,
     kColumnCountFieldNumber = 3,
   };
@@ -2290,6 +2312,20 @@ class table_data final :
   std::string* _internal_mutable_table_name();
   public:
 
+  // bytes link_info = 8;
+  void clear_link_info();
+  const std::string& link_info() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_link_info(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_link_info();
+  PROTOBUF_NODISCARD std::string* release_link_info();
+  void set_allocated_link_info(std::string* link_info);
+  private:
+  const std::string& _internal_link_info() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_link_info(const std::string& value);
+  std::string* _internal_mutable_link_info();
+  public:
+
   // int32 row_count = 2;
   void clear_row_count();
   int32_t row_count() const;
@@ -2320,6 +2356,7 @@ class table_data final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::row_data > row_lists_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence > filed_sequences_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_name_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr link_info_;
   int32_t row_count_;
   int32_t column_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -4599,6 +4636,124 @@ class send_process_listening_status_info final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_2eproto;
 };
+// -------------------------------------------------------------------
+
+class client_request_field_link_info final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:test_2.client_request_field_link_info) */ {
+ public:
+  inline client_request_field_link_info() : client_request_field_link_info(nullptr) {}
+  explicit constexpr client_request_field_link_info(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  client_request_field_link_info(const client_request_field_link_info& from);
+  client_request_field_link_info(client_request_field_link_info&& from) noexcept
+    : client_request_field_link_info() {
+    *this = ::std::move(from);
+  }
+
+  inline client_request_field_link_info& operator=(const client_request_field_link_info& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline client_request_field_link_info& operator=(client_request_field_link_info&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const client_request_field_link_info& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const client_request_field_link_info* internal_default_instance() {
+    return reinterpret_cast<const client_request_field_link_info*>(
+               &_client_request_field_link_info_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    26;
+
+  friend void swap(client_request_field_link_info& a, client_request_field_link_info& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(client_request_field_link_info* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(client_request_field_link_info* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  client_request_field_link_info* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<client_request_field_link_info>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const client_request_field_link_info& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const client_request_field_link_info& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "test_2.client_request_field_link_info";
+  }
+  protected:
+  explicit client_request_field_link_info(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:test_2.client_request_field_link_info)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_msg_2eproto;
+};
 // ===================================================================
 
 
@@ -4971,6 +5126,57 @@ inline void client_lua_table_data_quest::set_allocated_file_name(std::string* fi
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:test_2.client_lua_table_data_quest.file_name)
+}
+
+// bytes link_info = 2;
+inline void client_lua_table_data_quest::clear_link_info() {
+  link_info_.ClearToEmpty();
+}
+inline const std::string& client_lua_table_data_quest::link_info() const {
+  // @@protoc_insertion_point(field_get:test_2.client_lua_table_data_quest.link_info)
+  return _internal_link_info();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void client_lua_table_data_quest::set_link_info(ArgT0&& arg0, ArgT... args) {
+ 
+ link_info_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.client_lua_table_data_quest.link_info)
+}
+inline std::string* client_lua_table_data_quest::mutable_link_info() {
+  std::string* _s = _internal_mutable_link_info();
+  // @@protoc_insertion_point(field_mutable:test_2.client_lua_table_data_quest.link_info)
+  return _s;
+}
+inline const std::string& client_lua_table_data_quest::_internal_link_info() const {
+  return link_info_.Get();
+}
+inline void client_lua_table_data_quest::_internal_set_link_info(const std::string& value) {
+  
+  link_info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* client_lua_table_data_quest::_internal_mutable_link_info() {
+  
+  return link_info_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* client_lua_table_data_quest::release_link_info() {
+  // @@protoc_insertion_point(field_release:test_2.client_lua_table_data_quest.link_info)
+  return link_info_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void client_lua_table_data_quest::set_allocated_link_info(std::string* link_info) {
+  if (link_info != nullptr) {
+    
+  } else {
+    
+  }
+  link_info_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), link_info,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (link_info_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    link_info_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.client_lua_table_data_quest.link_info)
 }
 
 // -------------------------------------------------------------------
@@ -5919,6 +6125,57 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_squence 
 table_data::filed_sequences() const {
   // @@protoc_insertion_point(field_list:test_2.table_data.filed_sequences)
   return filed_sequences_;
+}
+
+// bytes link_info = 8;
+inline void table_data::clear_link_info() {
+  link_info_.ClearToEmpty();
+}
+inline const std::string& table_data::link_info() const {
+  // @@protoc_insertion_point(field_get:test_2.table_data.link_info)
+  return _internal_link_info();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void table_data::set_link_info(ArgT0&& arg0, ArgT... args) {
+ 
+ link_info_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:test_2.table_data.link_info)
+}
+inline std::string* table_data::mutable_link_info() {
+  std::string* _s = _internal_mutable_link_info();
+  // @@protoc_insertion_point(field_mutable:test_2.table_data.link_info)
+  return _s;
+}
+inline const std::string& table_data::_internal_link_info() const {
+  return link_info_.Get();
+}
+inline void table_data::_internal_set_link_info(const std::string& value) {
+  
+  link_info_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* table_data::_internal_mutable_link_info() {
+  
+  return link_info_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* table_data::release_link_info() {
+  // @@protoc_insertion_point(field_release:test_2.table_data.link_info)
+  return link_info_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void table_data::set_allocated_link_info(std::string* link_info) {
+  if (link_info != nullptr) {
+    
+  } else {
+    
+  }
+  link_info_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), link_info,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (link_info_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    link_info_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:test_2.table_data.link_info)
 }
 
 // -------------------------------------------------------------------
@@ -6982,9 +7239,15 @@ send_process_listening_status_info::infos() const {
   return infos_;
 }
 
+// -------------------------------------------------------------------
+
+// client_request_field_link_info
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
