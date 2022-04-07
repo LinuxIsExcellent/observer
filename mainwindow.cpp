@@ -131,6 +131,21 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
+void MainWindow::OnRequestLinkFieldInfo(QString sLinkInfo)
+{
+    QStringList stringList = sLinkInfo.split("#");
+    if (stringList.size() < 3)
+    {
+        qCritical() << "jump info error: " << sLinkInfo;
+        return;
+    }
+    QString sTableType = stringList[0];
+    QString sTableName = stringList[1];
+    QString sFieldName = stringList[2];
+
+    OnRequestFieldInfoByLink(sTableName, sFieldName);
+}
+
 void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
 {
     QStringList stringList = sLinkInfo.split("#");
@@ -188,10 +203,6 @@ void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget,
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 {
-    if (event->type() == QEvent::MouseButtonDblClick)
-    {
-        qDebug() << "click";
-    }
     if (qobject_cast<QLabel*>(watched) == m_timeLabel && event->type() == QEvent::MouseButtonDblClick)
     {
         m_timeWidget->setGeometry(m_timeLabel->x() - m_timeWidget->width() + m_timeLabel->width(),
@@ -420,6 +431,18 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
     }
 }
 
+void MainWindow::OnRequestFieldInfoByLink(QString sTableName, QString sTableField)
+{
+    test_2::client_request_field_link_info quest;
+    quest.set_table_name(sTableName.toStdString());
+    quest.set_field_name(sTableField.toStdString());
+
+    std::string output;
+    quest.SerializeToString(&output);
+
+    OnSndServerMsg(0, test_2::client_msg::REQUSET_FIELD_INFO_BY_LINK, output);
+}
+
 void MainWindow::OnRequestTableWidget(QString sTableName, QString sLinkInfo/* = ""*/)
 {
     test_2::client_lua_table_data_quest quest;
@@ -642,7 +665,51 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
 
             OnRecvServerProcessStatusInfo(notify);
         }
+        else if (nCmd == test_2::server_msg::SEND_FIELD_INFO_BY_LINK)
+        {
+            test_2::send_field_all_values_info notify;
+            notify.ParseFromString(strData);
+
+            OnRecvServerLinkFieldInfo(notify);
+        }
     }
+}
+
+QVector<COMBOXFIELDINFO>* MainWindow::GetComboxFieldInfoByKey(QString sKey)
+{
+    if (m_mLinkFieldValueInfos.find(sKey) != m_mLinkFieldValueInfos.end())
+    {
+        return &m_mLinkFieldValueInfos.find(sKey).value();
+    }
+
+    return nullptr;
+}
+
+void MainWindow::OnRecvServerLinkFieldInfo(const test_2::send_field_all_values_info& proto)
+{
+    QString sTableName = QString::fromStdString(proto.table_name());
+    QString sFieldName = QString::fromStdString(proto.field_name());
+
+    QString sKey = "table#" + sTableName + "#" + sFieldName;
+
+    auto iter = m_mLinkFieldValueInfos.find(sKey);
+    if (iter != m_mLinkFieldValueInfos.end())
+    {
+        m_mLinkFieldValueInfos.remove(sKey);
+    }
+
+    QVector<COMBOXFIELDINFO> vComboxFieldInfo;
+    for (int i = 0; i < proto.infos_size(); ++i)
+    {
+        test_2::link_field_info info = proto.infos(i);
+        COMBOXFIELDINFO comboxFnfo;
+        comboxFnfo.sValue = QString::fromStdString(info.field_value());
+        comboxFnfo.sDesc = QString::fromStdString(info.field_desc());
+
+        vComboxFieldInfo.push_back(comboxFnfo);
+    }
+
+    m_mLinkFieldValueInfos.insert(sKey, vComboxFieldInfo);
 }
 
 void MainWindow::OnRecvServerProcessStatusInfo(const test_2::send_process_listening_status_info& proto)

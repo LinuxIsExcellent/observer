@@ -227,6 +227,8 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QModelIndex index = m_tableView->currentIndex();
         QVariant data = index.data(Qt::DisplayRole);
         QVariant oldData = index.data(Qt::UserRole);
+        qDebug() << "data = " << data;
+        qDebug() << "old = " << oldData;
         if (data != oldData)
         {
             undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
@@ -336,7 +338,7 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
         //拖拽一个单元格，但是不修改其它数据的时候，itemChanged信号会传一个row = 0, col = 0的数据过来
         // 因为第1行的row是固定的表头，所以不可能会变化。
         //可以用row = 0, col = 0来判定是否只是稍微拖拽一下，并没有改变数据
-        if (nRow > 0 && nCol > 0)
+        if (nRow > 0)
         {
             m_bTableDataChange = true;
         }

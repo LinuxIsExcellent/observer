@@ -30,10 +30,16 @@ class ShowMsgDialog;
 class TabWidgetCell;
 class LuaTableDataWidget;
 class LuaListDataWidget;
-class AddFieldLinkDialog;;
+class AddFieldLinkDialog;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+typedef struct ComboxFieldInfo
+{
+    QString sValue;
+    QString sDesc;
+}COMBOXFIELDINFO;
 
 class MainWindow : public QMainWindow
 {
@@ -44,6 +50,8 @@ public:
     ~MainWindow();
 
     void init_windows();
+
+    void OnRequestFieldInfoByLink(QString sTableName, QString sTableField);
 
     void OnRequestTableWidget(QString sTableName, QString sLinkInfo = "");
 
@@ -58,6 +66,10 @@ public:
     void OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget = true);
 
     void OnJumpLinkTable(QString sLinkInfo, QString sField);
+
+    void OnRequestLinkFieldInfo(QString sLinkInfo);
+
+    QVector<COMBOXFIELDINFO>* GetComboxFieldInfoByKey(QString sKey);
 private:
     //服务器断开连接
     void OnServerDisconnect();
@@ -85,6 +97,9 @@ private:
 
     //收到服务器发过来的监听的进程的状态
     void OnRecvServerProcessStatusInfo(const test_2::send_process_listening_status_info& proto);
+
+    //收到服务器发过来的表的字段的所有值
+    void OnRecvServerLinkFieldInfo(const test_2::send_field_all_values_info& proto);
 protected:
     void closeEvent(QCloseEvent *event);
 
@@ -155,5 +170,7 @@ private:
     QLoadingWidget*     m_loadingDialog; //加载界面
 
     QVector<QLabel*>        m_vProcessStatusLabList;   //进程状态展示标签
+
+    QMap<QString, QVector<COMBOXFIELDINFO>>  m_mLinkFieldValueInfos;        //链接的字段的所有字段值
 };
 #endif // MAINWINDOW_H

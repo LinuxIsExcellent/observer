@@ -15,7 +15,7 @@ class ComboboxLineedit : public QWidget
     Q_OBJECT
 
 public:
-    explicit ComboboxLineedit(QModelIndex index, QWidget *parent = nullptr);
+    explicit ComboboxLineedit(QModelIndex index, QString sValue, QWidget *parent = nullptr);
     ~ComboboxLineedit();
 
     void setText(QString str);
@@ -29,12 +29,14 @@ public:
         return m_index;
     }
 
+    void OnRequestLinkFieldInfo();
 private slots:
     void OnChangeCurrentText(const QString &str);
     void OnJumpButtonClicked();
 protected:
     void resizeEvent(QResizeEvent *event);
 
+    bool eventFilter(QObject *watched, QEvent *event);
 private:
     Ui::ComboboxLineedit *ui;
 

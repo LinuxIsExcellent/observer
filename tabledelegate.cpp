@@ -19,9 +19,8 @@ QWidget *TableDelegate::createEditor(QWidget *parent,
         QString str = index.model()->data(index, Qt::UserRole+3).toString();    //获取关联的数据
         QModelIndex no_const_index = const_cast<QModelIndex&>(index);
 
-        ComboboxLineedit* editor = new ComboboxLineedit(no_const_index, parent);
         QString value = index.model()->data(index, Qt::DisplayRole).toString();
-        editor->setText(value);
+        ComboboxLineedit* editor = new ComboboxLineedit(no_const_index, value, parent);
 
         emit beginEdit();
         return editor;
