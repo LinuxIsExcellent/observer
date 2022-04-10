@@ -29,12 +29,14 @@ AddFieldLinkDialog::~AddFieldLinkDialog()
     delete ui;
 }
 
-void AddFieldLinkDialog::OnShow(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
+void AddFieldLinkDialog::OnShow(QString sIndex, TabWidgetCell* widget, QString sField, QString sAlreadyLink, bool rootWidget/* = true*/)
 {
     m_activeWidget = widget;
     m_bRootWidget = rootWidget;
     m_sField = sField;
     m_sIndex = sIndex;
+
+    ui->alreadyLinkLabel->setText(sAlreadyLink);
     show();
 }
 
@@ -104,7 +106,7 @@ void AddFieldLinkDialog::OnSetProtoFieldLinkInfo(const test_2::send_field_link_i
 
     for (int i = 0; i < proto.list_size();++i)
     {
-        test_2::table_field_list lists = proto.table(i);
+        test_2::table_field_list lists = proto.list(i);
 
         QTreeWidgetItem *itemFileName = new QTreeWidgetItem;
         itemFileName->setText(0, QString::fromStdString(lists.table_name()));

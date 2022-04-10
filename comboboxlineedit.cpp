@@ -71,7 +71,7 @@ void ComboboxLineedit::OnRequestLinkFieldInfo()
     MainWindow* mainWindow = GlobalConfig::getInstance()->GetMainWindow();
     if (mainWindow)
     {
-        mainWindow->OnRequestLinkFieldInfo(sLinkInfo);
+        mainWindow->OnRequestFieldInfoByLink(sLinkInfo);
     }
 }
 

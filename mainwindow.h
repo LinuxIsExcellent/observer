@@ -21,6 +21,7 @@
 #include "modifyservertimewidget.h"
 #include "addfieldlinkdialog.h"
 #include "qloadingwidget.h"
+#include "tabwidgetcell.h"
 #include <google/protobuf/text_format.h>
 
 #define RECV_BUFFER_SIZE 20 * 1024 * 1024
@@ -51,7 +52,9 @@ public:
 
     void init_windows();
 
-    void OnRequestFieldInfoByLink(QString sTableName, QString sTableField);
+    void OnRequestFieldInfoByLink(QString sLinkInfo);
+
+    void OnRequestListWidget(QString sTableName, QString sLinkInfo = "");
 
     void OnRequestTableWidget(QString sTableName, QString sLinkInfo = "");
 
@@ -63,11 +66,9 @@ public:
 
     void OnCloseTabWidget(QWidget* widget);
 
-    void OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget = true);
+    void OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, QString sAlreadyLink, bool rootWidget = true);
 
     void OnJumpLinkTable(QString sLinkInfo, QString sField);
-
-    void OnRequestLinkFieldInfo(QString sLinkInfo);
 
     QVector<COMBOXFIELDINFO>* GetComboxFieldInfoByKey(QString sKey);
 private:

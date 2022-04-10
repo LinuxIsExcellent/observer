@@ -1,5 +1,5 @@
 #include "lualistdatawidget.h"
-#include "stringtotableview.h"
+#include "tabledelegate.h"
 
 LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
 {
@@ -29,7 +29,7 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
             if (m_mDataList[nRow].nType == LUA_TTABLE)
             {
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, m_mDataList[nRow].sKey, &m_mFieldSquence, this);
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, m_mDataList[nRow].sKey, &m_mFieldSquence, this, this);
                     dialog->show();
                 });
             }
@@ -39,10 +39,40 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
     });
 }
 
+LuaListDataWidget::~LuaListDataWidget()
+{
+}
+
+void LuaListDataWidget::OnShowTableWithLinkMsg(QString sField, QString)
+{
+    for (int row = 0; row < m_standardItemModel->rowCount(); ++row)
+    {
+        QStandardItem* item = m_standardItemModel->item(row, 1);
+        if (item)
+        {
+            if (item->index().isValid())
+            {
+                if (item->index().data().toString() == sField)
+                {
+                    QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
+                    if (vScrollbar)
+                    {
+                        vScrollbar->setSliderPosition(row);
+                    }
+
+                    m_tableView->setCurrentIndex(item->index());
+                    return;
+                }
+            }
+        }
+    }
+}
+
 void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& proto)
 {
     m_mDataList.clear();
 
+    QString sLinkInfo = QString::fromStdString(proto.link_info());
     for (int i = 0; i < proto.filed_types_size();++i)
     {
         FieldKeyType fkt;
@@ -78,6 +108,17 @@ void LuaListDataWidget::SetProtoData(const test_2::send_lua_list_data_notify& pr
 
     disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     Flush();
+
+    if (sLinkInfo != "")
+    {
+        QStringList stringList = sLinkInfo.split("#");
+        if (stringList.size() == 4)
+        {
+            QString sFieldName = stringList[2];
+            QString sField = stringList[3];
+            OnShowTableWithLinkMsg(sFieldName, sField);
+        }
+    }
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 }
 
@@ -132,6 +173,24 @@ void LuaListDataWidget::Flush()
         ChangeDataModify();
 
     }
+}
+
+void LuaListDataWidget::SetFieldLink(QString sIndex, QString sField, QString sFieldLink)
+{
+    if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
+    {
+        for (auto & field : m_mFieldSquence[sIndex].vSFieldSquences)
+        {
+            if (field.sFieldName == sField)
+            {
+                field.sFieldLink = sFieldLink;
+                break;
+            }
+        }
+    }
+
+    m_bTableDataChange = true;
+    TabWidgetCell::ChangeDataModify();
 }
 
 void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
@@ -254,32 +313,35 @@ void LuaListDataWidget::OnRequestSaveData()
                 m_mFieldSquence.insert(colInfoKey, colFieldSquence);
             }
 
-            test_2::client_save_table_info_request quest;
-            quest.set_table_name(m_sName.toStdString());
-
-            for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
+            if (true)
             {
-                test_2::field_squence* field_squence = quest.add_field_squences();
-                if (field_squence)
+                test_2::client_save_table_info_request quest;
+                quest.set_table_name(m_sName.toStdString());
+
+                for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
                 {
-                    field_squence->set_index(iter.key().toStdString());
-                    for (auto sData : iter.value().vSFieldSquences)
+                    test_2::field_squence* field_squence = quest.add_field_squences();
+                    if (field_squence)
                     {
-                        test_2::field_info* fieldInfo = field_squence->add_infos();
-                        if (fieldInfo)
+                        field_squence->set_index(iter.key().toStdString());
+                        for (auto sData : iter.value().vSFieldSquences)
                         {
-                            fieldInfo->set_field_name(sData.sFieldName.toStdString());
-                            fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
-                            fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+                            test_2::field_info* fieldInfo = field_squence->add_infos();
+                            if (fieldInfo)
+                            {
+                                fieldInfo->set_field_name(sData.sFieldName.toStdString());
+                                fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
+                                fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+                            }
                         }
                     }
                 }
+
+                std::string output;
+                quest.SerializeToString(&output);
+
+                m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
             }
-
-            std::string output;
-            quest.SerializeToString(&output);
-
-            m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
         }
 
         QAbstractItemModel* model = m_tableView->model();

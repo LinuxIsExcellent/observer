@@ -62,11 +62,27 @@
        <height>50</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,2,1">
+      <item>
+       <widget class="QLabel" name="alreadyLinkLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -78,6 +94,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton">
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>ok</string>
         </property>

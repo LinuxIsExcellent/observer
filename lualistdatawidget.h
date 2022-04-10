@@ -8,6 +8,7 @@
 
 #include "msg.pb.h"
 #include "tabwidgetcell.h"
+#include "stringtotableview.h"
 
 typedef struct FieldKeyType
 {
@@ -28,7 +29,7 @@ class LuaListDataWidget : public TabWidgetCell
     Q_OBJECT
 public:
     LuaListDataWidget(QWidget *parent = nullptr);
-    virtual ~LuaListDataWidget(){};
+    virtual ~LuaListDataWidget();
 
     virtual inline bool IsTableDataChange()
     {
@@ -40,6 +41,10 @@ public:
     virtual void OnRequestSaveData();
 
     virtual void SetRowAndColParam();
+
+    virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);
+
+    void OnShowTableWithLinkMsg(QString sField, QString sValue);
 public slots:
     virtual void OnItemDataChange(QStandardItem *item);
 private slots:
@@ -48,6 +53,8 @@ private:
     QVector<FIELDKEYTYPE> m_mDataList;  //表的数据
 
     QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //二维表的表头顺序
+
+    StringToTableView* m_stringToTableView;
 };
 
 #endif // LUALISTDATAWIDGET_H

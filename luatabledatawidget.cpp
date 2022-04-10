@@ -59,7 +59,19 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
 
 
         m_tableCellMenu->addAction("增加关联", this, [=](){
-            m_mainWindow->OnOpenAddLinkFieldDialog("###field_sequence###", this, sField, true);
+            QString sAlreadyLink = "";
+            if (m_mFieldSquence.find("###field_sequence###") != m_mFieldSquence.end())
+            {
+                for (auto & field : m_mFieldSquence["###field_sequence###"].vSFieldSquences)
+                {
+                    if (field.sFieldName == sField)
+                    {
+                        sAlreadyLink = field.sFieldLink;
+                        break;
+                    }
+                }
+            }
+            m_mainWindow->OnOpenAddLinkFieldDialog("###field_sequence###", this, sField, sAlreadyLink, true);
         });
 
         m_tableCellMenu->addAction("筛选", this, [=](){
@@ -120,7 +132,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         if (m_mFieldTypes.find(sField) != m_mFieldTypes.end() && m_mFieldTypes.find(sField).value() == LUA_TTABLE)
         {
             m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sField, &m_mFieldSquence, this);
+                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sField, &m_mFieldSquence, this, this);
                 dialog->show();
             });
         }

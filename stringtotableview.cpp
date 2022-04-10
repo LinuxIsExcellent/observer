@@ -10,7 +10,7 @@
 #include "tabledelegate.h"
 #include "modifcommand.h"
 
-StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, QWidget *parent, int nLevel) :
+StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QWidget *parent, int nLevel) :
     QDialog(parent),
     ui(new Ui::StringToTableView),
     m_sTableName(sTableName),
@@ -21,6 +21,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     this->model = model;
     this->m_index = index;
     this->m_mFieldSquence = pMFieldSquence;
+    this->m_cellWidget = cellWidget;
 
     m_sData = index.data().toString();
 
@@ -47,6 +48,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:white;color: black;}");
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
@@ -84,6 +86,48 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
         m_tableCellMenu->exec(pt);
     });
 
+    connect(ui->tableView->horizontalHeader(), &QAbstractItemView::customContextMenuRequested, ui->tableView->horizontalHeader(),[=](const QPoint& pos){
+        //mapToGlobal获取m_tableView全局坐标
+        //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
+        //pos鼠标点击时在表格中的相对位置
+        QPoint pt = ui->tableView->parentWidget()->mapToGlobal(ui->tableView->pos()) + pos;
+        //判断鼠标右击位置是否是空白处，空白处则取消上一个选中焦点，不弹出菜单
+        int nIndex = ui->tableView->horizontalHeader()->logicalIndexAt(pos);
+        if (nIndex != 2){
+            //m_tableView->clearSelection();
+            return;
+        }
+
+        QString sField = m_standardItemModel->horizontalHeaderItem(nIndex)->text();
+        m_tableCellMenu->clear();
+
+        m_tableCellMenu->addAction("增加关联", this, [=](){
+            QString sAlreadyLink = "";
+            if (m_mFieldSquence)
+            {
+                if (m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
+                {
+                    for (auto & field : (*m_mFieldSquence)[m_sTableName].vSFieldSquences)
+                    {
+                        if (field.sFieldName == sField)
+                        {
+                            sAlreadyLink = field.sFieldLink;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            MainWindow* mainWindow = GlobalConfig::getInstance()->GetMainWindow();
+            if (mainWindow)
+            {
+                mainWindow->OnOpenAddLinkFieldDialog(m_sTableName, m_cellWidget, sField, sAlreadyLink, true);
+            }
+        });
+
+        m_tableCellMenu->exec(pt);
+    });
+
     //增加数据单元格的菜单
     connect(ui->tableView, &QAbstractItemView::customContextMenuRequested, ui->tableView,[=](const QPoint& pos){
         int nHeight = ui->tableView->horizontalHeader()->height();
@@ -98,17 +142,12 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
             return;
         }
 
+        QString sField = m_standardItemModel->data(m_standardItemModel->index(index.row(), 1)).toString();
+
         m_tableCellMenu->clear();
 
-        if (GlobalConfig::getInstance()->CheckStrIsLuaTable(index.data().toString(), false) == false)
+        if (index.column() == 2 && GlobalConfig::getInstance()->CheckStrIsLuaTable(index.data().toString(), false))
         {
-            return;
-        }
-
-        if (index.column() == 2)
-        {
-            QString sField = m_standardItemModel->data(m_standardItemModel->index(index.row(), 1)).toString();
-
             bool isNew = true;
             for (int row = 0; row < m_vRowDatas.size(); ++row)
             {
@@ -128,7 +167,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                             {
                                 sSubTableIndex = m_sTableName + "#" + rowData.sKey;
                             }
-                            StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, this, m_nLevel + 1);
+                            StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, this, m_nLevel + 1);
                             dialog->show();
                         });
                     }
@@ -154,12 +193,38 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                 }
 
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, this, m_nLevel + 1);
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, this, m_nLevel + 1);
                     dialog->show();
                 });
             }
         }
 
+        if (index.column() == 1)
+        {
+            m_tableCellMenu->addAction("增加关联", this, [=](){
+                QString sAlreadyLink = "";
+                if (m_mFieldSquence)
+                {
+                    if (m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
+                    {
+                        for (auto & field : (*m_mFieldSquence)[m_sTableName].vSFieldSquences)
+                        {
+                            if (field.sFieldName == sField)
+                            {
+                                sAlreadyLink = field.sFieldLink;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                MainWindow* mainWindow = GlobalConfig::getInstance()->GetMainWindow();
+                if (mainWindow)
+                {
+                    mainWindow->OnOpenAddLinkFieldDialog(m_sTableName, m_cellWidget, sField, sAlreadyLink, true);
+                }
+            });
+        }
 
         m_tableCellMenu->exec(pt);
     });
@@ -532,9 +597,11 @@ void StringToTableView::Flush()
         }
 
         QString sAnnonation = "";
+        QString sLinkInfo = "";
         if (squence && row < squence->vSFieldSquences.size())
         {
             sAnnonation = squence->vSFieldSquences[row].sFieldAnnonation;
+            sLinkInfo = squence->vSFieldSquences[row].sFieldLink;
         }
 
         QStandardItem* descItem = new QStandardItem(sAnnonation);
@@ -552,6 +619,13 @@ void StringToTableView::Flush()
         m_standardItemModel->setItem(row, 1, keyItem);
 
         QStandardItem* dataItem = new QStandardItem(sQValue);
+
+        if (sLinkInfo != "")
+        {
+            dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
+            dataItem->setData(QVariant(sLinkInfo), Qt::UserRole+3);
+        }
+
         m_standardItemModel->setItem(row, 2, dataItem);
     }
 
@@ -883,6 +957,8 @@ void StringToTableView::SetParam()
     }
 
     Flush();
+
+    lua_close(L);
 }
 
 

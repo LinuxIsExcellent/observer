@@ -121,6 +121,7 @@ bool GlobalConfig::LoadConfig(QString fileName)
         lua_pop(L, 1);
     }
 
+    lua_close(L);
     return true;
 }
 

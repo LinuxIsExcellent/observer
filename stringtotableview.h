@@ -41,7 +41,7 @@ class StringToTableView : public QDialog
     Q_OBJECT
 
 public:
-    explicit StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, QWidget *parent = nullptr, int nLevel = 0);
+    explicit StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QWidget *parent = nullptr, int nLevel = 0);
 
     ~StringToTableView();
 
@@ -93,6 +93,8 @@ private:
     Ui::StringToTableView *ui;
 
     QStandardItemModel* m_standardItemModel;
+
+    TabWidgetCell* m_cellWidget;    //属于哪一个表
 
     QMenu*  m_tableCellMenu;        //二维表数据的菜单栏
 

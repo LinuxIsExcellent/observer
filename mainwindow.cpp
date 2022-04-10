@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QMenu>
 #include "log.h"
+#include "tabwidgetcell.h"
 #include "luatabledatawidget.h"
 #include "lualistdatawidget.h"
 #include "qloadingwidget.h"
@@ -57,7 +58,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    m_ServerSockect->close();
     delete ui;
 }
 
@@ -76,9 +76,9 @@ void MainWindow::init_windows()
     m_leftWidget = new QWidget(this);
     m_rightWidget = new QWidget(this);
 
-    vlayout_left = new QVBoxLayout;
-    vlayout_right = new QVBoxLayout;
-    hlayout_all = new QHBoxLayout;
+    vlayout_left = new QVBoxLayout();
+    vlayout_right = new QVBoxLayout();
+    hlayout_all = new QHBoxLayout();
 
     //左边
     m_treeWidget = new QTreeWidget(this);
@@ -131,21 +131,6 @@ void MainWindow::init_windows()
     m_addFieldLinkDialog = new AddFieldLinkDialog(this);
 }
 
-void MainWindow::OnRequestLinkFieldInfo(QString sLinkInfo)
-{
-    QStringList stringList = sLinkInfo.split("#");
-    if (stringList.size() < 3)
-    {
-        qCritical() << "jump info error: " << sLinkInfo;
-        return;
-    }
-    QString sTableType = stringList[0];
-    QString sTableName = stringList[1];
-    QString sFieldName = stringList[2];
-
-    OnRequestFieldInfoByLink(sTableName, sFieldName);
-}
-
 void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
 {
     QStringList stringList = sLinkInfo.split("#");
@@ -171,11 +156,11 @@ void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
         }
         else if (iter.value()->GetType() == TabWidgetType::enTabWidgetList)
         {
-//            LuaTableDataWidget* cellWidget = qobject_cast<LuaTableDataWidget*>(iter.value());
-//            if (cellWidget)
-//            {
-//                cellWidget->OnShowTableWithLinkMsg(sFieldName, sField);
-//            }
+            LuaListDataWidget* cellWidget = qobject_cast<LuaListDataWidget*>(iter.value());
+            if (cellWidget)
+            {
+                cellWidget->OnShowTableWithLinkMsg(sFieldName, sField);
+            }
         }
     }
     else
@@ -184,14 +169,18 @@ void MainWindow::OnJumpLinkTable(QString sLinkInfo, QString sField)
         {
             OnRequestTableWidget(sTableName, sLinkInfo + "#" + sField);
         }
+        else if (sTableType == "list")
+        {
+            OnRequestListWidget(sTableName, sLinkInfo + "#" + sField);
+        }
     }
 }
 
-void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, bool rootWidget/* = true*/)
+void MainWindow::OnOpenAddLinkFieldDialog(QString sIndex, TabWidgetCell* widget, QString sField, QString sAlreadyLink, bool rootWidget/* = true*/)
 {
     if (m_addFieldLinkDialog)
     {
-        m_addFieldLinkDialog->OnShow(sIndex, widget, sField, rootWidget);
+        m_addFieldLinkDialog->OnShow(sIndex, widget, sField, sAlreadyLink, rootWidget);
 
         test_2::client_field_link_info_quest quest;
         std::string output;
@@ -420,27 +409,34 @@ void MainWindow::OnClickTreeWidgetItem(QTreeWidgetItem *item, int)
         }
         else if (item->parent()->text(0) == tr("全局一维表"))
         {
-            test_2::client_lua_table_data_quest quest;
-            quest.set_file_name(item->text(0).toStdString());
-
-            std::string output;
-            quest.SerializeToString(&output);
-
-            OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_LIST_DATA, output);
+            OnRequestListWidget(item->text(0));
         }
     }
 }
 
-void MainWindow::OnRequestFieldInfoByLink(QString sTableName, QString sTableField)
+void MainWindow::OnRequestFieldInfoByLink(QString sLinkInfo)
 {
     test_2::client_request_field_link_info quest;
-    quest.set_table_name(sTableName.toStdString());
-    quest.set_field_name(sTableField.toStdString());
+    quest.set_link_info(sLinkInfo.toStdString());
 
     std::string output;
     quest.SerializeToString(&output);
 
     OnSndServerMsg(0, test_2::client_msg::REQUSET_FIELD_INFO_BY_LINK, output);
+}
+
+void MainWindow::OnRequestListWidget(QString sTableName, QString sLinkInfo/* = ""*/)
+{
+    test_2::client_lua_list_data_quest quest;
+    quest.set_file_name(sTableName.toStdString());
+    quest.set_link_info(sLinkInfo.toStdString());
+
+    std::string output;
+    quest.SerializeToString(&output);
+
+    OnSndServerMsg(0, test_2::client_msg::REQUSET_LUA_LIST_DATA, output);
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
 void MainWindow::OnRequestTableWidget(QString sTableName, QString sLinkInfo/* = ""*/)
@@ -539,12 +535,12 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     // 先计算出包体的总长度
     // 因为packet类增加字符串的时候会增加2字节的长度和1字节的结束字符
     // 所以除了nSystem和nCmd之外需要多增加3字节的数据长度
+    qDebug() << "客户端请求 : nSystem = " << nSystem << ", nCmd = " << nCmd << ", count = " << data.length();
     quint32 nDataLength = sizeof(nSystem) + sizeof(nCmd) + 3 + data.length();
     Packet packet;
     packet << nDataLength << nSystem << nCmd << data.c_str();
 
     m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
-
     m_ServerSockect->flush();
 }
 
@@ -687,15 +683,18 @@ QVector<COMBOXFIELDINFO>* MainWindow::GetComboxFieldInfoByKey(QString sKey)
 
 void MainWindow::OnRecvServerLinkFieldInfo(const test_2::send_field_all_values_info& proto)
 {
-    QString sTableName = QString::fromStdString(proto.table_name());
-    QString sFieldName = QString::fromStdString(proto.field_name());
+    QString sLinkInfo = QString::fromStdString(proto.link_info());
+    QStringList stringList = sLinkInfo.split("#");
+    if (stringList.size() < 3)
+    {
+        qCritical() << "jump info error: " << sLinkInfo;
+        return;
+    }
 
-    QString sKey = "table#" + sTableName + "#" + sFieldName;
-
-    auto iter = m_mLinkFieldValueInfos.find(sKey);
+    auto iter = m_mLinkFieldValueInfos.find(sLinkInfo);
     if (iter != m_mLinkFieldValueInfos.end())
     {
-        m_mLinkFieldValueInfos.remove(sKey);
+        m_mLinkFieldValueInfos.remove(sLinkInfo);
     }
 
     QVector<COMBOXFIELDINFO> vComboxFieldInfo;
@@ -709,7 +708,7 @@ void MainWindow::OnRecvServerLinkFieldInfo(const test_2::send_field_all_values_i
         vComboxFieldInfo.push_back(comboxFnfo);
     }
 
-    m_mLinkFieldValueInfos.insert(sKey, vComboxFieldInfo);
+    m_mLinkFieldValueInfos.insert(sLinkInfo, vComboxFieldInfo);
 }
 
 void MainWindow::OnRecvServerProcessStatusInfo(const test_2::send_process_listening_status_info& proto)
@@ -827,6 +826,8 @@ void MainWindow::OnRecvServerLuaListData(const test_2::send_lua_list_data_notify
             m_tabWidget->setCurrentWidget(tabCell);
         }
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::OnRecvServerLuaTableData(const test_2::table_data& proto)
