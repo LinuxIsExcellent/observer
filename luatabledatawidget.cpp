@@ -54,6 +54,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
             QString sToolTips = m_standardItemModel->horizontalHeaderItem(nIndex)->toolTip();
             AnnonationEditWidget* annonationWidget = new AnnonationEditWidget(sField, sToolTips, this);
             annonationWidget->show();
+            annonationWidget->activateWindow();
             annonationWidget->move(pt);
         });
 
@@ -803,69 +804,4 @@ void LuaTableDataWidget::OnRequestSaveData()
 
     //保存之后清空undo栈
     clearUndoStack();
-}
-
-void LuaTableDataWidget::SetRowAndColParam()
-{
-    disconnect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
-    disconnect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
-    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
-    {
-        if (m_mFieldSquence.find("###row_height###") != m_mFieldSquence.end())
-        {
-            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###row_height###").value();
-
-            for (int row = 0; row < m_standardItemModel->rowCount();++row)
-            {
-                if (row < fieldSquence.vSFieldSquences.size())
-                {
-                    int nHeight = fieldSquence.vSFieldSquences[row].sFieldName.toInt();
-                    if (nHeight > 0)
-                    {
-                        m_tableView->setRowHeight(row, nHeight);
-                    }
-                }
-            }
-        }
-
-        if (m_mFieldSquence.find("###col_width###") != m_mFieldSquence.end())
-        {
-            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###col_width###").value();
-
-            for (int col = 0; col < m_standardItemModel->rowCount();++col)
-            {
-                if (col < fieldSquence.vSFieldSquences.size())
-                {
-                    int nWidth = fieldSquence.vSFieldSquences[col].sFieldName.toInt();
-                    if (nWidth > 0)
-                    {
-
-                        m_tableView->setColumnWidth(col, nWidth);
-                    }
-                }
-            }
-        }
-
-        if (m_mFieldSquence.find("###cell_color###") != m_mFieldSquence.end())
-        {
-            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###cell_color###").value();
-            for (auto& field : fieldSquence.vSFieldSquences)
-            {
-                int nRow = field.sFieldName.toInt();
-                int nCol = field.sFieldAnnonation.toInt();
-                QString qColorStr = field.sFieldLink;
-
-                QStandardItem *item = m_standardItemModel->item(nRow, nCol);
-                if (item)
-                {
-                    item->setData(QColor(qColorStr), Qt::BackgroundRole);
-                }
-            }
-        }
-    }
-
-    TabWidgetCell::SetRowAndColParam();
-
-    connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
-    connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
 }

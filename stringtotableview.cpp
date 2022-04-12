@@ -18,6 +18,8 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 {
     ui->setupUi(this);
 
+    this->setWindowFlags(Qt::Window);
+
     this->model = model;
     this->m_index = index;
     this->m_mFieldSquence = pMFieldSquence;
@@ -50,6 +52,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:white;color: black;}");
+
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
@@ -627,9 +630,11 @@ void StringToTableView::Flush()
         }
 
         m_standardItemModel->setItem(row, 2, dataItem);
-    }
+    }    
 
-    ui->tableView->resizeColumnsToContents();
+    ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     m_bDataChange = false;

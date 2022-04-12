@@ -12,6 +12,7 @@ AnnonationEditWidget::AnnonationEditWidget(QString sField, QString str/* = ""*/,
 
     m_bModify = false;
     this->setWindowFlags(Qt::Popup);
+    activateWindow();
     connect(ui->textEdit, &QTextEdit::textChanged, this, [=] () {
         m_bModify = true;
     });

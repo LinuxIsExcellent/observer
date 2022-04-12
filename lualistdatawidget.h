@@ -40,8 +40,6 @@ public:
 
     virtual void OnRequestSaveData();
 
-    virtual void SetRowAndColParam();
-
     virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);
 
     void OnShowTableWithLinkMsg(QString sField, QString sValue);
@@ -51,8 +49,6 @@ private slots:
     virtual void Flush();
 private:
     QVector<FIELDKEYTYPE> m_mDataList;  //表的数据
-
-    QMap<QString, FIELDSQUENCE>   m_mFieldSquence;   //二维表的表头顺序
 
     StringToTableView* m_stringToTableView;
 };

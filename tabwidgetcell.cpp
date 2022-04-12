@@ -251,6 +251,66 @@ TabWidgetCell::~TabWidgetCell()
 
 void TabWidgetCell::SetRowAndColParam()
 {
+    disconnect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
+    disconnect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
+    if (m_tableView && m_standardItemModel && m_standardItemModel->rowCount() > 0)
+    {
+        if (m_mFieldSquence.find("###row_height###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###row_height###").value();
+
+            for (int row = 0; row < m_standardItemModel->rowCount();++row)
+            {
+                if (row < fieldSquence.vSFieldSquences.size())
+                {
+                    int nHeight = fieldSquence.vSFieldSquences[row].sFieldName.toInt();
+                    if (nHeight > 0)
+                    {
+                        m_tableView->setRowHeight(row, nHeight);
+                    }
+                }
+            }
+        }
+
+        if (m_mFieldSquence.find("###col_width###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###col_width###").value();
+
+            for (int col = 0; col < m_standardItemModel->columnCount();++col)
+            {
+                if (col < fieldSquence.vSFieldSquences.size())
+                {
+                    int nWidth = fieldSquence.vSFieldSquences[col].sFieldName.toInt();
+                    if (nWidth > 0)
+                    {
+
+                        m_tableView->setColumnWidth(col, nWidth);
+                    }
+                }
+            }
+        }
+
+        if (m_mFieldSquence.find("###cell_color###") != m_mFieldSquence.end())
+        {
+            FIELDSQUENCE fieldSquence = m_mFieldSquence.find("###cell_color###").value();
+            for (auto& field : fieldSquence.vSFieldSquences)
+            {
+                int nRow = field.sFieldName.toInt();
+                int nCol = field.sFieldAnnonation.toInt();
+                QString qColorStr = field.sFieldLink;
+
+                QStandardItem *item = m_standardItemModel->item(nRow, nCol);
+                if (item)
+                {
+                    item->setData(QColor(qColorStr), Qt::BackgroundRole);
+                }
+            }
+        }
+    }
+
+    connect(m_tableView->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnColResized(int, int, int)));
+    connect(m_tableView->verticalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(OnRowResized(int, int, int)));
+
     QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
     if (vScrollbar)
     {
@@ -281,14 +341,20 @@ void TabWidgetCell::OnRequestSaveData()
 
 void TabWidgetCell::OnRowResized(int, int, int)
 {
-    m_bTableDataChange = true;
-    ChangeDataModify();
+    if (m_type == enTabWidgetTable)
+    {
+        m_bTableDataChange = true;
+        ChangeDataModify();
+    }
 }
 
 void TabWidgetCell::OnColResized(int, int, int)
 {
-    m_bTableDataChange = true;
-    ChangeDataModify();
+    if (m_type == enTabWidgetTable)
+    {
+        m_bTableDataChange = true;
+        ChangeDataModify();
+    }
 }
 
 void TabWidgetCell::ChangeDataModify()

@@ -154,7 +154,7 @@ public:
     void paste();
 
     //设置行高和列宽
-    virtual void SetRowAndColParam();
+    void SetRowAndColParam();
 
     virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
 public slots:
