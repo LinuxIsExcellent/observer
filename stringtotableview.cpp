@@ -149,7 +149,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
         m_tableCellMenu->clear();
 
-        if (index.column() == 2 && GlobalConfig::getInstance()->CheckStrIsLuaTable(index.data().toString(), false))
+        if (index.column() == 2 && GlobalConfig::getInstance()->CheckStrIsCorrectType(index.data().toString(), LUA_TTABLE))
         {
             bool isNew = true;
             for (int row = 0; row < m_vRowDatas.size(); ++row)
@@ -372,38 +372,7 @@ void StringToTableView::OnConfirmButtonClicked()
 
 void StringToTableView::OnCancelButtonClicked()
 {
-    if (m_bDataChange)
-    {
-        QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("保存修改？"),QString::fromLocal8Bit("表被修改，是否保存？"));
-        QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
-        QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
-        QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
-        cancelButton->hide();
-
-        box.exec();
-
-        //请求保存再关闭界面
-        if( box.clickedButton() == saveButton )
-        {
-            //请求保存修改 TODO
-            OnSaveData();
-            close();
-        }
-        //直接关闭界面
-        else if ( box.clickedButton() == quitButton )
-        {
-            close();
-        }
-        //退出message对话框（直接关闭messageBox对话框）
-        else if ( box.clickedButton() == cancelButton )
-        {
-            return;
-        }
-    }
-    else
-    {
-        close();
-    }
+    close();
 }
 
 void StringToTableView::OnChangeData()
@@ -966,6 +935,37 @@ void StringToTableView::SetParam()
     lua_close(L);
 }
 
+void StringToTableView::closeEvent(QCloseEvent *event)
+{
+    if (m_bDataChange)
+    {
+        QMessageBox box(QMessageBox::Warning,QString::fromLocal8Bit("保存修改？"),QString::fromLocal8Bit("表被修改，是否保存？"));
+        QPushButton *saveButton = (box.addButton(QString::fromLocal8Bit("保存"),QMessageBox::AcceptRole));
+        QPushButton *quitButton = (box.addButton(QString::fromLocal8Bit("退出"),QMessageBox::AcceptRole));
+        QPushButton *cancelButton = (box.addButton(QString::fromLocal8Bit("取消"),QMessageBox::RejectRole));
+        cancelButton->hide();
+
+        box.exec();
+
+        //请求保存再关闭界面
+        if( box.clickedButton() == saveButton )
+        {
+            OnSaveData();
+            event->accept();
+        }
+        //直接关闭界面
+        else if ( box.clickedButton() == quitButton )
+        {
+            event->accept();
+        }
+        //退出message对话框（直接关闭messageBox对话框）
+        else if ( box.clickedButton() == cancelButton )
+        {
+            event->ignore();
+            return;
+        }
+    }
+}
 
 void StringToTableView::keyPressEvent(QKeyEvent *ev)
 {

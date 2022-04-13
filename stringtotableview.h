@@ -79,6 +79,8 @@ public:
     void paste();
 
 protected:
+    void closeEvent(QCloseEvent *event);
+
     virtual void keyPressEvent(QKeyEvent *ev);
 
     bool eventFilter(QObject *obj, QEvent *eve);

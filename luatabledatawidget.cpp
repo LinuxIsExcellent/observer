@@ -649,11 +649,11 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
     ChangeDataModify();
 }
 
-void LuaTableDataWidget::OnRequestSaveData()
+bool LuaTableDataWidget::OnRequestSaveData()
 {
     qDebug() << "请求保存数据";
     //如果表的信息有变化
-    TabWidgetCell::OnRequestSaveData();
+    if (!TabWidgetCell::OnRequestSaveData()) return false;
 
     if (m_bHeadIndexChange || m_bTableDataChange)
     {
@@ -804,4 +804,6 @@ void LuaTableDataWidget::OnRequestSaveData()
 
     //保存之后清空undo栈
     clearUndoStack();
+
+    return true;
 }

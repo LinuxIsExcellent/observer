@@ -99,7 +99,7 @@ public:
 
     std::string doubleToString(double price);
 
-    bool CheckStrIsLuaTable(QString str, bool justCheckCorrect = true);
+    bool CheckStrIsCorrectType(QString str, int nType);
 private:
     static GlobalConfig* m_instance;
 

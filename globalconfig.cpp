@@ -191,7 +191,7 @@ std::string GlobalConfig::doubleToString(double price) {
     return res;
 }
 
-bool GlobalConfig::CheckStrIsLuaTable(QString str, bool justCheckCorrect/* = true*/)
+bool GlobalConfig::CheckStrIsCorrectType(QString str, int nType)
 {
     lua_State *L = luaL_newstate();
     if (L == NULL) return false;
@@ -203,15 +203,13 @@ bool GlobalConfig::CheckStrIsLuaTable(QString str, bool justCheckCorrect/* = tru
         return false;
     }
 
-    if (justCheckCorrect) return true;
-
     lua_getglobal(L, "temp_table");
-//    ParseLuaTable(L);
+    int nTargetType = lua_type(L, -1);
 
-    if (!lua_istable(L, -1))
+    if (nType == nTargetType)
     {
-        return false;
+        return true;
     }
 
-    return true;
+    return false;
 }

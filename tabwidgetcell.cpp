@@ -16,6 +16,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     m_bTableDataChange = false;
     m_currentVSlider = 0;
     m_currentHSlider = 0;
+    m_mTypeCheck.clear();
 
     //初始化上边的widget和layout
     m_topWidget = new QWidget(this);
@@ -324,8 +325,35 @@ void TabWidgetCell::SetRowAndColParam()
     }
 }
 
-void TabWidgetCell::OnRequestSaveData()
+bool TabWidgetCell::OnRequestSaveData()
 {
+    if (m_mTypeCheck.size() > 0)
+    {
+        for (auto iter = m_mTypeCheck.begin(); iter != m_mTypeCheck.end(); ++iter)
+        {
+            if (iter.value())
+            {
+                int nIndex = iter.key();
+                int nRow = nIndex / 10000;
+                int nCol = nIndex % 10000;
+
+                if(m_type == enTabWidgetTable)
+                {
+                    nRow += 2;
+                }
+                else if (m_type == enTabWidgetList)
+                {
+                    nRow += 1;
+                }
+                QString str = QString::number(nRow) + "行, "+ QString::number(nCol) + "列数据格式错误,无法保存";
+
+                QMessageBox information(QMessageBox::Critical, tr("警告"), str, QMessageBox::Ok);
+                information.exec();
+                return false;
+            }
+        }
+    }
+
     QScrollBar *vScrollbar = m_tableView->verticalScrollBar();
     if (vScrollbar)
     {
@@ -337,6 +365,8 @@ void TabWidgetCell::OnRequestSaveData()
     {
         m_currentHSlider = hScrollbar->sliderPosition();
     }
+
+    return true;
 }
 
 void TabWidgetCell::OnRowResized(int, int, int)
@@ -404,12 +434,14 @@ void TabWidgetCell::OnItemDataChange(QStandardItem *item)
         //拖拽一个单元格，但是不修改其它数据的时候，itemChanged信号会传一个row = 0, col = 0的数据过来
         // 因为第1行的row是固定的表头，所以不可能会变化。
         //可以用row = 0, col = 0来判定是否只是稍微拖拽一下，并没有改变数据
-        if (nRow > 0)
+        if (nRow > 0 || m_type == TabWidgetType::enTabWidgetList)
         {
             m_bTableDataChange = true;
         }
 
         ChangeDataModify();
+
+        CheckItemDataTypeIsCorrect(item);
     }
 }
 

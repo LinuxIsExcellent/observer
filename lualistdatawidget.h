@@ -31,6 +31,8 @@ public:
     LuaListDataWidget(QWidget *parent = nullptr);
     virtual ~LuaListDataWidget();
 
+    virtual void CheckItemDataTypeIsCorrect(QStandardItem *item);
+
     virtual inline bool IsTableDataChange()
     {
         return m_bTableDataChange;
@@ -38,7 +40,7 @@ public:
 
     void SetProtoData(const test_2::send_lua_list_data_notify& proto);
 
-    virtual void OnRequestSaveData();
+    virtual bool OnRequestSaveData();
 
     virtual void SetFieldLink(QString sIndex, QString sField, QString sFieldLink);
 

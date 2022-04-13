@@ -58,7 +58,7 @@ public:
 
     void SetProtoData(const test_2::table_data& proto);
 
-    virtual void OnRequestSaveData();
+    virtual bool OnRequestSaveData();
 
     virtual void GlobalKeyPressEevent(QKeyEvent *ev);
 

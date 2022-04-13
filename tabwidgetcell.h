@@ -111,7 +111,7 @@ public:
     }
 
     //请求保存数据
-    virtual void OnRequestSaveData();
+    virtual bool OnRequestSaveData();
 
     void SetDataModify()
     {
@@ -157,6 +157,8 @@ public:
     void SetRowAndColParam();
 
     virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
+
+    virtual void CheckItemDataTypeIsCorrect(QStandardItem *item){};
 public slots:
     //刷新界面
     virtual void Flush() {};
@@ -223,6 +225,8 @@ public:
 
     int m_currentVSlider;       //记录之前的垂直滑动条位置
     int m_currentHSlider;       //记录之前的水平滑动条位置
+
+    QMap<int, bool>             m_mTypeCheck;       //存储错误格式的类型的单元格row * 10000 + col, 是否出错
 };
 
 #endif // TABWIDGETCELL_H

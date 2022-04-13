@@ -272,9 +272,9 @@ void LuaListDataWidget::OnItemDataChange(QStandardItem *item)
     }
 }
 
-void LuaListDataWidget::OnRequestSaveData()
+bool LuaListDataWidget::OnRequestSaveData()
 {
-    TabWidgetCell::OnRequestSaveData();
+    if (!TabWidgetCell::OnRequestSaveData()) return false;
     //如果数据有变化
     if (m_bTableDataChange && m_mainWindow)
     {
@@ -371,5 +371,34 @@ void LuaListDataWidget::OnRequestSaveData()
 
         //保存之后清空undo栈
         clearUndoStack();
+    }
+
+    return true;
+}
+
+void LuaListDataWidget::CheckItemDataTypeIsCorrect(QStandardItem *item)
+{
+    if(item)
+    {
+        int nRow = item->row();
+        int nCol = item->column();
+
+        int nIndex = nRow * 10000 + nCol;
+        if (nRow < m_mDataList.size())
+        {
+            if (!GlobalConfig::getInstance()->CheckStrIsCorrectType(item->index().data().toString(), m_mDataList[nRow].nType))
+            {
+                item->setForeground(Qt::red);
+                m_mTypeCheck[nIndex] = true;
+            }
+            else
+            {
+                if(m_mTypeCheck.find(nIndex) != m_mTypeCheck.end())
+                {
+                    m_mTypeCheck[nIndex] = false;
+                    item->setForeground(Qt::black);
+                }
+            }
+        }
     }
 }
