@@ -106,6 +106,14 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
+    connect(m_tableView->verticalHeader(), &QHeaderView::sectionDoubleClicked, this,[=](int logicalIndex){
+        if (m_type == enTabWidgetTable)
+        {
+            m_standardItemModel->insertRows(logicalIndex + 1, 1);
+            SortVerticalHeaderNumber();
+        }
+    });
+
     //增加行表头的菜单
     connect(m_tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, m_tableView->verticalHeader(),[=](const QPoint& pos){
         //mapToGlobal获取m_tableView全局坐标
@@ -120,23 +128,30 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         }
 
         m_tableCellMenu->clear();
-        m_tableCellMenu->addAction("插入行", this, [=](){
-            m_standardItemModel->insertRows(nIndex, 1);
-            m_bTableDataChange = true;
-            ChangeDataModify();
-        });
 
-        m_tableCellMenu->addAction("增加行", this, [=](){
-            m_standardItemModel->insertRows(nIndex + 1, 1);
-            m_bTableDataChange = true;
-            ChangeDataModify();
-        });
+        if (nIndex >0 && m_type == enTabWidgetTable)
+        {
+            m_tableCellMenu->addAction("插入行", this, [=](){
+                m_standardItemModel->insertRows(nIndex, 1);
+                m_bTableDataChange = true;
+                ChangeDataModify();
+                SortVerticalHeaderNumber();
+            });
 
-        m_tableCellMenu->addAction("删除行", this, [=](){
-            m_standardItemModel->removeRows(nIndex, 1);
-            m_bTableDataChange = true;
-            ChangeDataModify();
-        });
+            m_tableCellMenu->addAction("增加行", this, [=](){
+                m_standardItemModel->insertRows(nIndex + 1, 1);
+                m_bTableDataChange = true;
+                ChangeDataModify();
+                SortVerticalHeaderNumber();
+            });
+
+            m_tableCellMenu->addAction("删除行", this, [=](){
+                m_standardItemModel->removeRows(nIndex, 1);
+                m_bTableDataChange = true;
+                ChangeDataModify();
+                SortVerticalHeaderNumber();
+            });
+        }
 
         QSet<int> rowSet;        
         QModelIndexList selectList = m_tableView->selectionModel()->selectedIndexes();
@@ -145,7 +160,7 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
             rowSet.insert(data.row());
         }
 
-        if (m_type == TabWidgetType::enTabWidgetTable)
+        if (nIndex > 0 && m_type == TabWidgetType::enTabWidgetTable)
         {
             m_tableCellMenu->addAction("隐藏行", this, [=](){
                 for (int row : rowSet.toList())
@@ -228,8 +243,6 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
         QModelIndex index = m_tableView->currentIndex();
         QVariant data = index.data(Qt::DisplayRole);
         QVariant oldData = index.data(Qt::UserRole);
-        qDebug() << "data = " << data;
-        qDebug() << "old = " << oldData;
         if (data != oldData)
         {
             undoStack->push(new ModifCommand(m_standardItemModel, index, oldData, data, ModifCommandType::singleModelIndex));
@@ -248,6 +261,34 @@ TabWidgetCell::TabWidgetCell(QWidget *parent) :
 TabWidgetCell::~TabWidgetCell()
 {
     delete ui;
+}
+
+void TabWidgetCell::SortVerticalHeaderNumber()
+{
+    if(m_type == enTabWidgetTable)
+    {
+        for (int i = 0; i < m_standardItemModel->rowCount(); ++i)
+        {
+            QStandardItem* item = m_standardItemModel->verticalHeaderItem(i);
+            if (item)
+            {
+                if (i > 0)
+                {
+                    item->setText(QString::number(i, 'f', 0));
+                    qDebug() << "i = " << i;
+                }
+            }
+            else
+            {
+                QStandardItem* verItem = new QStandardItem();
+                verItem->setText(QString::number(i, 'f', 0));
+
+                verItem->setFlags(Qt::ItemIsEnabled);
+                verItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+                m_standardItemModel->setVerticalHeaderItem(i, verItem);
+            }
+        }
+    }
 }
 
 void TabWidgetCell::SetRowAndColParam()
@@ -316,12 +357,14 @@ void TabWidgetCell::SetRowAndColParam()
     if (vScrollbar)
     {
         vScrollbar->setSliderPosition(m_currentVSlider);
+        qDebug() << "m_currentVSlider = " << m_currentVSlider;
     }
 
     QScrollBar *hScrollbar = m_tableView->horizontalScrollBar();
     if (hScrollbar)
     {
         hScrollbar->setSliderPosition(m_currentHSlider);
+        qDebug() << "m_currentHSlider = " << m_currentHSlider;
     }
 }
 
@@ -339,7 +382,7 @@ bool TabWidgetCell::OnRequestSaveData()
 
                 if(m_type == enTabWidgetTable)
                 {
-                    nRow += 2;
+                    nCol += 1;
                 }
                 else if (m_type == enTabWidgetList)
                 {

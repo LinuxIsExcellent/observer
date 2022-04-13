@@ -159,6 +159,8 @@ public:
     virtual void OnSaveAnnonations(QString sIndex, QString str, QString sField){}
 
     virtual void CheckItemDataTypeIsCorrect(QStandardItem *item){};
+
+    void SortVerticalHeaderNumber();
 public slots:
     //刷新界面
     virtual void Flush() {};

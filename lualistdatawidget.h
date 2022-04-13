@@ -51,8 +51,6 @@ private slots:
     virtual void Flush();
 private:
     QVector<FIELDKEYTYPE> m_mDataList;  //表的数据
-
-    StringToTableView* m_stringToTableView;
 };
 
 #endif // LUALISTDATAWIDGET_H

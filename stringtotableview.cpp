@@ -10,15 +10,18 @@
 #include "tabledelegate.h"
 #include "modifcommand.h"
 
-StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QWidget *parent, int nLevel) :
+StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QString sTitleName, QWidget *parent, int nLevel) :
     QDialog(parent),
     ui(new Ui::StringToTableView),
     m_sTableName(sTableName),
+    m_sTitleName(sTitleName),
     m_nLevel(nLevel)
 {
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::Window);
+    m_vRowDataTypes.clear();
+    m_mTypeCheck.clear();
 
     this->model = model;
     this->m_index = index;
@@ -27,7 +30,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
 
     m_sData = index.data().toString();
 
-    setWindowTitle("表");
+    setWindowTitle(m_sTitleName);
 //    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 //    setWindowFlag(Qt::WindowTitleHint, true);
 //    setModal(true);
@@ -56,6 +59,10 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     //初始化菜单栏
     m_tableCellMenu = new QMenu(this);
 
+    connect(ui->tableView->verticalHeader(), &QHeaderView::sectionDoubleClicked, this,[=](int logicalIndex){
+        m_standardItemModel->insertRows(logicalIndex + 1, 1);
+    });
+
     connect(ui->tableView->verticalHeader(), &QAbstractItemView::customContextMenuRequested, ui->tableView->verticalHeader(),[=](const QPoint& pos){
         //mapToGlobal获取m_tableView全局坐标
         //m_tableView->pos()获取m_tableView在父窗口中的相对坐标
@@ -73,16 +80,19 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
         m_tableCellMenu->addAction("插入行", this, [=](){
             m_standardItemModel->insertRows(nIndex, 1);
             m_bDataChange = true;
+            OnChangeBtnState();
         });
 
         m_tableCellMenu->addAction("增加行", this, [=](){
             m_standardItemModel->insertRows(nIndex + 1, 1);
             m_bDataChange = true;
+            OnChangeBtnState();
         });
 
         m_tableCellMenu->addAction("删除行", this, [=](){
             m_standardItemModel->removeRows(nIndex, 1);
             m_bDataChange = true;
+            OnChangeBtnState();
         });
 
 
@@ -170,7 +180,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                             {
                                 sSubTableIndex = m_sTableName + "#" + rowData.sKey;
                             }
-                            StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, this, m_nLevel + 1);
+                            StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, m_sTitleName + "." + sField, this, m_nLevel + 1);
                             dialog->show();
                         });
                     }
@@ -196,7 +206,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                 }
 
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, this, m_nLevel + 1);
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sSubTableIndex, this->m_mFieldSquence, m_cellWidget, m_sTitleName + "." + sField, this, m_nLevel + 1);
                     dialog->show();
                 });
             }
@@ -284,6 +294,11 @@ StringToTableView::~StringToTableView()
     delete ui;
 }
 
+void StringToTableView::OnChangeBtnState()
+{
+    ui->pushButton_2->setDisabled(!m_bDataChange);
+}
+
 void StringToTableView::OnItemDataChange(QStandardItem * item)
 {
     if (item && item->index().isValid())
@@ -292,6 +307,7 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
         bool is_ok = false;
         sField.toInt(&is_ok);
 
+        //这个是修改第一列的备注的，只能修改键值对的key的备注
         if (item->column() == 0 && is_ok == false)
         {
             int nCol = item->index().column();
@@ -357,7 +373,93 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
             }
         }
 
+        CheckItemDataTypeIsCorrect(item);
+
         m_bDataChange = true;
+        OnChangeBtnState();
+    }
+}
+
+void StringToTableView::CheckItemDataTypeIsCorrect(QStandardItem *item)
+{
+    if(item)
+    {
+        int nRow = item->row();
+        int nCol = item->column();
+
+        QString sField = m_standardItemModel->data(m_standardItemModel->index(nRow, 1)).toString();
+        QString sValue = item->index().data().toString();
+        int nType = 0;
+        bool is_correct = false;
+        //如果只是判断键是否正确
+        if (nCol == 1)
+        {
+            std::string sCheckStr = sField.toStdString();
+            //对数组的整数key和string的key做一个区分
+            if(sCheckStr.find_first_not_of("-.0123456789\"") == std::string::npos)
+            {
+                is_correct = true;
+            }
+            else
+            {
+                //key只能是为string或者整数
+                nType = GlobalConfig::getInstance()->PickStrALuaValueType(sField);
+                if (nType == LUA_TSTRING)
+                {
+                    QChar c = sField[0];
+                    //第一个字符必须是字母
+                    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+                    {
+                        is_correct = true;
+                    }
+                }
+                else if (nType == LUA_TNUMBER)
+                {
+                    is_correct = true;
+                }
+            }
+        }
+        else
+        {
+            //如果是修改之前就存在的键值，则判断之前的类型
+            if (m_vRowDataTypes.find(sField) != m_vRowDataTypes.end())
+            {
+                nType = m_vRowDataTypes.find(sField).value();
+                if (nType == LUA_TSTRING)
+                {
+                    sValue = "\"" + sValue + "\"";
+                }
+                if (GlobalConfig::getInstance()->CheckStrIsCorrectType(sValue, nType))
+                {
+                    is_correct = true;
+                }
+            }
+            //如果是修改之前不存在的类型，则给他找一个可能的类型
+            else
+            {
+                nType = GlobalConfig::getInstance()->PickStrALuaValueType(sValue);
+                if (nType > 0)
+                {
+                    is_correct = true;
+                    m_vRowDataTypes.insert(sField, nType);
+                }
+            }
+        }
+
+        int nIndex = nRow * 10000 + nCol;
+        if (!is_correct)
+        {
+            item->setForeground(Qt::red);
+            m_mTypeCheck[nIndex] = true;
+        }
+        else
+        {
+            if(m_mTypeCheck.find(nIndex) != m_mTypeCheck.end())
+            {
+                m_mTypeCheck[nIndex] = false;
+                item->setForeground(Qt::black);
+            }
+        }
     }
 }
 
@@ -365,9 +467,11 @@ void StringToTableView::OnConfirmButtonClicked()
 {
     if(m_bDataChange)
     {
-        OnSaveData();
+        if (OnSaveData())
+        {
+            close();
+        }
     }
-    close();
 }
 
 void StringToTableView::OnCancelButtonClicked()
@@ -419,8 +523,28 @@ void StringToTableView::OnChangeData()
 //    SetParam();
 }
 
-void StringToTableView::OnSaveData()
+bool StringToTableView::OnSaveData()
 {
+    if (m_mTypeCheck.size() > 0)
+    {
+        for (auto iter = m_mTypeCheck.begin(); iter != m_mTypeCheck.end(); ++iter)
+        {
+            if (iter.value())
+            {
+                int nIndex = iter.key();
+                int nRow = nIndex / 10000;
+                int nCol = nIndex % 10000;
+
+                nRow += 1;
+                QString str = QString::number(nRow) + "行, "+ QString::number(nCol) + "列数据格式错误,无法保存";
+
+                QMessageBox information(QMessageBox::Critical, tr("警告"), str, QMessageBox::Ok);
+                information.exec();
+                return false;
+            }
+        }
+    }
+
     //重新设置table里面的key的排序，数据部分不用考虑
     QVector<FIELDINFO> vNewKeySquence;
     QString sResult = "{";
@@ -451,7 +575,25 @@ void StringToTableView::OnSaveData()
             sResult = sResult + "[" + vKey.toString() + "] = ";
         }
 
-        sResult = sResult + vValue.toString();
+        int nType = 0;
+        if (m_vRowDataTypes.find(vKey.toString()) != m_vRowDataTypes.end())
+        {
+            nType = m_vRowDataTypes.find(vKey.toString()).value();
+        }
+        //如果是新加的行，字段类型一般不好确定，就只能从表 数字 字符串  这样去判断
+        else
+        {
+            nType = GlobalConfig::getInstance()->PickStrALuaValueType(vValue.toString());
+        }
+
+        if (nType == LUA_TSTRING)
+        {
+            sResult = sResult + "\"" + vValue.toString() + "\"";
+        }
+        else
+        {
+            sResult = sResult + vValue.toString();
+        }
 
         if (i < m_standardItemModel->rowCount() - 1)
         {
@@ -533,6 +675,10 @@ void StringToTableView::OnSaveData()
             }
         }
     }
+
+    m_bDataChange = false;
+    OnChangeBtnState();
+    return true;
 }
 
 void StringToTableView::Flush()
@@ -607,6 +753,7 @@ void StringToTableView::Flush()
 
     connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     m_bDataChange = false;
+    OnChangeBtnState();
 }
 
 std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTableKey)
@@ -663,7 +810,14 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         }
         else if (nValueType == LUA_TBOOLEAN)
         {
-            sField = QString(lua_toboolean(L, -1));
+            if (lua_toboolean(L, -1) == 0)
+            {
+                sField = "false";
+            }
+            else
+            {
+                sField = "true";
+            }
         }
         else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
         {
@@ -825,7 +979,7 @@ void StringToTableView::SetParam()
         QString sSubTableKey = "";
         if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
         {
-            sKey = QString::number(lua_tonumber(L, -2));
+            sKey = QString::number(lua_tonumber(L, -2), 'f', 0);
             sSubTableKey = m_sTableName + "%ARRAY";
         }
         else
@@ -833,7 +987,6 @@ void StringToTableView::SetParam()
             sKey = QString::fromStdString(lua_tostring(L, -2));
             sSubTableKey = m_sTableName + "#" + sKey;
         }
-
 
         info.nKeyType = nKeyType;
         info.sKey = sKey;
@@ -848,11 +1001,19 @@ void StringToTableView::SetParam()
         }
         else if (nValueType == LUA_TSTRING)
         {
-            sField = '\"' + QString::fromStdString(lua_tostring(L, -1)) + '\"';
+//            sField = '\"' + QString::fromStdString(lua_tostring(L, -1)) + '\"';
+            sField = QString::fromStdString(lua_tostring(L, -1));
         }
         else if (nValueType == LUA_TBOOLEAN)
         {
-            sField = QString(lua_toboolean(L, -1));
+            if(lua_toboolean(L, -1) == 0)
+            {
+                sField = "false";
+            }
+            else
+            {
+                sField = "true";
+            }
         }
         else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
         {
@@ -923,11 +1084,22 @@ void StringToTableView::SetParam()
     for (auto data : vKeyValueData)
     {
         m_vRowDatas.push_back(data);
+        std::string sStdKey = data.sKey.toStdString();
+        if (sStdKey.find_first_not_of("-.0123456789") == std::string::npos)
+        {
+            QString sMapKey = "\"" + data.sKey + "\"";
+            m_vRowDataTypes.insert(sMapKey, data.nType);
+        }
+        else
+        {
+            m_vRowDataTypes.insert(data.sKey, data.nType);
+        }
     }
 
     for (auto data : vArrayValueData)
     {
         m_vRowDatas.push_back(data);
+        m_vRowDataTypes.insert(data.sKey, data.nType);
     }
 
     Flush();
@@ -950,8 +1122,14 @@ void StringToTableView::closeEvent(QCloseEvent *event)
         //请求保存再关闭界面
         if( box.clickedButton() == saveButton )
         {
-            OnSaveData();
-            event->accept();
+            if (OnSaveData())
+            {
+                event->accept();
+            }
+            else
+            {
+                event->ignore();
+            }
         }
         //直接关闭界面
         else if ( box.clickedButton() == quitButton )
@@ -962,7 +1140,6 @@ void StringToTableView::closeEvent(QCloseEvent *event)
         else if ( box.clickedButton() == cancelButton )
         {
             event->ignore();
-            return;
         }
     }
 }
@@ -1017,6 +1194,7 @@ void StringToTableView::undo()
     if (!undoStack->canUndo())
     {
         m_bDataChange = false;
+        OnChangeBtnState();
     }
 }
 
@@ -1184,6 +1362,8 @@ void StringToTableView::paste()
     {
         undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
     }
+
+    OnChangeBtnState();
 }
 
 void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
@@ -1200,6 +1380,7 @@ void StringToTableView::ChangeModelIndexData(QModelIndex index, QString sData)
 
 //            OnChangeData();
             m_bDataChange = true;
+            OnChangeBtnState();
         }
     }
 }
@@ -1262,6 +1443,8 @@ bool StringToTableView::eventFilter(QObject *obj, QEvent *eve)
             {
                 undoStack->push(new ModifCommand(m_standardItemModel, commandList, ModifCommandType::ListModelIndex));
             }
+
+            OnChangeBtnState();
 
             return true;
         }

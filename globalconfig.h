@@ -100,6 +100,8 @@ public:
     std::string doubleToString(double price);
 
     bool CheckStrIsCorrectType(QString str, int nType);
+
+    int PickStrALuaValueType(QString str);
 private:
     static GlobalConfig* m_instance;
 

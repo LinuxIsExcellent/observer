@@ -133,7 +133,7 @@ LuaTableDataWidget::LuaTableDataWidget(QWidget *parent) : TabWidgetCell(parent)
         if (m_mFieldTypes.find(sField) != m_mFieldTypes.end() && m_mFieldTypes.find(sField).value() == LUA_TTABLE)
         {
             m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sField, &m_mFieldSquence, this, this);
+                StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sField, &m_mFieldSquence, this, m_sName + "." + sField, this);
                 dialog->show();
             });
         }
@@ -407,7 +407,6 @@ void LuaTableDataWidget::OnTableViewSectionMoved(int, int, int)
     for (int i = 0; i < m_tableView->model()->columnCount(); ++i)
     {
         int nVisualIndex = m_tableView->horizontalHeader()->visualIndex(i);
-        m_tableView->model()->headerData(i, Qt::Horizontal).toString();
         mFieldSortMap.insert(m_tableView->model()->headerData(i, Qt::Horizontal).toString(), nVisualIndex);
     }
 
@@ -478,7 +477,7 @@ void LuaTableDataWidget::Flush()
                 }
                 case LUA_TBOOLEAN:
                 {
-                    dataTypeStr = "0为否，1为是";
+                    dataTypeStr = "bool";
                     break;
                 }
             }
@@ -488,6 +487,13 @@ void LuaTableDataWidget::Flush()
             item->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
             m_standardItemModel->setItem(0, i, item);
         }
+
+        QStandardItem* verItem = new QStandardItem();
+        verItem->setText("数据类型");
+
+        verItem->setFlags(Qt::ItemIsEnabled);
+        verItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        m_standardItemModel->setVerticalHeaderItem(0, verItem);
 
         for (int i = 0; i < m_tableData.dataList.count(); ++i)
         {
@@ -515,14 +521,14 @@ void LuaTableDataWidget::Flush()
                 QStandardItem* dataItem = new QStandardItem(strFieldValue);
                 if (vSFieldSquences)
                 {
-                    for (int i = 0;i < (*vSFieldSquences).size(); ++i)
+                    for (int m = 0;m < (*vSFieldSquences).size(); ++m)
                     {
-                        if ((*vSFieldSquences)[i].sFieldName == strFieldName)
+                        if ((*vSFieldSquences)[m].sFieldName == strFieldName)
                         {
-                            if ((*vSFieldSquences)[i].sFieldLink != "")
+                            if ((*vSFieldSquences)[m].sFieldLink != "")
                             {
                                 dataItem->setData(QVariant(DelegateModel::EditAndCombox), Qt::UserRole+2);
-                                dataItem->setData(QVariant((*vSFieldSquences)[i].sFieldLink), Qt::UserRole+3);
+                                dataItem->setData(QVariant((*vSFieldSquences)[m].sFieldLink), Qt::UserRole+3);
                             }
                         }
                     }
@@ -533,18 +539,11 @@ void LuaTableDataWidget::Flush()
 
             //设置行表头
             QStandardItem* verItem = new QStandardItem();
-            if (i == 0)
-            {
-                verItem->setText("数据类型");
-            }
-            else
-            {
-                verItem->setText(QString::number(i));
-            }
+            verItem->setText(QString::number(i + 1));
 
             verItem->setFlags(Qt::ItemIsEnabled);
             verItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-            m_standardItemModel->setVerticalHeaderItem(i, verItem);
+            m_standardItemModel->setVerticalHeaderItem(i + 1, verItem);
         }
 
         SetRowAndColParam();
@@ -623,6 +622,11 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
                 VALUEPAIR pairValue;
                 pairValue.sField = strFieldName;
                 pairValue.sValue = QString::fromStdString(pair.value());
+                if (strFieldName == "id")
+                {
+                    qDebug() << "strFieldName = " << strFieldName;
+                    qDebug() << "pairValue.sValue = " << pairValue.sValue;
+                }
 
                 rowData.dataList.push_back(pairValue);
             }
@@ -631,6 +635,7 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
         }
     }
 
+    disconnect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
     Flush();
 
     if (sLinkInfo != "")
@@ -647,6 +652,8 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
     m_bTableDataChange = false;
     m_bHeadIndexChange = false;
     ChangeDataModify();
+
+    connect(m_standardItemModel, SIGNAL(itemChanged(QStandardItem *)), this, SLOT(OnItemDataChange(QStandardItem *)));
 }
 
 bool LuaTableDataWidget::OnRequestSaveData()
@@ -806,4 +813,38 @@ bool LuaTableDataWidget::OnRequestSaveData()
     clearUndoStack();
 
     return true;
+}
+
+void LuaTableDataWidget::CheckItemDataTypeIsCorrect(QStandardItem *item)
+{
+    if(item)
+    {
+        int nRow = item->row();
+        int nCol = item->column();
+        if (nRow > 0)
+        {
+            QString sField = m_tableView->model()->headerData(nCol, Qt::Horizontal).toString();
+            int nType = m_mFieldTypes.find(sField).value();
+
+            int nIndex = nRow * 10000 + nCol;
+            QString sData = item->index().data().toString();
+            if (nType == LUA_TSTRING)
+            {
+                sData = "\"" + sData + "\"";
+            }
+            if (sData != "" && !GlobalConfig::getInstance()->CheckStrIsCorrectType(sData, nType))
+            {
+                item->setForeground(Qt::red);
+                m_mTypeCheck[nIndex] = true;
+            }
+            else
+            {
+                if(m_mTypeCheck.find(nIndex) != m_mTypeCheck.end())
+                {
+                    m_mTypeCheck[nIndex] = false;
+                    item->setForeground(Qt::black);
+                }
+            }
+        }
+    }
 }

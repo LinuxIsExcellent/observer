@@ -41,15 +41,19 @@ class StringToTableView : public QDialog
     Q_OBJECT
 
 public:
-    explicit StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QWidget *parent = nullptr, int nLevel = 0);
+    explicit StringToTableView(QStandardItemModel *model, QModelIndex index, QString sTableName, QMap<QString, FIELDSQUENCE>* pMFieldSquence, TabWidgetCell* cellWidget, QString sTitleName, QWidget *parent = nullptr, int nLevel = 0);
 
     ~StringToTableView();
+
+    void CheckItemDataTypeIsCorrect(QStandardItem *item);
+
+    void OnChangeBtnState();
 
     void SetParam();
 
     void Flush();
 
-    void OnSaveData();
+    bool OnSaveData();
 
     void OnChangeData();
 
@@ -103,8 +107,11 @@ private:
     QMap<QString, FIELDSQUENCE>* m_mFieldSquence;    //表头数据
 
     QVector<ROWINFO>    m_vRowDatas;    //数据
+    QMap<QString, int>    m_vRowDataTypes;    //键值对的类型
+    QMap<int, bool>             m_mTypeCheck;       //存储错误格式的类型的单元格row * 10000 + col, 是否出错
 
     QString m_sTableName;       //该展开界面在额外信息表内的表名
+    QString m_sTitleName;       //标题栏
 
     bool        m_bDataChange;      //数据是否改变
 

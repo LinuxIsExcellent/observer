@@ -41,6 +41,8 @@ public:
     LuaTableDataWidget(QWidget *parent = nullptr);
     virtual ~LuaTableDataWidget() {};
 
+    virtual void CheckItemDataTypeIsCorrect(QStandardItem *item);
+
     inline bool IsHeadIndexChange()
     {
         return m_bHeadIndexChange;

@@ -29,7 +29,8 @@ LuaListDataWidget::LuaListDataWidget(QWidget *parent) : TabWidgetCell(parent)
             if (m_mDataList[nRow].nType == LUA_TTABLE)
             {
                 m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
-                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, m_mDataList[nRow].sKey, &m_mFieldSquence, this, this);
+                    QString sFieldName = m_mDataList[nRow].sKey;
+                    StringToTableView* dialog = new StringToTableView(m_standardItemModel, index, sFieldName, &m_mFieldSquence, this, m_sName + "." + sFieldName, this);
                     dialog->show();
                 });
             }
@@ -386,7 +387,12 @@ void LuaListDataWidget::CheckItemDataTypeIsCorrect(QStandardItem *item)
         int nIndex = nRow * 10000 + nCol;
         if (nRow < m_mDataList.size())
         {
-            if (!GlobalConfig::getInstance()->CheckStrIsCorrectType(item->index().data().toString(), m_mDataList[nRow].nType))
+            QString sData = item->index().data().toString();
+            if (m_mDataList[nRow].nType == LUA_TSTRING)
+            {
+                sData = "\"" + sData + "\"";
+            }
+            if (sData != "" && !GlobalConfig::getInstance()->CheckStrIsCorrectType(sData, m_mDataList[nRow].nType))
             {
                 item->setForeground(Qt::red);
                 m_mTypeCheck[nIndex] = true;

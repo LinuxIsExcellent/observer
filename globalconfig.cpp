@@ -206,10 +206,34 @@ bool GlobalConfig::CheckStrIsCorrectType(QString str, int nType)
     lua_getglobal(L, "temp_table");
     int nTargetType = lua_type(L, -1);
 
-    if (nType == nTargetType)
+    if (nTargetType == LUA_TNIL || nType == nTargetType)
     {
         return true;
     }
 
     return false;
+}
+
+int GlobalConfig::PickStrALuaValueType(QString str)
+{
+    int nType = 0;
+    if (CheckStrIsCorrectType(str, LUA_TTABLE))
+    {
+        nType = LUA_TTABLE;
+    }
+    else if (CheckStrIsCorrectType(str, LUA_TNUMBER))
+    {
+        nType = LUA_TNUMBER;
+    }
+    else if (CheckStrIsCorrectType(str, LUA_TBOOLEAN))
+    {
+        nType = LUA_TBOOLEAN;
+    }
+    //如果前面的类型都不是，最后检测是否为string，如果string都检测失败，返回0(不是nil，这里表示不存在的类型)
+    else if (CheckStrIsCorrectType("\"" + str + "\"", LUA_TSTRING))
+    {
+        nType = LUA_TSTRING;
+    }
+
+    return nType;
 }
