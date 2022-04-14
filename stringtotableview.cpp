@@ -172,7 +172,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                     {
                         m_tableCellMenu->addAction(tr("数据展开"), this, [=](){
                             QString sSubTableIndex = "";
-                            if(rowData.nKeyType == LUA_TNUMBER || rowData.nKeyType == LUA_TNIL)
+                            if(rowData.nKeyType == LUA_TNUMBER)
                             {
                                 sSubTableIndex = m_sTableName + "%ARRAY";
                             }
@@ -373,7 +373,10 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
             }
         }
 
-        CheckItemDataTypeIsCorrect(item);
+        if (item->column() > 0)
+        {
+            CheckItemDataTypeIsCorrect(item);
+        }
 
         m_bDataChange = true;
         OnChangeBtnState();
@@ -402,18 +405,9 @@ void StringToTableView::CheckItemDataTypeIsCorrect(QStandardItem *item)
             }
             else
             {
-                //key只能是为string或者整数
-                nType = GlobalConfig::getInstance()->PickStrALuaValueType(sField);
-                if (nType == LUA_TSTRING)
-                {
-                    QChar c = sField[0];
-                    //第一个字符必须是字母
-                    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-                    {
-                        is_correct = true;
-                    }
-                }
-                else if (nType == LUA_TNUMBER)
+                QChar c = sField[0];
+                //第一个字符必须是字母
+                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
                 {
                     is_correct = true;
                 }
@@ -782,7 +776,7 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         //字段部分
         QString sKey = "";
         QString sSubTableKey = "";
-        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        if (nKeyType == LUA_TNUMBER)
         {
             sKey = QString::number(lua_tonumber(L, -2));
             sSubTableKey = sTableKey + "%ARRAY";
@@ -819,14 +813,18 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
                 sField = "true";
             }
         }
-        else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
+        else if (nValueType == LUA_TNUMBER)
         {
             sField = QString::fromStdString(lua_tostring(L, -1));
+        }
+        else if (nValueType == LUA_TNIL)
+        {
+            sField = "nil";
         }
 
         info.sField = sField;
 
-        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        if (nKeyType == LUA_TNUMBER)
         {
             vArrayValueData.push_back(info);
         }
@@ -977,7 +975,7 @@ void StringToTableView::SetParam()
         //字段部分
         QString sKey = "";
         QString sSubTableKey = "";
-        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        if (nKeyType == LUA_TNUMBER)
         {
             sKey = QString::number(lua_tonumber(L, -2), 'f', 0);
             sSubTableKey = m_sTableName + "%ARRAY";
@@ -1015,14 +1013,18 @@ void StringToTableView::SetParam()
                 sField = "true";
             }
         }
-        else if (nValueType == LUA_TNIL || nValueType == LUA_TNUMBER)
+        else if (nValueType == LUA_TNUMBER)
         {
             sField = QString::fromStdString(lua_tostring(L, -1));
+        }
+        else if (nValueType == LUA_TNIL)
+        {
+            sField = "nil";
         }
 
         info.sField = sField;
 
-        if (nKeyType == LUA_TNUMBER || nKeyType == LUA_TNIL)
+        if (nKeyType == LUA_TNUMBER)
         {
             vArrayValueData.push_back(info);
         }

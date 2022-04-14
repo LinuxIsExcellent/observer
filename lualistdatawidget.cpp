@@ -155,9 +155,12 @@ void LuaListDataWidget::Flush()
             sValue = sValue.replace('\n',"\\n");
 
             QString sAnnonation = "";
-            if (squence && i < squence->vSFieldSquences.size())
+            for (auto fieldInfo : squence->vSFieldSquences)
             {
-                sAnnonation = squence->vSFieldSquences[i].sFieldAnnonation;
+                if(m_mDataList[i].sKey == fieldInfo.sFieldName)
+                {
+                    sAnnonation = fieldInfo.sFieldAnnonation;
+                }
             }
 
             m_standardItemModel->setItem(i, 0, new QStandardItem(sAnnonation));
@@ -385,7 +388,7 @@ void LuaListDataWidget::CheckItemDataTypeIsCorrect(QStandardItem *item)
         int nCol = item->column();
 
         int nIndex = nRow * 10000 + nCol;
-        if (nRow < m_mDataList.size())
+        if (nCol> 0 && nRow < m_mDataList.size())
         {
             QString sData = item->index().data().toString();
             if (m_mDataList[nRow].nType == LUA_TSTRING)

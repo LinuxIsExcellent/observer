@@ -465,6 +465,10 @@ void LuaTableDataWidget::Flush()
                     break;
                 }
                 case LUA_TNIL:
+                {
+                    dataTypeStr = "空";
+                    break;
+                }
                 case LUA_TNUMBER:
                 {
                     dataTypeStr = "数字";
