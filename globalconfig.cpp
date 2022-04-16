@@ -206,7 +206,7 @@ bool GlobalConfig::CheckStrIsCorrectType(QString str, int nType)
     lua_getglobal(L, "temp_table");
     int nTargetType = lua_type(L, -1);
 
-    if (nTargetType == LUA_TNIL || nType == nTargetType)
+    if (nType == nTargetType)
     {
         return true;
     }

@@ -114,6 +114,7 @@ private:
     QString m_sTitleName;       //标题栏
 
     bool        m_bDataChange;      //数据是否改变
+    bool        m_bFieldSquenceChange;     //表的额外信息是否改变
 
     int         m_nLevel;       //多少级
 

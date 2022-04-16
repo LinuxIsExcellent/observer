@@ -28,6 +28,9 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     this->m_mFieldSquence = pMFieldSquence;
     this->m_cellWidget = cellWidget;
 
+    m_bDataChange = false;
+    m_bFieldSquenceChange = false;
+
     m_sData = index.data().toString();
 
     setWindowTitle(m_sTitleName);
@@ -333,6 +336,7 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
                             if (data.sFieldAnnonation != item->index().data().toString())
                             {
                                 data.sFieldAnnonation = item->index().data().toString();
+                                m_bFieldSquenceChange = true;
                             }
                             break;
                         }
@@ -369,6 +373,7 @@ void StringToTableView::OnItemDataChange(QStandardItem * item)
                     }
 
                     m_mFieldSquence->insert(m_sTableName, squence);
+                    m_bFieldSquenceChange = true;
                 }
             }
         }
@@ -539,6 +544,39 @@ bool StringToTableView::OnSaveData()
         }
     }
 
+    //先判断是否是连续的从1开始的整数
+    QVector<int> vArrayKeyValue;
+    for (int i = 0; i < m_standardItemModel->rowCount(); i++)
+    {
+        QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 1));
+
+        bool is_ok = false;
+        vKey.toInt(&is_ok);
+        if (is_ok)
+        {
+            vArrayKeyValue.push_back(vKey.toInt());
+        }
+    }
+
+    std::sort(vArrayKeyValue.begin(), vArrayKeyValue.end(),
+          [=](const int& a, const int& b)
+              {
+                  return a < b;
+              }
+          );
+
+    int nFlag = 1;
+    bool isCompleteArray = true;
+    for (int i = 0; i < vArrayKeyValue.size(); ++i)
+    {
+        if (nFlag != vArrayKeyValue[i]){
+            isCompleteArray = false;
+            break;
+        }
+
+        nFlag++;
+    }
+
     //重新设置table里面的key的排序，数据部分不用考虑
     QVector<FIELDINFO> vNewKeySquence;
     QString sResult = "{";
@@ -566,7 +604,10 @@ bool StringToTableView::OnSaveData()
         }
         else
         {
-            sResult = sResult + "[" + vKey.toString() + "] = ";
+            if (!isCompleteArray)
+            {
+                sResult = sResult + "[" + vKey.toString() + "] = ";
+            }
         }
 
         int nType = 0;
@@ -597,7 +638,6 @@ bool StringToTableView::OnSaveData()
 
     sResult = sResult + "}";
 
-    bool fieldSquenceChange = false;
     if (vNewKeySquence.size() > 0)
     {
         if (m_mFieldSquence && m_mFieldSquence->size() > 0 && m_mFieldSquence->find(m_sTableName) != m_mFieldSquence->end())
@@ -627,7 +667,7 @@ bool StringToTableView::OnSaveData()
             for (int i = vNewKeySquence.size() - 1; i >= 0; --i)
             {
                 squence.vSFieldSquences.push_front(vNewKeySquence[i]);
-                fieldSquenceChange = true;
+                m_bFieldSquenceChange = true;
             }
         }
         //直接插入
@@ -638,7 +678,7 @@ bool StringToTableView::OnSaveData()
             squence.vSFieldSquences = vNewKeySquence;
             m_mFieldSquence->insert(m_sTableName, squence);
 
-            fieldSquenceChange = true;
+            m_bFieldSquenceChange = true;
         }
     }
 
@@ -650,7 +690,7 @@ bool StringToTableView::OnSaveData()
         {
             tabWidget->ChangeModelIndexData(m_index, sResult);
 
-            if (fieldSquenceChange)
+            if (m_bFieldSquenceChange)
             {
                 tabWidget->SetDataModify();
             }
@@ -663,9 +703,10 @@ bool StringToTableView::OnSaveData()
         {
             view->ChangeModelIndexData(m_index, sResult);
 
-            if (fieldSquenceChange)
+            if (m_bFieldSquenceChange)
             {
                 view->SetDataModify();
+                view->OnChangeBtnState();
             }
         }
     }
@@ -876,10 +917,10 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
     std::sort(vArrayValueData.begin(), vArrayValueData.end(),
           [=](const ROWINFO& a, const ROWINFO& b)
               {
-                  a.sKey.toDouble();
-                  b.sKey.toDouble();
+                  a.sKey.toInt();
+                  b.sKey.toInt();
 
-                  return a.sKey.toDouble() < b.sKey.toDouble();
+                  return a.sKey.toInt() < b.sKey.toInt();
               }
           );
 

@@ -357,14 +357,12 @@ void TabWidgetCell::SetRowAndColParam()
     if (vScrollbar)
     {
         vScrollbar->setSliderPosition(m_currentVSlider);
-        qDebug() << "m_currentVSlider = " << m_currentVSlider;
     }
 
     QScrollBar *hScrollbar = m_tableView->horizontalScrollBar();
     if (hScrollbar)
     {
         hScrollbar->setSliderPosition(m_currentHSlider);
-        qDebug() << "m_currentHSlider = " << m_currentHSlider;
     }
 }
 

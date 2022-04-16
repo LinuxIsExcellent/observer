@@ -535,12 +535,16 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     // 先计算出包体的总长度
     // 因为packet类增加字符串的时候会增加2字节的长度和1字节的结束字符
     // 所以除了nSystem和nCmd之外需要多增加3字节的数据长度
-    qDebug() << "客户端请求 : nSystem = " << nSystem << ", nCmd = " << nCmd << ", count = " << data.length();
-    quint32 nDataLength = sizeof(nSystem) + sizeof(nCmd) + 3 + data.length();
-    Packet packet;
-    packet << nDataLength << nSystem << nCmd << data.c_str();
+    const char* str = data.c_str();
+    quint32 nDataLength = strlen(str);
+    quint32 nPacketLength = sizeof(nSystem) + sizeof(nCmd) + 3 + nDataLength;
 
-    m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+    qDebug() << "客户端请求 : nSystem = " << nSystem << ", nCmd = " << nCmd << ", count = " << nDataLength;
+    Packet packet;
+    packet << nPacketLength << nSystem << nCmd << str;
+
+    quint32 nWrite = m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+    qDebug() << "nWrite = " << nWrite;
     m_ServerSockect->flush();
 }
 
@@ -568,6 +572,8 @@ void MainWindow::OnServerMsgRecv()
         QByteArray header = m_RecvBuffer.left(4);
         quint32 nLength = *(quint32*)header.data();
 
+//        qDebug() << "nBufferSize = " << nBufferSize;
+//        qDebug() << "nLength = " << nLength;
         if (nBufferSize - 4 >= nLength)
         {
             char* packetStr = m_RecvBuffer.data();
@@ -600,7 +606,7 @@ void MainWindow::OnNetMsgProcess(Packet& packet)
     const char* strData;
 
     packet >> nSystem >> nCmd >> strData;
-//    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd;
+//    qDebug() << "nSystem = " << nSystem << ", nCmd = " << nCmd << ", packet length = " << packet.getLength();
 
     if (nSystem == 0)
     {
@@ -876,9 +882,9 @@ void MainWindow::OnLeftTreeViewData(const test_2::server_send_file_tree_notify& 
     second->setText(0, tr("全局一维表"));
     items.append(second);
 
-    QTreeWidgetItem* third = new QTreeWidgetItem;
-    third->setText(0, tr("组合"));
-    items.append(third);
+//    QTreeWidgetItem* third = new QTreeWidgetItem;
+//    third->setText(0, tr("组合"));
+//    items.append(third);
 
     m_treeWidget->insertTopLevelItems(0, items);
 

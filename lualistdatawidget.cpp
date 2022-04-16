@@ -155,11 +155,14 @@ void LuaListDataWidget::Flush()
             sValue = sValue.replace('\n',"\\n");
 
             QString sAnnonation = "";
-            for (auto fieldInfo : squence->vSFieldSquences)
+            if (squence && squence->vSFieldSquences.size() > 0)
             {
-                if(m_mDataList[i].sKey == fieldInfo.sFieldName)
+                for (auto fieldInfo : squence->vSFieldSquences)
                 {
-                    sAnnonation = fieldInfo.sFieldAnnonation;
+                    if(m_mDataList[i].sKey == fieldInfo.sFieldName)
+                    {
+                        sAnnonation = fieldInfo.sFieldAnnonation;
+                    }
                 }
             }
 
