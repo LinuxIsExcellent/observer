@@ -20,6 +20,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
     ui->setupUi(this);
 
     this->setWindowFlags(Qt::Window);
+    setWindowIcon(QIcon(":/images/res/icon_main.jpeg"));
     m_vRowDataTypes.clear();
     m_mTypeCheck.clear();
 

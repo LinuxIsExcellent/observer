@@ -11,6 +11,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
+    setWindowIcon(QIcon(":/images/res/icon_main.jpeg"));
 
     QDesktopWidget* desktopWidget = QApplication::desktop();
     if(desktopWidget)

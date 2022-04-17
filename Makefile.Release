@@ -202,7 +202,8 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_res.cpp
 release/qrc_res.cpp: res.qrc \
 		F:/Qt5.9.9/5.9.9/mingw53_32/bin/rcc.exe \
-		res/bba093125db8e58219947d4c08c331bf.png
+		res/bba093125db8e58219947d4c08c331bf.png \
+		res/icon_main.jpeg
 	F:\Qt5.9.9\5.9.9\mingw53_32\bin\rcc.exe -name res res.qrc -o release\qrc_res.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h

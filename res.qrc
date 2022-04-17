@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
         <file alias="jump">res/bba093125db8e58219947d4c08c331bf.png</file>
+        <file>res/icon_main.jpeg</file>
     </qresource>
 </RCC>

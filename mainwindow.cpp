@@ -18,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     resize(1280, 720);
 
+    setWindowIcon(QIcon(":/images/res/icon_main.jpeg"));
+    setWindowTitle(tr("配置工具"));
+
     m_menu_bar = new QMenuBar(this);             //创建一个菜单栏
     this->setMenuBar(m_menu_bar);
 

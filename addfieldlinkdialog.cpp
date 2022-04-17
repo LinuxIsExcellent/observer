@@ -10,6 +10,7 @@ AddFieldLinkDialog::AddFieldLinkDialog(QWidget *parent) :
 
     setWindowTitle("设置关联");
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
+    setWindowIcon(QIcon(":/images/res/icon_main.jpeg"));
     setModal(true);
 
     QIcon icon;
