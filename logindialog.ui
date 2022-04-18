@@ -18,7 +18,7 @@
     <rect>
      <x>80</x>
      <y>20</y>
-     <width>71</width>
+     <width>131</width>
      <height>41</height>
     </rect>
    </property>
@@ -30,7 +30,7 @@
     </font>
    </property>
    <property name="text">
-    <string>选择项目</string>
+    <string>选择项</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBox">

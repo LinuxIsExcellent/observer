@@ -10,6 +10,8 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
+    ui->label->setText(tr("选择项目"));
+    ui->label->setGeometry(80, 20,80, 40);
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Window);
     setWindowIcon(QIcon(":/images/res/icon_main.jpeg"));
 
