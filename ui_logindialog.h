@@ -39,7 +39,7 @@ public:
         LoginDialog->resize(400, 300);
         label = new QLabel(LoginDialog);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(80, 20, 71, 41));
+        label->setGeometry(QRect(80, 20, 131, 41));
         QFont font;
         font.setPointSize(12);
         font.setBold(true);
@@ -69,7 +69,7 @@ public:
     void retranslateUi(QDialog *LoginDialog)
     {
         LoginDialog->setWindowTitle(QApplication::translate("LoginDialog", "Dialog", Q_NULLPTR));
-        label->setText(QApplication::translate("LoginDialog", "\351\200\211\346\213\251\351\241\271\347\233\256", Q_NULLPTR));
+        label->setText(QApplication::translate("LoginDialog", "\351\200\211\346\213\251\351\241\271", Q_NULLPTR));
         connect_btn->setText(QApplication::translate("LoginDialog", "\347\231\273\345\275\225", Q_NULLPTR));
         quit_btn->setText(QApplication::translate("LoginDialog", "\351\200\200\345\207\272", Q_NULLPTR));
         close_button->setText(QApplication::translate("LoginDialog", "X", Q_NULLPTR));

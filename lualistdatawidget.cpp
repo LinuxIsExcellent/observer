@@ -320,35 +320,44 @@ bool LuaListDataWidget::OnRequestSaveData()
                 m_mFieldSquence.insert(colInfoKey, colFieldSquence);
             }
 
-            if (true)
-            {
-                test_2::client_save_table_info_request quest;
-                quest.set_table_name(m_sName.toStdString());
+            test_2::client_save_table_info_request quest;
+            quest.set_table_name(m_sName.toStdString());
 
-                for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
+            for (auto iter = m_mFieldSquence.begin(); iter != m_mFieldSquence.end();++ iter)
+            {
+                test_2::field_squence* field_squence = quest.add_field_squences();
+                if (field_squence)
                 {
-                    test_2::field_squence* field_squence = quest.add_field_squences();
-                    if (field_squence)
+                    field_squence->set_index(iter.key().toStdString());
+                    for (auto sData : iter.value().vSFieldSquences)
                     {
-                        field_squence->set_index(iter.key().toStdString());
-                        for (auto sData : iter.value().vSFieldSquences)
+                        if (sData.sFieldName.toStdString() != "")
                         {
                             test_2::field_info* fieldInfo = field_squence->add_infos();
                             if (fieldInfo)
                             {
                                 fieldInfo->set_field_name(sData.sFieldName.toStdString());
-                                fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
-                                fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+                                if (sData.sFieldAnnonation.toStdString() != "")
+                                {
+                                    qDebug() << "sData.sFieldAnnonation.toStdString() = " << sData.sFieldAnnonation;
+                                    fieldInfo->set_field_desc(sData.sFieldAnnonation.toStdString());
+                                }
+
+                                if (sData.sFieldLink.toStdString() != "")
+                                {
+                                    qDebug() << "sData.sFieldLink.toStdString() = " << sData.sFieldLink;
+                                    fieldInfo->set_field_link(sData.sFieldLink.toStdString());
+                                }
                             }
                         }
                     }
                 }
-
-                std::string output;
-                quest.SerializeToString(&output);
-
-                m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
             }
+
+            std::string output;
+            quest.SerializeToString(&output);
+
+            m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
         }
 
         QAbstractItemModel* model = m_tableView->model();

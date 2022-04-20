@@ -178,7 +178,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                             QString sSubTableIndex = "";
                             if(rowData.nKeyType == LUA_TNUMBER)
                             {
-                                sSubTableIndex = m_sTableName + "%ARRAY";
+                                sSubTableIndex = m_sTableName + "&ARRAY";
                             }
                             else
                             {
@@ -202,7 +202,7 @@ StringToTableView::StringToTableView(QStandardItemModel *model, QModelIndex inde
                 QString sSubTableIndex = "";
                 if (is_ok)
                 {
-                    sSubTableIndex = m_sTableName + "%ARRAY";
+                    sSubTableIndex = m_sTableName + "&ARRAY";
                 }
                 else
                 {
@@ -706,6 +706,7 @@ bool StringToTableView::OnSaveData()
 
             if (m_bFieldSquenceChange)
             {
+                view->SetFieldDataModify();
                 view->SetDataModify();
                 view->OnChangeBtnState();
             }
@@ -821,7 +822,7 @@ std::string StringToTableView::ParseLuaTableToString(lua_State *L, QString sTabl
         if (nKeyType == LUA_TNUMBER)
         {
             sKey = QString::number(lua_tonumber(L, -2));
-            sSubTableKey = sTableKey + "%ARRAY";
+            sSubTableKey = sTableKey + "&ARRAY";
         }
         else
         {
@@ -1020,7 +1021,7 @@ void StringToTableView::SetParam()
         if (nKeyType == LUA_TNUMBER)
         {
             sKey = QString::number(lua_tonumber(L, -2), 'f', 0);
-            sSubTableKey = m_sTableName + "%ARRAY";
+            sSubTableKey = m_sTableName + "&ARRAY";
         }
         else
         {
@@ -1221,6 +1222,12 @@ void StringToTableView::keyPressEvent(QKeyEvent *ev)
     if (ev->key() == Qt::Key_V  &&  ev->modifiers() == Qt::ControlModifier)
     {
         paste();
+        return;
+    }
+
+    if (ev->key() == Qt::Key_Escape)
+    {
+        close();
         return;
     }
 }

@@ -716,7 +716,7 @@ const char descriptor_table_protodef_msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\003(\0132\022.test_2.pair_value\"H\n\nfield_info\022\022\n"
   "\nfield_name\030\001 \001(\014\022\022\n\nfield_desc\030\002 \001(\014\022\022\n"
   "\nfield_link\030\003 \001(\014\"A\n\rfield_squence\022\r\n\005in"
-  "dex\030\001 \001(\t\022!\n\005infos\030\002 \003(\0132\022.test_2.field_"
+  "dex\030\001 \001(\014\022!\n\005infos\030\002 \003(\0132\022.test_2.field_"
   "info\"\364\001\n\ntable_data\022\022\n\ntable_name\030\001 \001(\014\022"
   "\021\n\trow_count\030\002 \001(\005\022\024\n\014column_count\030\003 \001(\005"
   "\022\023\n\013filed_names\030\004 \003(\014\022,\n\013filed_types\030\005 \003"
@@ -3047,12 +3047,11 @@ const char* field_squence::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string index = 1;
+      // bytes index = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_index();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "test_2.field_squence.index"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -3099,13 +3098,9 @@ uint8_t* field_squence::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string index = 1;
+  // bytes index = 1;
   if (!this->_internal_index().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_index().data(), static_cast<int>(this->_internal_index().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "test_2.field_squence.index");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         1, this->_internal_index(), target);
   }
 
@@ -3140,10 +3135,10 @@ size_t field_squence::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // string index = 1;
+  // bytes index = 1;
   if (!this->_internal_index().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_index());
   }
 

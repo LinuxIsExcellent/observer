@@ -2070,7 +2070,7 @@ class field_squence final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::test_2::field_info >&
       infos() const;
 
-  // string index = 1;
+  // bytes index = 1;
   void clear_index();
   const std::string& index() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -6158,7 +6158,7 @@ inline void field_info::set_allocated_field_link(std::string* field_link) {
 
 // field_squence
 
-// string index = 1;
+// bytes index = 1;
 inline void field_squence::clear_index() {
   index_.ClearToEmpty();
 }
@@ -6170,7 +6170,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void field_squence::set_index(ArgT0&& arg0, ArgT... args) {
  
- index_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ index_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:test_2.field_squence.index)
 }
 inline std::string* field_squence::mutable_index() {
