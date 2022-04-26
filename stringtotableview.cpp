@@ -586,6 +586,20 @@ bool StringToTableView::OnSaveData()
         QVariant vKey = m_standardItemModel->data(m_standardItemModel->index(i, 1));
         QVariant vValue = m_standardItemModel->data(m_standardItemModel->index(i, 2));
 
+        if (!vKey.isValid())
+        {
+            QMessageBox information(QMessageBox::Critical, tr("警告"), QString("第%1行的'字段'为无效值，请删除该行或填充数据").arg(i+1), QMessageBox::Ok);
+            information.exec();
+            return false;
+        }
+
+        if (!vValue.isValid())
+        {
+            QMessageBox information(QMessageBox::Critical, tr("警告"), QString("第%1行的'值'为无效值，请删除该行或填充数据").arg(i+1), QMessageBox::Ok);
+            information.exec();
+            return false;
+        }
+
         bool is_ok = false;
         vKey.toInt(&is_ok);
         if (!is_ok)

@@ -193,6 +193,14 @@ std::string GlobalConfig::doubleToString(double price) {
 
 bool GlobalConfig::CheckStrIsCorrectType(QString str, int nType)
 {
+    //先判断是否为纯数字
+    if(nType == LUA_TNUMBER)
+    {
+        if (str.toStdString().find_first_not_of("-.0123456789\"") != std::string::npos)
+        {
+            return false;
+        }
+    }
     lua_State *L = luaL_newstate();
     if (L == NULL) return false;
 
