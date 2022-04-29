@@ -546,20 +546,7 @@ void MainWindow::OnSndServerMsg(quint16 nSystem, quint16 nCmd, std::string data)
     Packet packet;
     packet << nPacketLength << nSystem << nCmd << str;
 
-    quint32 nLength;
-    packet>>nLength;
-    packet>>nSystem;
-    packet>>nCmd;
-
-    const char* out1;
-    packet>>out1;
-
-    qDebug() << "nLength = " << nLength;
-    qDebug() << "nSystem = " << nSystem;
-    qDebug() << "nCmd = " << nCmd;
-//    qDebug() << "out1 = " << QString::fromStdString(out1);
-
-    quint32 nWrite = m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
+    m_ServerSockect->write(packet.getDataBegin(), packet.getLength());
     m_ServerSockect->flush();
 }
 

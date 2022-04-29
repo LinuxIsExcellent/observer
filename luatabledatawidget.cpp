@@ -360,10 +360,30 @@ void LuaTableDataWidget::sectionMovableBtnClicked()
 //调整表的字段顺序
 void LuaTableDataWidget::ModifyFieldSquences(QString sIndex, QMap<QString, quint16> mFieldSortMap)
 {
-    bool isHas = false;
+    bool isHasSquence = false;
     if (m_mFieldSquence.find(sIndex) != m_mFieldSquence.end())
     {
+        //先把map里面没有的key加入squence
         FIELDSQUENCE& fieldSquence = m_mFieldSquence.find(sIndex).value();
+        for (QMap<QString, quint16>::iterator iter = mFieldSortMap.begin(); iter != mFieldSortMap.end(); ++iter)
+        {
+            bool isHas = false;
+            for (auto data : fieldSquence.vSFieldSquences)
+            {
+                if(iter.key() == data.sFieldName)
+                {
+                    isHas = true;
+                }
+            }
+
+            //如果不存在，则加入
+            if (!isHas)
+            {
+                FIELDINFO info;
+                info.sFieldName = iter.key();
+                fieldSquence.vSFieldSquences.push_back(info);
+            }
+        }
 
         qSort(fieldSquence.vSFieldSquences.begin(), fieldSquence.vSFieldSquences.end(),
               [=](const FIELDINFO& a, const FIELDINFO& b)
@@ -374,10 +394,10 @@ void LuaTableDataWidget::ModifyFieldSquences(QString sIndex, QMap<QString, quint
                   }
               );
 
-        isHas = true;
+        isHasSquence = true;
     }
 
-    if (!isHas)
+    if (!isHasSquence)
     {
         QVector<FIELDINFO> vFieldInfos;
         vFieldInfos.resize(mFieldSortMap.size());
@@ -626,11 +646,6 @@ void LuaTableDataWidget::SetProtoData(const test_2::table_data& proto)
                 VALUEPAIR pairValue;
                 pairValue.sField = strFieldName;
                 pairValue.sValue = QString::fromStdString(pair.value());
-                if (strFieldName == "id")
-                {
-                    qDebug() << "strFieldName = " << strFieldName;
-                    qDebug() << "pairValue.sValue = " << pairValue.sValue;
-                }
 
                 rowData.dataList.push_back(pairValue);
             }
@@ -772,7 +787,7 @@ bool LuaTableDataWidget::OnRequestSaveData()
         m_mainWindow->OnSndServerMsg(0, test_2::client_msg::REQUEST_SAVE_TABLE_INFO, output);
     }
     //如果数据有变化
-    if (m_bTableDataChange && m_mainWindow)
+    if ((m_bTableDataChange || m_bHeadIndexChange) && m_mainWindow)
     {
         QAbstractItemModel* model = m_tableView->model();
 
