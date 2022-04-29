@@ -73,6 +73,7 @@ void SelectRowDataDialog::InitDialog()
     QVector<QString> vFieldData;
     QMap<QString, int> mMap;
     int nEmpty = 0;
+    int nAllSelectRow = 0;
     for (int i = 1; i < nRow; ++i)
     {
         if (m_pTargetTableView->isRowHidden(i) == false)
@@ -96,6 +97,7 @@ void SelectRowDataDialog::InitDialog()
                 }
             }
 
+            nAllSelectRow++;
             if (sValue == "")
             {
                 nEmpty++;
@@ -110,7 +112,7 @@ void SelectRowDataDialog::InitDialog()
     }
 
     //把全选放在最前面
-    mMap.insert("(全选)", nRow);
+    mMap.insert("(全选)", nAllSelectRow);
     vFieldData.push_front("(全选)");
 
     int i = 0;
